@@ -10,24 +10,17 @@ The main requirements of a world like this are as follows:
 4. The network should maintain consensus on the state of game world 
 
 ## Consensus
-The system values that the network must agree on are entirely depended on required fairness and desired gameplay. Some examples are: player location, player health, platers skills and level, player items etc...
+The system variables that the network must agree on are depended on the required fairness and desired gameplay. Some examples are: player location, player health, platers skills and level or player items. It's trivial to solve this using conventional methods, a server maintains a secure connection with a player and the player pipes his actions in the server, the server then reacts, providing ground truth for the network.
 
-Using conventional methods tracking things like this are trivial, a server maintains a secure connection with a player and the player pipes his actions in the server, the server then reacts. As our system aims to be decentralised, we require another method.
+A decentralised system will require a different approach. Blockchains present clear deficiencies for solving this problem, they are too slow, the chain would get too large and they required additional consensus protocols that are still in heavy development. 
 
-A blockchain could be used to maintain consensus in the universe. If the user wished to make an action, he cryptographically signs the action an submits this to the network, the network assembles all the players actions and puts them into the blockchain. All actions should have a deterministic result, so consensus is maintained
-
-This method has two major problems.
-
-1. Blockchains are typically slow
-2. The chain size will grow too fast 
-
-A completely alternate method will now be presented.
+A completely alternate consensus method will now be presented.
 
 ### Worlds
-The idea of a world is a supernode that maintains consensus in it's domain, the important elements and tasks are listed below.
+The idea of a world is a supernode that maintains consensus in it's domain, a world can be anyone that wants to host 
 
 1. An IP address that it can be uniquely identified with
-2. Eight adjacent neighbors, with eight adjacent IP addresses. These are set by the world, and considered to be trusted
+2. Four adjacent neighbors, with four adjacent IP addresses. These are set by the world, and considered to be trusted
 3. Listening to players in the world, when the present actions into their Action Ledger
 4. Recording the ALH (Action ledger hash) of players from the world they entered from and world they moved into
 
@@ -40,14 +33,19 @@ If a player wants to move from World 1 to World 2 there are some requirements
 ### Action Ledgers
 A players action ledger contains all the cryptographically signed actions that he wishes to commit in a world, the list in held in chronological order. When a player wants to commit an action, the player must sign the action and sent it to the world, if the action is legal, it is entered into the worlds action ledger for that player. Once the player moved to another world, the action ledger is hashed and sent to the other world.
 
-### Action Ledger traceback
-Does there need to be a way for each world to trace back a players actions until the inception of time?
-
 ### Trust
-The system only works if the neighboring worlds have trust in each other. It's possible for neighboring worlds to have disagreements with each other. For instance, one world might introduce an item that other worlds consider to be too powerful, in this case the world can just neglect it's existence, any action presented into the action ledger would be considered an illegal action and not entered into the action ledger.
+The system only works if the neighboring worlds have trust in each other. It's possible for neighboring worlds to have disagreements with each other. For instance, a neighboring world might introduce an item that other worlds consider to be too powerful, in this case the world can just neglect it's existence, any action presented into the action ledger would be considered an illegal action and not entered into the action ledger of the world for that player.
 
-Worlds that have rules that are considered to be completely egregious can be neglected. As an example lets say world one borders world two, world two borders world three, but world one does not border world three. It's entirely possible that world one might 
+Worlds that have rules that are considered to be completely egregious can be neglected. As an example lets say world one borders world two, world two borders world three, but world one does not border world three. It's entirely possible that world one might not agree with the rules of world three. There are two ways of dealing with a dispute like this, either a world disconnect or Action Ledger Traceback. 
+
+####Action Ledger traceback
+When a player enters a world, the world has the option to traceback the Action ledger of a player to either the last entry in that world, or the players genesis. A world may wish to trust the consensus of the adjacent world, but this is a security question to be answered by the world itself. If the world conducts an action ledger traceback, and the traceback contains actions in a world that are not considered canon by the world doing the audit, the rewards and actions committed in the offending world are neglected in the world doing the audit.
+
+### World Disconnects
+It's possible a world may issue a disconnect of an adjacent world, this means that players can no longer travel back and fourth through these worlds. If the player resided in the disconnected world this could leave the player stranded in the offending world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state before the player moved into the offending world. 
+
+## Player Genesis
+Worlds should accept new players and form their genesis, which is zeroing out everything. 
 
 ## Outstanding Issues
-- Supernode outage
-
+- World outage, if a world experiences an outage, this could leave players stranded. Especially in the case where worlds require an action ledger traceback. 
