@@ -17,7 +17,7 @@ A decentralised system will require a different approach. Blockchains present cl
 A completely alternate consensus method will now be presented.
 
 ### Worlds
-The idea of a world is a supernode that maintains consensus in it's domain, a world can be anyone that wants to host 
+The idea of a world is a node that maintains consensus in it's domain, a world can be anyone that wants to host 
 
 1. An IP address that it can be uniquely identified with
 2. Four adjacent neighbors, with four adjacent IP addresses. These are set by the world, and considered to be trusted
