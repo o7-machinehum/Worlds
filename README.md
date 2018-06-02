@@ -38,7 +38,7 @@ The system only works if the neighboring worlds have trust in each other. It's p
 
 Worlds that have rules that are considered to be completely egregious can be neglected. As an example lets say world one borders world two, world two borders world three, but world one does not border world three. It's entirely possible that world one might not agree with the rules of world three. There are two ways of dealing with a dispute like this, either a world disconnect or Action Ledger Traceback. 
 
-####Action Ledger traceback
+#### Action Ledger traceback
 When a player enters a world, the world has the option to traceback the Action ledger of a player to either the last entry in that world, or the players genesis. A world may wish to trust the consensus of the adjacent world, but this is a security question to be answered by the world itself. If the world conducts an action ledger traceback, and the traceback contains actions in a world that are not considered canon by the world doing the audit, the rewards and actions committed in the offending world are neglected in the world doing the audit.
 
 ### World Disconnects
