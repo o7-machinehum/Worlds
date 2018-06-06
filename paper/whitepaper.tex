@@ -9,6 +9,7 @@
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\endspace\ignorespaces#1}
 \pagestyle{plain}
+\setlength\parindent{0pt}
 
 \begin{document}
 \def \SystemName {Worlds} % Lol because this shit probably will change.
@@ -16,7 +17,7 @@
 \mainmatter  % start of an individual contribution
 
 % This needs some work, big time.
-\title{\SystemName: A protocol for a distributed MMORPG}
+\title{\SystemName: A protocol for a distributed MMO}
 
 \author{Ryan Walker\\
 				Ryan.cjw@gmail.com\\
@@ -44,30 +45,27 @@
 A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system can. This paper will overview a truly limitless yet fair protocol that allows developers to bolt their code into in common universe. 
 \end{abstract}
 
+%It is counterintuitive for developers to implement a system for a third party to develop code on their platform. This is simply because maintaining the system holistically would be nearly impossible.
 \section{Introduction}
-For an open software ecosystem to grow organically there should be outlets for people to contribute. In the context of a massively multiplayer online game these currently do not exist. There are a couple reasons for this, one being the proprietary nature of the game, another being (Insert something here), but most prominently, the lack of consensus forming on a distributed scale. The system variables the network must agree on are a function of the required fairness and desired gameplay. Some examples are: player location, player health, players skills, player level or player items. It's trivial to solve this using conventional methods, a server maintains a secure connection with a player and the player pipes his actions in the server, the server then reacts, providing ground truth for the network.
-
-A decentralised system will require a different approach. Blockchains present clear deficiencies for solving this problem, they are too slow, the chain would get too large and they required additional consensus protocols that are still in heavy development. 
-
-A completely alternate consensus method will now be presented...
+For an open software ecosystem to grow organically there should be outlets for people to contribute. In the context of a massively multiplayer online game these currently do not exist. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. It's trivial to solve this using conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. A distributed system will require a different approach. Blockchains present clear deficiencies, they are too slow, the chain would get too large and they required additional consensus protocols that are still in heavy development. A completely alternate consensus method will now be presented...
 
 \section{Worlds}
-
 \subsection{Overview}
-A world, defined as $w_x$, is a node that serves content to players, defined as $P_x$, and forms consensus among it's own domain, it's possible for any node in the network to be a world. A world has four adjacent worlds that is decided by itself. Players can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}), and the second being a \textbf{world transfer} (\ref{WT}).
+A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to $?N?$ adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}), and the second being a \textbf{world transfer} (\ref{WT}). Worlds, just like players have their own RSA key pair. 
+
+%Right now the reader thinks a world is a server
 
 \subsection{Action Ledger}
 \label{AL}
-A player's action ledger, defined as $P_{x,yAL}$ (where $x$ is a unique player identifier and $y$ is the world the action ledger was generated in), contains all the cryptographically signed actions that he wishes to commit in a world, the list in held in chronological order. In order to commit an action a player must concatenate the worlds current nuance with the action sign the action and sent it to the world, if the action is legal, it is entered into the worlds action ledger for that player. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
+An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate the worlds current nuance with the action then sign and sent to the world. If the action is legal, it is entered into the worlds action ledger for that player. If reactions are to occur to a player, the world must concatenate the players current nuance with the action then sign and sent to the player. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
 
 \subsection{Transport Hash}
 \label{TH}
-% This needs work 
-A transport hash is simply a secure hash of an action ledger, $h_s(P_{xyAL})$, these are secured by the worlds are used to prove a player is presenting an honest action ledger. The transport hash is formed when a player leaves the world. A \textbf{Forward Transport Hash} is just a transport hash kept in a special location. This is explained more in the world transfer section, it is defined as  $h_{sf}(P_{xyAL})$
+A transport hash is simply a secure hash of an action ledger, $h_s(AL(P_{k}, w_k))$, these are secured by the worlds are used to prove a player is presenting an honest action ledger. The transport hash is formed when a player leaves the world. A \textbf{Forward Transport Hash} is just a transport hash kept in a special location. This is explained more in the world transfer section, it is defined as  $h_{sf}(AL(P_{k}, w_k))$
 
 \subsection{World Transfer} 
 \label{WT}
-There needs to be a secure and fair way for players to transcend worlds. If a player, defined as $P_1$, wants to move from $w_1$ to $w_2$ (Figure \ref{w1tow2}) and then to $w_3$, there is a detailed state machine that honest worlds must adhere to in order to maintain consensus. The system values in this scenario are defined as...
+There needs to be a secure and fair way for players to transcend worlds. If a player, defined as $P_1$, wants to move from $w_1$ to $w_2$ (Figure \ref{w1tow2}) and then to $w_3$, there is a detailed state machine that honest worlds must adhere to in order to maintain consensus. The network values in this scenario are defined as...
 
 \begin{figure}
 \caption{$P_1$ moving from $w_1$ to $w_2$}
@@ -84,24 +82,23 @@ There needs to be a secure and fair way for players to transcend worlds. If a pl
 \begin{tabular}{ c|c c c }
 & $w_1$ & $w_2$ & $w_3$ \\
 \hline 
-$h_s(P_{1,yAL})$ & $NULL$ & $NULL$ & $NULL$ \\ 
-$h_{sf}(P_{1,yAL})$ & $NULL$ & $NULL$ & $NULL$ \\ 
-Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_1$\\
+$h_s(AL(P_1,w_k))$ & $NULL$ & $NULL$ & $NULL$ \\ 
+$h_{sf}(AL(P_1,w_k))$ & $NULL$ & $NULL$ & $NULL$ \\ 
+Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 \end{tabular}
 \end{center}
 \end{figure}
 
 \begin{enumerate}
-\item First $w_2$ must verify that $P_1$ currently resides in $w_1$, this is done by ensuring $h_{sf}(P_{1,yAL}) = NULL$ this is found by sending a signed data request message from $w_2$ to $w_1$ 
+\item First $w_2$ must verify that $P_1$ currently resides in $w_1$, this is done by ensuring $h_{sf}(AL(P_1,w_k)) = NULL$ this is found by sending a signed data request message from $w_2$ to $w_1$ 
 \item $w_2$ insures that $w_1$ is adjasent to itself
-\item The player presents a $P_{1,1AL}$ to $w_2$
-\item $w_1$ calculates $h_s(P_{1,1AL})$ using the $AL$ on the serverside
-\item $w_2$ calculates $h_s(P_{1,1AL})$ using the $AL$ provided by $P_1$, the hashes must match
+\item The player presents a $AL(P_1,w_1)$ to $w_2$
+\item $w_1$ calculates $h_s(AL(P_1,w_1))$ using the $AL$ on the serverside
+\item $w_2$ calculates $h_s(AL(P_1,w_1))$ using the $AL$ provided by $P_1$, the hashes must match
 \item (Optional) The Action ledger traceback can be complete
 \item $P_1$ is now granted access to $w_2$ and can submit action 
-\item $w_1$ Must store $h_s(P_{1,1AL})$, $P_{1,1AL}$ can be deleted
+\item $w_1$ must store $h_s(AL(P_1,w_1))$, $AL(P_1,w_1)$ can be deleted
 \end{enumerate}
-
 
 \begin{figure}
 \caption{$P_1$ in $w_2$}
@@ -117,9 +114,9 @@ Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_1$\\
 \begin{tabular}{ c|c c c }
 & $w_1$ & $w_2$ & $w_3$ \\
 \hline 
-$h_s(P_{1,yAL})$ & $ h_s(P_{1,1AL})$ & $NULL$ & $NULL$ \\ 
-$h_{sf}(P_{1,yAL})$ & $NULL$ & $NULL$ & $NULL$ \\ 
-Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_1$\\
+$h_s(AL(P_1,w_k))$ & $ h_s(AL(P_1,w_1))$ & $NULL$ & $NULL$ \\ 
+$h_{sf}(AL(P_1,w_k))$ & $NULL$ & $NULL$ & $NULL$ \\ 
+Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 \end{tabular}
 \end{center}
 \end{figure}
@@ -139,9 +136,9 @@ Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_1$\\
 \begin{tabular}{ c|c c c }
 & $w_1$ & $w_2$ & $w_3$ \\
 \hline 
-$h_s(P_{1,yAL})$ & $h_s(P_{1,1AL})$ & $h_s(P_{1,2AL})$ & $NULL$ \\ 
-$h_{sf}(P_{1,yAL})$ & $h_s(P_{1,2AL})$ & $NULL$ & $NULL$ \\ 
-Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_1$\\
+$h_s(AL(P_1,w_k))$ & $h_s(AL(P_1,w_1))$ & $h_s(AL(P_1,w_2))$ & $NULL$ \\ 
+$h_{sf}(AL(P_1,w_k))$ & $h_s(AL(P_1,w_2))$ & $NULL$ & $NULL$ \\ 
+Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 \end{tabular}
 \end{center}
 \end{figure}
@@ -153,10 +150,10 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 \section{Trust}
 The system is not entirely trustless, the neighboring worlds need to trust each other. It's possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful, in this case the world can just neglect it's existence, any action presented using that item would be considered illegal and not entered into the action ledger of the $w_1$.
 
-Worlds that have rules that are considered to be completely egregious can be neglected, consider Figure \ref{ThreeWorlds}. 
+Worlds that have rules that are considered to be completely egregious can be neglected, consider Figure \ref{ThreeWorld}<-WTF? should be fig. 4 
 
 \begin{figure}
-\label{ThreeWorlds}
+\label{ThreeWorld}
 \caption{Three adjacent worlds}
 \begin{center}
 \begin{tikzpicture}[>=stealth']
@@ -172,17 +169,23 @@ It's entirely possible that $w_1$ might not agree with the rules of $w_3$. There
 
 \subsection{Action Ledger traceback}
 \label{ALT}
-Depending on the required security of the world, it may required an Action ledger traceback. If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. A world may wish to trust the consensus of the adjacent world, but this is a security question to be answered by the world itself. If the world conducts an action ledger traceback, and the traceback contains actions in a world that are not considered legal by the world doing the audit, the rewards and actions committed in the offending world are neglected in the world.
+Depending on the required security of the world, it may required an Action ledger traceback. If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. 
+
+This requests all $h_s{AL(P_k, w_{k:n})}$ from the from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions considered illegal by the world doing the audit. In this case the rewards and actions committed in the offending world are neglected in the world. If you get This will create a phenomenon called \textbf{Action Ledger Fragmentation} (\ref{ALF}) 
 
 \subsection{World Disconnects}
 \label{WD}
-It's possible a world may issue a disconnect of an adjacent world, this means that players can no longer travel back and fourth through these worlds and they are no longer considered adjacent. If the player resided in the disconnected world this could leave the player stranded in the offending world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state before the player moved into the offending world. 
+It's possible a world may issue a disconnect of an adjacent world, this means that players can no longer travel back and fourth through these worlds and they are no longer considered adjacent. If the player resided in the disconnected world this could leave the player stranded in the offending world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state before the player moved into the offending world.
+
+\section{Action Listings}
+% Legal Actions - Okay to perform
+% Illegal Actions - Not okay to perform anywhere
+% Acceptable actions - Okay to perform not in world
 
 
-% \begin{center}
-% \begin{tikzpicture}
-% \draw (0,0) rectangle (1,1) node[pos=.5] {Test};
-% \end{tikzpicture}
-% \end{center}
+\section{Outstanding Issues}
+\subsection{Action Ledger Fragmentation}
+\label{ALF}
+
 
 \end{document}
