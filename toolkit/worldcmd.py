@@ -24,4 +24,4 @@ def GenKeys():
 	Keys.GenKeys()
 
 def Encrypt(packet):
-	Keys.Encrypt(packet)
+	return(Keys.Encrypt(packet))

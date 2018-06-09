@@ -1,6 +1,9 @@
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
+import pdb
+
+# Ensure pycryptodome is install and not pycrypto
 
 # TODO: Is this secure?
 private_key = None
@@ -11,15 +14,15 @@ def GenKeys():
 	global private_key	
 	global public_key
  
-	key = RSA.generate(2048)
+	key = RSA.generate(1024)
 	
-	private_key = key.export_key()
-	file_out = open("keys/private.pem", "wb")
-	file_out.write(private_key)
-
-	public_key = key.publickey().export_key()
+	public_key = key.export_key()
 	file_out = open("keys/public.pem", "wb")
 	file_out.write(public_key)
+
+	private_key = key.publickey().export_key()
+	file_out = open("keys/private.pem", "wb")
+	file_out.write(private_key)
 
 def LoadKeys():
 	global private_key	
@@ -28,10 +31,17 @@ def LoadKeys():
 	private_key = RSA.import_key(open("keys/private.pem").read()) 
 	public_key = RSA.import_key(open("keys/public.pem").read())
 
-#TODO: Fix all this
+# packet is bytes
 def Encrypt(packet):
-	if private_key == None:
-		print('Please load in your keys')
-	else:
+	global private_key	
+	global public_key
+	
+	# pdb.set_trace()
+
+	try:	
 		cipher_rsa = PKCS1_OAEP.new(private_key)		
-		cipher_rsa.decrypt(packet)
+		# print(cipher_rsa.encrypt(str.encode(packet)))
+		return(cipher_rsa.encrypt(str.encode(packet)))
+	except AttributeError:
+		print('Please load in your keys')
+		
