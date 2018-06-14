@@ -36,12 +36,19 @@ def Encrypt(packet):
 	global private_key	
 	global public_key
 	
-	# pdb.set_trace()
-
 	try:	
 		cipher_rsa = PKCS1_OAEP.new(private_key)		
-		# print(cipher_rsa.encrypt(str.encode(packet)))
 		return(cipher_rsa.encrypt(str.encode(packet)))
 	except AttributeError:
 		print('Please load in your keys')
-		
+
+# TODO: This should accept public key as argument
+def Decrypt(packet):
+	global private_key	
+	global public_key
+	
+	try:	
+		cipher_rsa = PKCS1_OAEP.new(public_key)		
+		return(cipher_rsa.decrypt(packet))
+	except AttributeError:
+		print('Please load in your keys')

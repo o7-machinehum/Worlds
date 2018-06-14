@@ -1,0 +1,39 @@
+# An extremely limited set of commands that players can use to interact with a world. Please keep in mind that worlds have the ability to modify this command subset to whatever they see fit.
+
+# Actions
+## Movement commands
+Move:
+ Code: 0x00
+ SubCmd:
+  N: # Move North 
+   Code: 0x00
+  E: # Move East 
+   Code: 0x01
+  S: # Move South 
+   Code: 0x02
+  W: # Move West 
+   Code: 0x03
+  Up: # Move Up 
+   Code: 0x04
+  Down: # Move Down 
+   Code: 0x05
+
+## Action commmands
+Act: 
+ Code: 0x02
+ SubCmd:
+  PicUp: # Pickup Item
+   Code: 0x00
+  Drop:
+   Code: 0x02
+  UseItem:
+   Code: 0x03
+
+# Reactions. Code 
+PlayerMod: # Modify Players
+ Code: 0x7F
+ SubCmd:
+  IncHp:
+   Code: 0x00
+  DecHp:
+   Code: 0x01
