@@ -4,7 +4,7 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 \usepackage{tikz}
-\usetikzlibrary{arrows,chains,positioning,scopes,quotes}
+\usetikzlibrary{arrows,chains,positioning,scopes,quotes,calc}
 
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\endspace\ignorespaces#1}
@@ -191,6 +191,17 @@ A clear data construct containing possible player outcomes is used to form conse
 \textbf{Illegal Actions} are actions that a world does not consider to be legal. Illegal actions will simply not show up on a worlds action listing.
 \\\\
 \textbf{Acceptable Actions} are action that are to be performed in other worlds. Results from these actions are respected.
+
+\section{System Architecture}
+\tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=1cm}}
+\begin{center}
+\begin{tikzpicture}
+    \node (WE)[myblock]{Worlds Engine};
+    \node (WS)[myblock,right of=WE, yshift=2cm]{Worlds Server};
+    \draw[->] (WE) -| (WS);
+    % more arrows here
+\end{tikzpicture}
+\end{center}
 
 \section{Outstanding Issues}
 \subsection{Action Ledger Fragmentation}

@@ -3,7 +3,6 @@ import pdb
 import Keys 
 import time
 
-
 # Open YAML config file
 with open("config.yaml", 'r') as stream:
 	try:
