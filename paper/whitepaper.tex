@@ -17,7 +17,7 @@
 \mainmatter  % start of an individual contribution
 
 % This needs some work, big time.
-\title{\SystemName: A protocol for a distributed MMO}
+\title{\SystemName: A distributed MMO}
 
 \author{Ryan Walker\\
 				ryan.cjw@gmail.com}
@@ -41,22 +41,20 @@
 %  - World disconnect
 
 \begin{abstract}
-A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system can. This paper will overview a truly limitless yet fair protocol that allows developers to bolt their code into in common universe. 
+A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system. This paper will overview a truly limitless yet fair protocol that allows developers to bolt their code into in common universe. 
 \end{abstract}
 
 %It is counterintuitive for developers to implement a system for a third party to develop code on their platform. This is simply because maintaining the system holistically would be nearly impossible.
 \section{Introduction}
-For an open software ecosystem to grow organically there should be outlets for people to contribute. In the context of a massively multiplayer online game these currently do not exist. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. It's trivial to solve this using conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. A distributed system will require a different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate consensus method will now be presented...
+For an open software ecosystem to grow organically there should be outlets for people to contribute. In the context of a massively multiplayer online game these currently do not exist. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. It's trivial to solve this using conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate consensus method will now be presented...
 
 \section{Worlds}
 \subsection{Overview}
 A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}), and the second being a \textbf{world transfer} (\ref{WT}). Worlds, just like players have their own RSA key pair. 
 
-%Right now the reader thinks a world is a server
-
 \subsection{Action Ledger}
 \label{AL}
-An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate the worlds current nuance with the action then sign and sent to the world. If the action is legal, it is entered into the worlds action ledger for that player. If reactions are to occur to a player, the world must concatenate the players current nuance with the reaction then sign and sent to the player. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
+An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate current unix time with the action, then sign and sent to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must concatenate current unix time with the reaction then sign and sent to the player. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
 
 \subsection{Transport Hash}
 \label{TH}
@@ -93,7 +91,7 @@ Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 
 \begin{enumerate}
 \item $P_1$ sends a signed world entry packet to $w_2$
-\item $w_2$ insures that $w_1$ is adjasent to itself and that $P_1$
+\item $w_2$ insures that $w_1$ is adjasent to itself
 \item $w_2$ must verify that $P_1$ currently resides in $w_1$, this is done by ensuring $h_{sf}(AL(P_1,w_k)) = NULL$. This is found by sending a signed data request to $w_1$ 
 \item $P_1$ presents $AL(P_1,w_1)$ to $w_2$
 \item $w_1$ calculates $h_s(AL(P_1,w_1))$ using the $AL$ on the serverside
@@ -193,13 +191,36 @@ A clear data construct containing possible player outcomes is used to form conse
 \textbf{Acceptable Actions} are action that are to be performed in other worlds. Results from these actions are respected.
 
 \section{System Architecture}
-\tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=1cm}}
+\begin{center}
+\begin{tabular}{r l}
+$A$: & Action\\ 
+$Cy(A)$: & Encrypted Action\\
+$R$: & Response\\ 
+$Cy(R)$: & Encrypted Response\\
+
+
+\end{tabular}
+\end{center}
+
+\tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=3cm}}
 \begin{center}
 \begin{tikzpicture}
-    \node (WE)[myblock]{Worlds Engine};
-    \node (WS)[myblock,right of=WE, yshift=2cm]{Worlds Server};
-    \draw[->] (WE) -| (WS);
-    % more arrows here
+\node (WE)[myblock]{\textbf{Worlds Engine}};
+\node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
+\node (WC)[myblock,left of=WE, xshift=-3cm, align=center]{Worlds Client};
+\node (Key)[myblock,below of=WE, yshift=-1cm]{RSA Key Pair};
+\node (AL)[myblock,right of=Key, xshift=3cm]{Action Ledger};
+\node (AList)[myblock,left of=Key, xshift=-3cm]{Action Listing};
+
+\draw[->] ($(WE.north east)!0.25!(WE.north west)$) -- node[anchor=west]{$Cy(A)$} ($(WS.south east)!0.25!(WS.south west)$);
+\draw[<-] ($(WE.north east)!0.75!(WE.north west)$) -- node[anchor=west]{$Cy(R)$} ($(WS.south east)!0.75!(WS.south west)$);
+\draw[->] (WC) -- node[anchor=north]{$A$} (WE);
+\draw[<-] (WE) -- (Key);
+\draw[<->] (AList) -- (WC);
+\draw ($(AList.north east)!0.25!(AList.north west)$)edge[out=90,in=-90,->]($(WE.south east)!0.75!(WE.south west)$);
+\draw ($(AL.north east)!0.5!(AL.north west)$)edge[out=90,in=-90,<->]($(WE.south east)!0.25!(WE.south west)$);
+
+% more arrows here
 \end{tikzpicture}
 \end{center}
 

@@ -4,36 +4,27 @@
 ## Movement commands
 Move:
  Code: 0x00
- SubCmd:
-  N: # Move North 
-   Code: 0x00
-  E: # Move East 
-   Code: 0x01
-  S: # Move South 
-   Code: 0x02
-  W: # Move West 
-   Code: 0x03
-  Up: # Move Up 
-   Code: 0x04
-  Down: # Move Down 
-   Code: 0x05
+ N: 0x00 # Move North 
+ E: 0x01 # Move East 
+ S: 0x02 # Move South 
+ W: 0x03 # Move West 
+ Up: 0x04 # Move Up 
+ Down: 0x05 # Move Down 
 
 ## Action commmands
 Act: 
- Code: 0x02
- SubCmd:
-  PicUp: # Pickup Item
-   Code: 0x00
-  Drop:
-   Code: 0x02
-  UseItem:
-   Code: 0x03
+ Code: 0x01
+ PicUp: 0x00 # Pickup Item
+ Drop: 0x02
+ UseItem: 0x03
+
+## Control commands
+Con:
+ Code: 0x7E
+ Gen: 0x00  #Player Genesis
 
 # Reactions. Code 
 PlayerMod: # Modify Players
  Code: 0x7F
- SubCmd:
-  IncHp:
-   Code: 0x00
-  DecHp:
-   Code: 0x01
+ IncHp: 0x00
+ DecHp: 0x01
