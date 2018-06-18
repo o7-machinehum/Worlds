@@ -21,7 +21,8 @@ Act:
 ## Control commands
 Con:
  Code: 0x7E
- Gen: 0x00  #Player Genesis
+ Gen: 0x00  # Player Genesis
+ Connect: 0x01 # Player Connection
 
 # Reactions. Code 
 PlayerMod: # Modify Players

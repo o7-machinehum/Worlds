@@ -1,6 +1,7 @@
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
+import hashlib
 import pdb
 
 # Ensure pycryptodome is install and not pycrypto
@@ -52,3 +53,8 @@ def Decrypt(packet):
 		return(cipher_rsa.decrypt(packet))
 	except AttributeError:
 		print('Please load in your keys')
+
+def Hash(x):
+	m = hashlib.sha256()
+	m.update(x)
+	return(m.digest())

@@ -38,3 +38,7 @@ def PrintAL():
 def FormPayload(Code, SubCode, Argument=0x00):
 	Packet = str(t()) + '.' + str(Code) + '.' + str(SubCode) + '.' + str(Argument)
 	return(Encrypt(Packet))
+
+def HashAL(AL):
+	return(Keys.Hash(str.encode(AL.read())))
+
