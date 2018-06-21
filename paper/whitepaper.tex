@@ -4,12 +4,29 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usepackage[scaled]{beramono}
+\usepackage{listings}
+\usepackage{color}
 \usetikzlibrary{arrows,chains,positioning,scopes,quotes,calc}
 
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\endspace\ignorespaces#1}
 \pagestyle{plain}
 \setlength\parindent{0pt}
+
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\lstset{
+  language=Python,
+  showstringspaces=false,
+  formfeed=\newpage,
+  tabsize=4,
+  commentstyle=\itshape,
+  basicstyle=\ttfamily,
+  morekeywords={models, lambda, forms}
+}
 
 \begin{document}
 \def \SystemName {Worlds} % Lol because this shit probably will change.
@@ -41,16 +58,15 @@
 %  - World disconnect
 
 \begin{abstract}
-A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system. This paper will overview a truly limitless yet fair protocol that allows developers to bolt their code into in common universe. 
+A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system. This paper will overview a truly limitless protocol that allows developers to bolt their code into in common universe. 
 \end{abstract}
 
-%It is counterintuitive for developers to implement a system for a third party to develop code on their platform. This is simply because maintaining the system holistically would be nearly impossible.
 \section{Introduction}
-For an open software ecosystem to grow organically there should be outlets for people to contribute. In the context of a massively multiplayer online game these currently do not exist. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. It's trivial to solve this using conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate consensus method will now be presented...
+For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that could have negative consequences if managed improperly. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. This is trivially done with conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate consensus method will now be presented...
 
 \section{Worlds}
 \subsection{Overview}
-A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}), and the second being a \textbf{world transfer} (\ref{WT}). Worlds, just like players have their own RSA key pair. 
+A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}), and the second being a \textbf{world transfer} (\ref{WT}). Worlds and players both have their own RSA key pair. 
 
 % There is also the option for a player to log on
 
@@ -181,16 +197,23 @@ It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions consi
 
 \subsection{World Disconnects}
 \label{WD}
-It's possible a world may issue a disconnect of an adjacent world, this means that players can no longer travel back and fourth through these worlds and they are no longer considered adjacent. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state.
+It's possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state. The history of that player is now forked into two separate paths.
 
-\section{Action Listing}
-A clear data construct containing possible player outcomes is used to form consensus from world to world.
-\\\\
-\textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented.
-\\\\
-\textbf{Illegal Actions} are actions that a world does not consider to be legal. Illegal actions will simply not show up on a worlds action listing.
-\\\\
-\textbf{Acceptable Actions} are action that are to be performed in other worlds. Results from these actions are respected.
+\subsection{One Way Gates}
+Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to threaten to disconnect from $w_2$ it does not disconnect from $w_3$. The third and final way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
+
+\section{Action Listing} %Why is there a space here?!
+\subsection{Construct}
+An \textit{action listing} is a data construct containing possible player actions. There is a action code tree that must be followed when the player does the hashing. Figure \ref{CodeAL} shows a section of a possible Action Listing. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: $0x7F$. There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be legal. Illegal actions will simply not show up on a worlds action listing.
+
+\begin{figure}
+\caption{Section of an Action Listing}
+\label{CodeAL}
+\lstinputlisting[firstline=1,lastline=13]{../toolkit/ActionListing.yaml}
+\end{figure}
+
+\subsection{Action Listing Translation}
+% How does 
 
 \section{System Architecture}
 \begin{center}
