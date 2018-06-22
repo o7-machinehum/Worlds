@@ -169,7 +169,7 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 	% Player to Player
 	% Player to Environment
 
-\section{Trust}
+\section{Trust} % I don't think this should be called trust
 The system is not entirely trustless, the neighboring worlds need to trust each other. It's possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$.
 
 Worlds that have rules that are considered to be completely egregious can be neglected, consider Figure \ref{ThreeW} 
@@ -202,9 +202,15 @@ It's possible a world may issue a disconnect of an adjacent world, this means th
 \subsection{One Way Gates}
 Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to threaten to disconnect from $w_2$ it does not disconnect from $w_3$. The third and final way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
 
+\subsection{World Economic Caps}
+It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets are hard cap to the amount of resources that can be distributed to players from the environment.
+
+\subsection{Beyond}
+The 
+
 \section{Action Listing} %Why is there a space here?!
 \subsection{Construct}
-An \textit{action listing} is a data construct containing possible player actions. There is a action code tree that must be followed when the player does the hashing. Figure \ref{CodeAL} shows a section of a possible Action Listing. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: $0x7F$. There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be legal. Illegal actions will simply not show up on a worlds action listing.
+An \textit{action listing} is a data construct containing possible player actions. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: \textit{0x7F}. There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be fair. Illegal actions will simply not show up on a worlds action listing. Action ledger tracebacks (\ref{ALT}) can deal with the occurrence of illegal actions on players action ledgers. 
 
 \begin{figure}
 \caption{Section of an Action Listing}
