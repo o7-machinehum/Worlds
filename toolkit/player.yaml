@@ -1,6 +1,6 @@
 Name: 'Turnip'
 CurrentWorld: 
- Address: '192.168.10.FAKE' # World IP
+ Address: '192.168.100.58' # World IP
  Name: 'Turnip World'
  Client: 'FAKE.exe' # World Client
 HP: 50

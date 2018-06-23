@@ -1,14 +1,13 @@
 import socket
 import sys, glob, os
-import threading, logging
+import threading, logging, queue
 import yaml
 import pdb
 import Worldcmd as WC
 
 logging.basicConfig(level=logging. DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-# logging.getLogger().addHandler(logging.StreamHandler())
 
-def OpenSocket(ip, port):
+def OpenSocket(ip, port, data):
 	logging.debug('Started OpenSocket Thread')
 	# Create a TCP/IP socket
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,22 +24,30 @@ def OpenSocket(ip, port):
 		print('waiting for a connection')
 		connection, client_address = sock.accept()
 		try:
-			print('connection from', client_address)
-
-			# Receive the data in small chunks and retransmit it
+			logging.debug('connection from: ' + str(client_address[0]) +':'+ str(client_address[1]))
 			while True:
-				data = connection.recv(16)
-				print('received {!r}'.format(data))
+				data = connection.recv(256)
 				if data:
-					print('sending data back to the client')
-					connection.sendall(data)
+					logging.debug('Recived data')
+					logging.debug(data)
+					data.put(data)
 				else:
-					print('no data from', client_address)
+					logging.debug(str(client_address[0]) +':'+ str(client_address[1]) + ' Has disconnected')
 					break
 		finally:
 			# Clean up the connection
 			print('Closing Connection')
 			connection.close()
+
+def ConnectSocket(ip, port, data):
+	logging.debug('Started ConnectSocket Thread')
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	# sock.connect((ip, port))
+	while(True):
+		out = data.get()
+		logging.debug('Sending data')
+		logging.debug(out)
+		# Then actually send the data! :P
 
 # Main Routine
 #-------------
@@ -74,7 +81,7 @@ if(os.path.exists('player.yaml')):
 			player = yaml.load(stream)
 		except yaml.YAMLError as exc:
 			print(exc)
-		print('Hi ' + player['Name'] + "!, You're in World:" + player['CurrentWorld']['Address'])
+		print('Hi ' + player['Name'] + "!, You're in World: " + player['CurrentWorld']['Address'])
 else:
 	if(input('No player file found. Form player genesis?(y/n):') == 'y'):
 		World = input('Please Enter World Address:')
@@ -90,7 +97,6 @@ else:
 	print('Opening Action Ledger: ' + ALname)
 	AL = open(ALname, 'r+')
 
-
 print('Launching Client')
 if(input('Open: ' + player['CurrentWorld']['Client'] + '(y/n):') == 'y'):
 	0
@@ -99,19 +105,18 @@ else:
 	exit()
 
 print('Signing into World')
-WC.HashAL(AL) # Hash Action Ledger
-# 1. Open Socket with world
-# 2. Sent public Key
+DataOut = queue.Queue()
+DataOut.put(WC.HashAL(AL)) # Hash Action Ledger
+Remote = threading.Thread(name='RemoteSocket', target=ConnectSocket, args=(player['CurrentWorld']['Address'], config['RemotePort'], DataOut, ))
+Remote.start()
+# 3. Sent public Key
 # 3. Send hashed AL
 # 4. Send Start piping actions
 
-print('Opening Local Socket on port:' + str(config['port']))
-Local = threading.Thread(name='LocalSocket', target=OpenSocket, args=('localhost', config['port'],))
+print('Opening Local Socket on port:' + str(config['LocalPort']))
+DataIn = queue.Queue()
+Local = threading.Thread(name='LocalSocket', target=OpenSocket, args=('localhost', config['LocalPort'], DataIn,))
 Local.start()
-# 1. Open local socket on port
-# 2. Accecpt Actions on that socket
 
-# Wait until everything is up, then issue
-#print('World Engine Online')
-
+print('World Engine Online')
 

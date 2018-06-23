@@ -41,4 +41,3 @@ def FormPayload(Code, SubCode, Argument=0x00):
 
 def HashAL(AL):
 	return(Keys.Hash(str.encode(AL.read())))
-

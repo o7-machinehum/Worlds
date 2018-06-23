@@ -200,13 +200,13 @@ It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions consi
 It's possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state. The history of that player is now forked into two separate paths.
 
 \subsection{One Way Gates}
-Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to threaten to disconnect from $w_2$ it does not disconnect from $w_3$. The third and final way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
+Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to use negotiation tactics with either $w_3$ or $w_2$ to change the rules or disconnect respectively. The third way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
 
 \subsection{World Economic Caps}
-It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets are hard cap to the amount of resources that can be distributed to players from the environment.
+It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets a hard cap to the amount of resources that can be distributed to players from the environment in a given time period. The cap can be set in either an amount of experience points, coins, items, etc... This can then be vetted in a world transfer.  
 
 \subsection{Beyond}
-The 
+The mechanics above are simply suggestions. It's possible for worlds to follow all, some or none of them. Worlds can make their own mechanics. The Worlds Engine is completely open for anyone to modify.
 
 \section{Action Listing} %Why is there a space here?!
 \subsection{Construct}
@@ -219,7 +219,8 @@ An \textit{action listing} is a data construct containing possible player action
 \end{figure}
 
 \subsection{Action Listing Translation}
-% How does 
+As it is possible for worlds to share the exact same action listing, it's possible there might be discrepancies. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
+
 
 \section{System Architecture}
 \begin{center}
@@ -229,14 +230,14 @@ $Cy(A)$: & Encrypted Action\\
 $R$: & Response\\ 
 $Cy(R)$: & Encrypted Response\\
 
-
 \end{tabular}
 \end{center}
 
+\begin{small}
 \tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=3cm}}
 \begin{center}
 \begin{tikzpicture}
-\node (WE)[myblock]{\textbf{Worlds Engine}};
+\node(WE)[myblock]{\textbf{Worlds Engine}};
 \node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
 \node (WC)[myblock,left of=WE, xshift=-3cm, align=center]{Worlds Client};
 \node (Key)[myblock,below of=WE, yshift=-1cm]{RSA Key Pair};
@@ -254,6 +255,7 @@ $Cy(R)$: & Encrypted Response\\
 % more arrows here
 \end{tikzpicture}
 \end{center}
+\end{small}
 
 \section{Outstanding Issues}
 \subsection{Action Ledger Fragmentation}
