@@ -18,6 +18,18 @@
 \definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
 \definecolor{mylilas}{RGB}{170,55,241}
 
+\newcommand*{\StrikeThruDistance}{0.15cm}%
+\newcommand*{\StrikeThru}{\StrikeThruDistance,\StrikeThruDistance}%
+
+\tikzset{strike thru arrow/.style={
+    decoration={markings, mark=at position 0.5 with {
+        \draw [blue, thick,-] 
+            ++ (-\StrikeThruDistance,-\StrikeThruDistance) 
+            -- ( \StrikeThruDistance, \StrikeThruDistance);}
+    },
+    postaction={decorate},
+}}
+
 \lstset{
   language=Python,
   showstringspaces=false,
@@ -66,9 +78,7 @@ For an open software ecosystem to grow organically there should be outlets for c
 
 \section{Worlds}
 \subsection{Overview}
-A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}), and the second being a \textbf{world transfer} (\ref{WT}). Worlds and players both have their own RSA key pair. 
-
-% There is also the option for a player to log on
+A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of three ways, the first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}). The third and final method is by issuing a \textbf{refuge package}(\ref{RP}). Worlds and players both have their own RSA key pair. 
 
 \subsection{Action Ledger}
 \label{AL}
@@ -165,9 +175,9 @@ Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 \label{PG}
 Player Genesis is the creation of a new player, for this to occur a player must digitally sign a genesis package with the current nuance of the world. The world must ensure there are no existing values entered for that player. The player is then instated into the world with all the initial player values set to zero. 
 
-% Two types of action
-	% Player to Player
-	% Player to Environment
+\subsection{Refuge Package}
+\label{RP}
+A refugee
 
 \section{Trust} % I don't think this should be called trust
 The system is not entirely trustless, the neighboring worlds need to trust each other. It's possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$.
@@ -197,7 +207,35 @@ It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions consi
 
 \subsection{World Disconnects}
 \label{WD}
-It's possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept the player back into the world in an earlier state. The history of that player is now forked into two separate paths.
+It's possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept \textbf{refugee packages} (\ref{RP}) from the orphaned player. The history of that player is now forked into two separate paths as the player will still be able to play on either worlds. It would be highly risky for the player to play on both accounts as it could risk an \textbf{action ledger conflict}(\ref{ALC})
+
+\subsection{Action Ledger Conflicts}
+\label{ALC}
+Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w_3$ and $w_5$. If a player resides in $w_{3:5}$ there is now no way to return to $w_{1:2}$. It's possible that these worlds may accept a refugee package and reinstate the player. The player now has the option to play on either forks, but in the event of a path creation between $w_{3:5}$ and $w_{1:2}$ it would not be possible for the player in the $w_{3:5}$ fork to travel to any worlds that the other player fork has traveled to as it would cause an action ledger conflict.
+% Is it really this simple (more thinking required)
+% Run on sentence
+
+\begin{figure}
+\caption{Action Ledger Conflict}
+\label{fALC}
+\begin{center}
+\begin{tikzpicture}[>=stealth']
+{[start chain]
+\node[on chain] (A) {$w_1$};
+\node[on chain,join=by {-},right=of A] (B) {$w_2$};
+\node[on chain,join=by {-},right=of B] (C) {$w_3$};
+\node[on chain,join=by {-},above=of C] (D) {$w_4$};
+\node[on chain,join=by {-},above=of B] (E) {$w_5$};}
+\draw[-] (B) -- (E);
+\coordinate (MidWay) at ($(B.east)!0.5!(C.west)$);
+\draw [thick,-] ($(MidWay)-(\StrikeThru)$) -- ($(MidWay)+(\StrikeThru)$);
+\coordinate (MidWay2) at ($(B.east)!0.5!(E.west)$);
+\draw [thick,-] ($(MidWay2)-(\StrikeThru)$) -- ($(MidWay2)+(\StrikeThru)$);
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+% \node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
 
 \subsection{One Way Gates}
 Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to use negotiation tactics with either $w_3$ or $w_2$ to change the rules or disconnect respectively. The third way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
@@ -261,5 +299,12 @@ $Cy(R)$: & Encrypted Response\\
 \subsection{Action Ledger Fragmentation}
 \label{ALF}
 Action ledger fragmentation is when a significant portion of a players action ledger has become 'neglected' due to worlds with action disagreements. 
+
+\subsection{Malicious Worlds}
+It's possible for worlds to turn evil, where players would have no recourse traditionally. In this system, since players keep a copy of their action ledger and signed reactions. It's possible to recover from an attack.   
+
+\subsection{World Outages}
+In the event of a server outages players may become stranded. The first line of defense for this should be server mirrors. Worlds should run an maintain mirrors that will pickup the slack in the event of an outage. Even if it's a far less capable system, player will at least be able to exit. In the even of a permanent world outage, adjacent worlds should accept signed \textbf{refugee packages}(\ref{RP}).  
+
 
 \end{document}

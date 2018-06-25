@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  22 JUN 2018 14:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  25 JUN 2018 16:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -516,18 +516,18 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 (./whitepaper.aux)
 \openout1 = `whitepaper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -592,12 +592,12 @@ e
 ))
 ABD: EveryShipout initializing macros
 \c@lstlisting=\count150
-LaTeX Font Info:    Try loading font information for U+msa on input line 44.
+LaTeX Font Info:    Try loading font information for U+msa on input line 56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 44.
+LaTeX Font Info:    Try loading font information for U+msb on input line 56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -605,34 +605,34 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 83--87
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
 
  []
 
 [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 194--197
+Underfull \hbox (badness 10000) in paragraph at lines 204--207
 
  []
 
-[4]
-LaTeX Font Info:    Try loading font information for T1+fvm on input line 218.
+[4] [5]
+LaTeX Font Info:    Try loading font information for T1+fvm on input line 256.
  (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 218.
+(Font)              scaled to size 8.09995pt on input line 256.
 
 (../toolkit/ActionListing.yaml
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <9> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 8.09995pt on input line 1.
-) [5] [6] (./whitepaper.aux) ) 
+) [6] [7] (./whitepaper.aux) ) 
 Here is how much of TeX's memory you used:
- 14545 strings out of 493029
- 284825 string characters out of 6136233
- 336763 words of memory out of 5000000
- 17794 multiletter control sequences out of 15000+600000
+ 14594 strings out of 493029
+ 285613 string characters out of 6136233
+ 338264 words of memory out of 5000000
+ 17843 multiletter control sequences out of 15000+600000
  16565 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,10n,56p,896b,1175s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -653,10 +653,10 @@ ic/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200
 mf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/publi
 c/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.
 pfb>
-Output written on whitepaper.pdf (6 pages, 224105 bytes).
+Output written on whitepaper.pdf (7 pages, 227910 bytes).
 PDF statistics:
- 96 PDF objects out of 1000 (max. 8388607)
- 70 compressed objects within 1 object stream
+ 101 PDF objects out of 1000 (max. 8388607)
+ 74 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
