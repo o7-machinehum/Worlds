@@ -46,7 +46,7 @@
 \mainmatter  % start of an individual contribution
 
 % This needs some work, big time.
-\title{\SystemName: A distributed MMO}
+\title{\SystemName: A distributed MMO \textit{(DRAFT)}}
 
 \author{Ryan Walker\\
 				ryan.cjw@gmail.com}
@@ -173,16 +173,18 @@ Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 
 \subsection{Player Genesis} 
 \label{PG}
-Player Genesis is the creation of a new player, for this to occur a player must digitally sign a genesis package with the current nuance of the world. The world must ensure there are no existing values entered for that player. The player is then instated into the world with all the initial player values set to zero. 
+Player Genesis is the creation of a new player, for this to occur a player must digitally sign a genesis package with unix time. The world must ensure there are no existing values entered for that player. The player is then instated into the world with all the initial player values set to zero. 
 
 \subsection{Refuge Package}
 \label{RP}
-A refugee
+A refugee package is a special player request for players that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage}(\ref{WO}). This splits the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
 \section{Worlds Engine Mechanics} 
-The system is not entirely trustless, the neighboring worlds need to trust each other. It's possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$.
+The mechanics below are simply suggestions. It's possible for worlds to follow all, some or none of them. Worlds can make their own mechanics as the engine is completely open for anyone to modify. Clusters of worlds might be complete anarchy, others built on peace and justice. There will probably not be a connection between sections like this, which is perfectly fine.
 
-Worlds that have rules that are considered to be completely egregious can be neglected, consider Figure \ref{ThreeW} 
+\subsection{Action Ledger traceback}
+\label{ALT}
+The system is not entirely trustless, the neighboring worlds need to trust each other. It's possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$. Worlds that are not entirely trusted can be audited, consider Figure \ref{ThreeW} 
 
 \begin{figure}
 \caption{Three adjacent worlds}
@@ -197,11 +199,7 @@ Worlds that have rules that are considered to be completely egregious can be neg
 \end{center}
 \end{figure}
 
-It's entirely possible that $w_1$ might have conflicts with the rules of $w_3$. During the worlds transfer, $w_1$ would not get the action ledger from $w_3$. Completely illegal action could have been committed in $w_3$ (eg. free money). In this case $w_1$ can required an Action \textbf{Action Ledger Traceback}(\ref{ALT}).
-
-\subsection{Action Ledger traceback}
-\label{ALT}
-Depending on the required security of a world, an Action Ledger Traceback (ALT) may be requested upon a world transfer. If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. The world then needs to obtain $h_s{AL(P_k, w_{k:n})}$ from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. 
+It's entirely possible that $w_1$ might have conflicts with the rules of $w_3$, however $w_1$ did not choose be adjacent to $w_2$. During the worlds transfer, $w_1$ would not get the action ledger from $w_3$. Completely illegal action could have been committed in $w_3$ (eg. free money). In this case $w_1$ can request an \textbf{Action Ledger Traceback}(\ref{ALT}). If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. The world then needs to obtain $h_s{AL(P_k, w_{k:n})}$ from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. 
 \\\\
 It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions considered illegal by the world doing the audit. In this case the rewards and actions committed in the offending world are neglected in the world. An ALT should not often return illegal actions as it will result in \textbf{Action Ledger Fragmentation} (\ref{ALF}), if this is seen often the world should consider a disconnect from the offending world. 
 
@@ -209,31 +207,6 @@ It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions consi
 \label{WD}
 It's possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept \textbf{refugee packages} (\ref{RP}) from the orphaned player. The history of that player is now forked into two separate paths as the player will still be able to play on either worlds. It would be highly risky for the player to play on both accounts as it could risk an \textbf{action ledger conflict}(\ref{ALC})
 
-\subsection{Action Ledger Conflicts}
-\label{ALC}
-Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w_3$ and $w_5$. If a player resides in $w_{3:5}$ there is now no way to return to $w_{1:2}$. It's possible that these worlds may accept a refugee package and reinstate the player. The player now has the option to play on either forks. In the event of a future path creation between $w_{3:5}$ and $w_{1:2}$ it is possible that that player forks might collide.
-
-\begin{figure}
-\caption{Action Ledger Conflict}
-\label{fALC}
-\begin{center}
-\begin{tikzpicture}[>=stealth']
-{[start chain]
-\node[on chain] (A) {$w_1$};
-\node[on chain,join=by {-},right=of A] (B) {$w_2$};
-\node[on chain,join=by {-},right=of B] (C) {$w_3$};
-\node[on chain,join=by {-},above=of C] (D) {$w_4$};
-\node[on chain,join=by {-},above=of B] (E) {$w_5$};}
-\draw[-] (B) -- (E);
-\coordinate (MidWay) at ($(B.east)!0.5!(C.west)$);
-\draw [thick,-] ($(MidWay)-(\StrikeThru)$) -- ($(MidWay)+(\StrikeThru)$);
-\coordinate (MidWay2) at ($(B.east)!0.5!(E.west)$);
-\draw [thick,-] ($(MidWay2)-(\StrikeThru)$) -- ($(MidWay2)+(\StrikeThru)$);
-\end{tikzpicture}
-\end{center}
-\end{figure}
-
-This is called an action ledger conflict, and I don't what what to do about it right now...
 
 % \node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
 
@@ -243,8 +216,15 @@ Worlds can only control their adjacent neighbors, they have no way of controllin
 \subsection{World Economic Caps}
 It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets a hard cap to the amount of resources that can be distributed to players from the environment in a given time period. This can cap experience points, coins, items, etc...
 
-\subsection{Beyond}
-The mechanics above are simply suggestions. It's possible for worlds to follow all, some or none of them. Worlds can make their own mechanics. The Worlds Engine is completely open for anyone to modify. Sections of the game might be built on anarchy, others built on peace and justice. There will probably not be a connection between sections like this, which is perfectly fine.
+\subsection{Game Items}
+TODO: Write more on this. 
+
+% 'Item history' is ledger dating back to the origin of the item.
+% - Contains a signed item genesis by the world
+% - All transactions between players. Signed by both players.
+% - Worlds must hold the hash of the item history
+% - The most recent transaction of the item. Is the current owner.
+% - This needs to be vetted in a world transfer!
 
 \section{Action Listing} %Why is there a space here?!
 \subsection{Construct}
@@ -305,5 +285,30 @@ It's possible for worlds to turn evil, where players would have no recourse trad
 \subsection{World Outages}
 In the event of a server outages players may become stranded. The first line of defense for this should be server mirrors. Worlds should run an maintain mirrors that will pickup the slack in the event of an outage. Even if it's a far less capable system, player will at least be able to exit. In the even of a permanent world outage, adjacent worlds should accept signed \textbf{refugee packages}(\ref{RP}).  
 
+\subsection{Action Ledger Conflicts}
+\label{ALC}
+Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w_3$ and $w_5$. If a player resides in $w_{3:5}$ there is now no way to return to $w_{1:2}$. It's possible that these worlds may accept a refugee package and reinstate the player. The player now has the option to play on either forks. In the event of a future path creation between $w_{3:5}$ and $w_{1:2}$ it is possible that that player forks might collide.
+
+\begin{figure}
+\caption{Action Ledger Conflict}
+\label{fALC}
+\begin{center}
+\begin{tikzpicture}[>=stealth']
+{[start chain]
+\node[on chain] (A) {$w_1$};
+\node[on chain,join=by {-},right=of A] (B) {$w_2$};
+\node[on chain,join=by {-},right=of B] (C) {$w_3$};
+\node[on chain,join=by {-},above=of C] (D) {$w_4$};
+\node[on chain,join=by {-},above=of B] (E) {$w_5$};}
+\draw[-] (B) -- (E);
+\coordinate (MidWay) at ($(B.east)!0.5!(C.west)$);
+\draw [thick,-] ($(MidWay)-(\StrikeThru)$) -- ($(MidWay)+(\StrikeThru)$);
+\coordinate (MidWay2) at ($(B.east)!0.5!(E.west)$);
+\draw [thick,-] ($(MidWay2)-(\StrikeThru)$) -- ($(MidWay2)+(\StrikeThru)$);
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+This is called an action ledger conflict, and I don't what what to do about it right now...
 
 \end{document}
