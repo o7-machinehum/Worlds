@@ -1,3 +1,4 @@
-toolkit/Worldcmd.pyc
-toolkit/__pycache__/
+Worldcmd.pyc
+__pycache__
 *.pem
+AL/*

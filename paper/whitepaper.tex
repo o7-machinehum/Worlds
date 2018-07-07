@@ -57,17 +57,15 @@
 %% Serious scrum area
 
 \begin{abstract}
-A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system. This paper will overview a truly limitless protocol that allows developers to bolt their code into in common universe. 
+A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system. This paper overviews a protocol that enables developers to bolt their game into in common universe. 
 \end{abstract}
 
 \section{Introduction}
-For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that could have negative consequences if managed improperly. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. This is trivially done with conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate consensus method will now be presented...
+For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that have negative consequences if managed improperly. The fairness and security of the game are entirely dependent on the network forming consensus on what is considered to be the truth. This is trivially done with conventional methods. A server maintains a secure connection with a player and the player pipes his actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate method will now be presented.
 
 \section{Worlds}
 \subsection{Overview}
-A world, defined as $w_k$, is a node that forms consensus among it's domain. It is possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}) and the second being a \textbf{world transfer} (\ref{WT}). 
-
-% The third and final method is by issuing a \textbf{refuge package}(\ref{RP}). Worlds and players both have their own RSA key pair. 
+A world, defined as $w_k$, is a node that forms consensus among it's domain. It is possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of three ways, the first being a \textbf{player genesis}(\ref{PG}) and the second being a \textbf{world transfer} (\ref{WT}). A \textbf{refuge packages}(\ref{RP}) is a special third method for world entry, it can be issued by orphaned players. Worlds and players both have their own RSA key pair. 
 
 \subsection{Action Ledger}
 \label{AL}
@@ -166,7 +164,7 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 
 \subsection{Refuge Package}
 \label{RP}
-A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage}(\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
+A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage} (\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
 \section{Worlds Engine Mechanics} 
 The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness.
@@ -233,7 +231,7 @@ An \textit{action listing} is a data construct containing possible player action
 \begin{figure}
 \caption{Section of an Action Listing}
 \label{CodeAL}
-\lstinputlisting[firstline=1,lastline=13]{../toolkit/ActionListing.yaml}
+\lstinputlisting[firstline=1,lastline=13]{../Client/ActionListing.yaml}
 \end{figure}
 
 \subsection{Action Listing Translation}
@@ -283,6 +281,7 @@ Action ledger fragmentation is when a significant portion of a players action le
 Traditionally players would have no recourse against malicious worlds. But it possible that after a world disconnect adjacent worlds might allow players to rejoin, in addition they have the option to neglect the malicious activity.
 
 \subsection{World Outages}
+\label{WO}
 In the event of a server outages players may become stranded. The first line of defense for this should be server mirrors, these do no have to be as capable as the main servers but should allow players to exit. In the even of a permanent world outage, adjacent worlds should accept signed \textbf{refugee packages}(\ref{RP}).
 
 \subsection{Action Ledger Conflicts}
