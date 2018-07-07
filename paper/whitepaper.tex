@@ -54,20 +54,7 @@
 \institute{} %Merp
 
 \maketitle
-
-% - Abstract:  Why, What, How 
-
-% Worlds
-%  - Overview
-%  - Action Ledger
-%  - Transport Hash
-%  - Forward Transport hash
-%  - World Tranfer
-%  - Player Genesis
-%  
-% Trust
-%  - Action ledger traceback
-%  - World disconnect
+%% Serious scrum area
 
 \begin{abstract}
 A protocol defining how anyone can join or contribute to a completely unbounded universe could allow the flexibility to organically grow an MMO faster and more efficiently then any proprietary closed system. This paper will overview a truly limitless protocol that allows developers to bolt their code into in common universe. 
@@ -78,15 +65,17 @@ For an open software ecosystem to grow organically there should be outlets for c
 
 \section{Worlds}
 \subsection{Overview}
-A world, defined as $w_k$, is a node that forms consensus among it's own domain. It's possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of three ways, the first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}). The third and final method is by issuing a \textbf{refuge package}(\ref{RP}). Worlds and players both have their own RSA key pair. 
+A world, defined as $w_k$, is a node that forms consensus among it's domain. It is possible for any node in the network to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of two ways, the first being a \textbf{player genesis}(\ref{PG}) and the second being a \textbf{world transfer} (\ref{WT}). 
+
+% The third and final method is by issuing a \textbf{refuge package}(\ref{RP}). Worlds and players both have their own RSA key pair. 
 
 \subsection{Action Ledger}
 \label{AL}
-An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate current unix time with the action, then sign and sent to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must concatenate current unix time with the reaction then sign and sent to the player. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
+An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate current unix time with the action, then sign and send to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must concatenate current unix time with the reaction then sign and sent to the player. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
 
 \subsection{Transport Hash}
 \label{TH}
-A transport hash is a hash of an action ledger, $h_s(AL(P_{k}, w_k))$, these are secured by the worlds and are used to prove a player is presenting an honest action ledger. The transport hash is formed when a player leaves the world. A \textbf{Forward Transport Hash} is just a transport hash kept in a special location. This is explained more in the world transfer section, it is defined as  $h_{sf}(AL(P_{k}, w_k))$
+A transport hash is a hash of an action ledger, $h_s(AL(P_{k}, w_k))$, these are secured by the worlds and are used to prove a player is presenting an honest action ledger. The transport hash is formed when a player leaves the world. A \textbf{Forward Transport Hash} is a transport hash kept in a special location. This is explained more in the world transfer section, it is defined as  $h_{sf}(AL(P_{k}, w_k))$
 
 \subsection{World Transfer} 
 \label{WT}
@@ -177,14 +166,16 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 
 \subsection{Refuge Package}
 \label{RP}
-A refugee package is a special player request for players that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage}(\ref{WO}). This splits the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
+A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage}(\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
 \section{Worlds Engine Mechanics} 
-The mechanics below are simply suggestions. It's possible for worlds to follow all, some or none of them. Worlds can make their own mechanics as the engine is completely open for anyone to modify. Clusters of worlds might be complete anarchy, others built on peace and justice. There will probably not be a connection between sections like this, which is perfectly fine.
+The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness.
+
+% Clusters of worlds might be complete anarchy, others built on peace and justice. There will probably not be a connection between sections like this, which is perfectly fine.
 
 \subsection{Action Ledger traceback}
 \label{ALT}
-The system is not entirely trustless, the neighboring worlds need to trust each other. It's possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$. Worlds that are not entirely trusted can be audited, consider Figure \ref{ThreeW} 
+The system is not entirely trustless, the neighboring worlds need to trust each other. It is possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$. Worlds that are not entirely trusted can be audited, consider Figure \ref{ThreeW} 
 
 \begin{figure}
 \caption{Three adjacent worlds}
@@ -199,25 +190,34 @@ The system is not entirely trustless, the neighboring worlds need to trust each 
 \end{center}
 \end{figure}
 
-It's entirely possible that $w_1$ might have conflicts with the rules of $w_3$, however $w_1$ did not choose be adjacent to $w_2$. During the worlds transfer, $w_1$ would not get the action ledger from $w_3$. Completely illegal action could have been committed in $w_3$ (eg. free money). In this case $w_1$ can request an \textbf{Action Ledger Traceback}(\ref{ALT}). If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. The world then needs to obtain $h_s{AL(P_k, w_{k:n})}$ from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. 
+It is possible that $w_1$ might have conflicts with the rules of $w_3$, however $w_1$ did not choose be adjacent to $w_2$. During the worlds transfer, $w_1$ would not get the action ledger from $w_3$. Completely illegal action could have been committed in $w_3$ (eg. free money). In this case $w_1$ can request an \textbf{Action Ledger Traceback}(\ref{ALT}). If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. The world then needs to obtain $h_s{AL(P_k, w_{k:n})}$ from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. 
 \\\\
-It's still entirely possible for the $AL(P_k, w_{k:n})$ to contain actions considered illegal by the world doing the audit. In this case the rewards and actions committed in the offending world are neglected in the world. An ALT should not often return illegal actions as it will result in \textbf{Action Ledger Fragmentation} (\ref{ALF}), if this is seen often the world should consider a disconnect from the offending world. 
+If $AL(P_k, w_{k:n})$ contains illegal actions, the world has some options.
+
+\begin{itemize}
+\item Deny the player entry 
+\item Neglect rewards. This will cause \textbf{Action Ledger Fragmentation} (\ref{ALF}) 
+\end{itemize}
+
+If illegal options are seen, the world should consider a disconnect from the offending world.
 
 \subsection{World Disconnects}
 \label{WD}
-It's possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world. It would be logical for the world that issued the disconnect to accept \textbf{refugee packages} (\ref{RP}) from the orphaned player. The history of that player is now forked into two separate paths as the player will still be able to play on either worlds. It would be highly risky for the player to play on both accounts as it could risk an \textbf{action ledger conflict}(\ref{ALC})
+It is possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world, see \textbf{Orphaned Players} (\ref{OP}).
+
+% It would be logical for the world that issued the disconnect to accept \textbf{refugee packages} (\ref{RP}) from the orphaned player. The history of that player is now forked into two separate paths as the player will still be able to play on either worlds. It would be highly risky for the player to play on both accounts as it could risk an \textbf{action ledger conflict}(\ref{ALC})
 
 
 % \node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
 
-\subsection{One Way Gates}
+\subsection{One Way Gates} % This needs rework.
 Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to use negotiation tactics with either $w_3$ or $w_2$ to change the rules or disconnect respectively. The third way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
 
 \subsection{World Economic Caps}
 It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets a hard cap to the amount of resources that can be distributed to players from the environment in a given time period. This can cap experience points, coins, items, etc...
 
-\subsection{Game Items}
-TODO: Write more on this. 
+% \subsection{Game Items}
+% TODO: Write more on this. 
 
 % 'Item history' is ledger dating back to the origin of the item.
 % - Contains a signed item genesis by the world
@@ -237,7 +237,7 @@ An \textit{action listing} is a data construct containing possible player action
 \end{figure}
 
 \subsection{Action Listing Translation}
-As it is possible for worlds to share the exact same action listing, it's possible there might be discrepancies. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
+Worlds might not share the exact same action listing. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
 
 \section{System Architecture}
 \begin{center}
@@ -277,17 +277,18 @@ $Cy(R)$: & Encrypted Response\\
 \section{Outstanding Issues}
 \subsection{Action Ledger Fragmentation}
 \label{ALF}
-Action ledger fragmentation is when a significant portion of a players action ledger has become 'neglected' due to worlds with action disagreements. 
+Action ledger fragmentation is when a significant portion of a players action ledger has become 'neglected' due to worlds with action disagreements. This should be scarce, as if there are worlds with disagreements they should be considering a disconnect or changing rules.
 
 \subsection{Malicious Worlds}
-It's possible for worlds to turn evil, where players would have no recourse traditionally. In this system, since players keep a copy of their action ledger and signed reactions. It's possible to recover from an attack.   
+Traditionally players would have no recourse against malicious worlds. But it possible that after a world disconnect adjacent worlds might allow players to rejoin, in addition they have the option to neglect the malicious activity.
 
 \subsection{World Outages}
-In the event of a server outages players may become stranded. The first line of defense for this should be server mirrors. Worlds should run an maintain mirrors that will pickup the slack in the event of an outage. Even if it's a far less capable system, player will at least be able to exit. In the even of a permanent world outage, adjacent worlds should accept signed \textbf{refugee packages}(\ref{RP}).  
+In the event of a server outages players may become stranded. The first line of defense for this should be server mirrors, these do no have to be as capable as the main servers but should allow players to exit. In the even of a permanent world outage, adjacent worlds should accept signed \textbf{refugee packages}(\ref{RP}).
 
 \subsection{Action Ledger Conflicts}
 \label{ALC}
-Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w_3$ and $w_5$. If a player resides in $w_{3:5}$ there is now no way to return to $w_{1:2}$. It's possible that these worlds may accept a refugee package and reinstate the player. The player now has the option to play on either forks. In the event of a future path creation between $w_{3:5}$ and $w_{1:2}$ it is possible that that player forks might collide.
+Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w_3$ and $w_5$. If a player resides in $w_{3:5}$ there is now no way to return to $w_{1:2}$. $w_{1:2}$ may accept a refugee package and reinstate the player. The player now has the option to play on either forks. In the event of a future path creation between $w_{3:5}$ and $w_{1:2}$
+it is possible that that player forks might collide.
 
 \begin{figure}
 \caption{Action Ledger Conflict}
@@ -309,6 +310,6 @@ Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w
 \end{center}
 \end{figure}
 
-This is called an action ledger conflict, and I don't what what to do about it right now...
+This is called an action ledger conflict. Without an action ledger traceback being done it is possible for items or funds to be duplicated. To avoid situations like this is should be common practice to avoid joining worlds that have player history that collides with other attached worlds player history.
 
 \end{document}
