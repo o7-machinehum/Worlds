@@ -214,7 +214,9 @@ Worlds can only control their adjacent neighbors, they have no way of controllin
 \subsection{World Economic Caps}
 It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets a hard cap to the amount of resources that can be distributed to players from the environment in a given time period. This can cap experience points, coins, items, etc...
 
-% \subsection{Game Items}
+\subsection{Item Ledger}
+\label{IL}
+Worlds with more security requirements might require and item ledger. An item ledger is a data construct the holds the history of an item. The implementation and purpose are almost identical to an action ledger. To own an item, a plyer must own the most recent item ledger and for the hash to be verified by the world the player current resides.
 % TODO: Write more on this. 
 
 % 'Item history' is ledger dating back to the origin of the item.
@@ -223,6 +225,19 @@ It's possible that worlds may require neighboring worlds to employ a \textit{wor
 % - Worlds must hold the hash of the item history
 % - The most recent transaction of the item. Is the current owner.
 % - This needs to be vetted in a world transfer!
+
+\subsection{Exchange Rates}
+\label{ER}
+Exchanges rates are a possible alternative to world economic caps. During a world transfer players would have the option to exchange their funds into the currency of the world they are entering.
+
+% TODO: What is the exchange value
+% 1. Market determined - you need a buyer?!
+% 2. Determined by the worlds. w1 give x monies for monies in w2.
+
+\subsection{Exchange Traceback}
+Does this make sense?
+% Where is the money coming from?
+% This is literially the exact same thing as an action ledger traceback but with money?
 
 \section{Action Listing} %Why is there a space here?!
 \subsection{Construct}
@@ -241,9 +256,9 @@ Worlds might not share the exact same action listing. An action listing translat
 \begin{center}
 \begin{tabular}{r l}
 $A$: & Action\\ 
-$Cy(A)$: & Encrypted Action\\
+$Cy(A)$: & Signed Action\\
 $R$: & Response\\ 
-$Cy(R)$: & Encrypted Response\\
+$Cy(R)$: & Signed Response\\
 
 \end{tabular}
 \end{center}
@@ -252,12 +267,13 @@ $Cy(R)$: & Encrypted Response\\
 \tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=3cm}}
 \begin{center}
 \begin{tikzpicture}
-\node(WE)[myblock]{\textbf{Worlds Engine}};
-\node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
-\node (WC)[myblock,left of=WE, xshift=-3cm, align=center]{Worlds Client};
-\node (Key)[myblock,below of=WE, yshift=-1cm]{RSA Key Pair};
-\node (AL)[myblock,right of=Key, xshift=3cm]{Action Ledger};
-\node (AList)[myblock,left of=Key, xshift=-3cm]{Action Listing};
+\node(WE)[myblock]{\begin{tabular}{c}Worlds Engine \\ {\scriptsize wClient.py} \\\end{tabular}};
+\node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Server \\ {\scriptsize wServer.py} \\\end{tabular}};
+\node (WC)[myblock,left of=WE, xshift=-3cm]{\begin{tabular}{c}Game Client \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
+\node (Key)[myblock,below of=WE, yshift=-1cm]{\begin{tabular}{c}Key Pair \\ {\scriptsize private.pem/public.pem} \\\end{tabular}};
+\node (AL)[myblock,right of=Key, xshift=3cm]{\begin{tabular}{c}Action Ledger \\ {\scriptsize AL/} \\\end{tabular}};
+\node (AList)[myblock,left of=Key, xshift=-3cm]{\begin{tabular}{c}Action Listing \\ {\scriptsize ActionListing.yaml} \\\end{tabular}};
+\node (PF)[myblock,below of=AList, yshift=-1cm]{\begin{tabular}{c}Player File \\ {\scriptsize player.yaml} \\\end{tabular}};
 
 \draw[->] ($(WE.north east)!0.25!(WE.north west)$) -- node[anchor=west]{$Cy(A)$} ($(WS.south east)!0.25!(WS.south west)$);
 \draw[<-] ($(WE.north east)!0.75!(WE.north west)$) -- node[anchor=west]{$Cy(R)$} ($(WS.south east)!0.75!(WS.south west)$);
@@ -266,6 +282,8 @@ $Cy(R)$: & Encrypted Response\\
 \draw[<->] (AList) -- (WC);
 \draw ($(AList.north east)!0.25!(AList.north west)$)edge[out=90,in=-90,->]($(WE.south east)!0.75!(WE.south west)$);
 \draw ($(AL.north east)!0.5!(AL.north west)$)edge[out=90,in=-90,<->]($(WE.south east)!0.25!(WE.south west)$);
+\draw ($(PF.north)!0.5!(PF.north)$)edge[out=90,in=-90,<-]($(WE.south east)!0.63!(WE.south west)$);
+\draw ($(PF.north west)!0.5!(PF.south west)$)edge[out=180,in=-180,->]($(WC.south west)!0.5!(WC.north west)$);
 
 % more arrows here
 \end{tikzpicture}
@@ -309,6 +327,6 @@ it is possible that that player forks might collide.
 \end{center}
 \end{figure}
 
-This is called an action ledger conflict. Without an action ledger traceback being done it is possible for items or funds to be duplicated. To avoid situations like this is should be common practice to avoid joining worlds that have player history that collides with other attached worlds player history.
+This is called an action ledger conflict. Even with an action ledger traceback being done it is possible for items or funds to be duplicated. To mitigate situations like this is should be common practice to avoid joining worlds that have player history that collides. Another possible combatant is \textbf{item ledgers} (\ref{IL}) and \textbf{exchanges rates} (\ref{ER}).
 
 \end{document}
