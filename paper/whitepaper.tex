@@ -61,11 +61,39 @@ A protocol defining how anyone can contribute to an unbounded universe could all
 \end{abstract}
 
 \section{Introduction}
-For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that have negative consequences if managed improperly. The fairness and security of the game are dependent on the network forming consensus. This is trivially done with conventional methods. A server maintains a secure connection with a player who pipes actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. A completely alternate method will now be presented.
+For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that have negative consequences if managed improperly. The fairness and security of a game are dependent on it's network forming consensus. This is trivially done with conventional methods. A server maintains a secure connection with a player who pipes actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. An alternate method will now be presented.
 
 \section{Worlds}
 \subsection{Overview}
-A world, defined as $w_k$, forms consensus among it's domain. It is possible for any node to be a world. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of three ways. The first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}) and the third: a \textbf{refuge packages}(\ref{RP}). It is possible for players to transfer between adjacent worlds and keep their items and stats. This is done using the mechanics discussed below.
+% A node the hosts players and provides an experience 
+% Provides that game client that renders player graphics
+% Hosts servers that run the worlds engine
+
+A world, defined as $w_k$, is a node that designs a user experience and hosts players. Worlds provide the game client that players interact with. In addition they host servers that form consensus among the worlds domain. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of three ways. The first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}) and the third: a \textbf{refuge packages}(\ref{RP}). It is possible for players to transfer between adjacent worlds and keep their items and stats. This is done using the mechanics discussed below.
+
+\begin{small}
+\tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=3cm}}
+\begin{center}
+\begin{tikzpicture}
+\label{Hello}
+\node(WE)[myblock]{\begin{tabular}{c}Worlds Engine \\ {\scriptsize wClient.py} \\\end{tabular}};
+\node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Server \\ {\scriptsize wServer.py} \\\end{tabular}};
+\node (WC)[myblock,left of=WE, xshift=-3cm]{\begin{tabular}{c}Game Client \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
+\node (SE)[myblock,left of=WS, xshift=-3cm]{\begin{tabular}{c}Server Engine \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
+
+\draw [dashed] (-6,1) -- (6,1);
+\node [right of=WS, xshift=2cm]{Server Side};
+\node [right of=WE, xshift=2cm]{Client Side};
+
+\draw[->] ($(WE.north east)!0.25!(WE.north west)$) --  ($(WS.south east)!0.25!(WS.south west)$);
+\draw[<-] ($(WE.north east)!0.75!(WE.north west)$) --  ($(WS.south east)!0.75!(WS.south west)$);
+\draw[->] (WC) -- (WE);
+\draw[->] (SE) -- (WS);
+
+% more arrows here
+\end{tikzpicture}
+\end{center}
+\end{small}
 
 \subsection{Action Ledger}
 \label{AL}
@@ -80,7 +108,7 @@ A transport hash is a hash of an action ledger, $h_s(AL(P_{k}, w_k))$, these are
 A detailed state machine outlines how players can move about neighboring worlds. Honest worlds must follow this procedure, if they misbehave they could be risking a \textbf{World Disconnect} (\ref{WD}) from their neighboring worlds. 
 \\
 \\
-\textbf{Eg:} Imagine a player, defined as $P_1$, wants to move from $w_1$ to $w_2$ and then to $w_3$ (Figure \ref{w1tow2}), The network values in this scenario are defined as...
+\textbf{Eg:} A player, defined as $P_1$, wants to move from $w_1$ to $w_2$ and then to $w_3$ (Figure \ref{w1tow2}), The network values in this scenario are defined as...
 
 \begin{figure}
 \caption{$P_1$ moving from $w_1$ to $w_2$}
@@ -167,13 +195,13 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage} (\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
 \section{Engine Mechanics} 
-The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness. Players are able to play in whatever worlds they wish - but they must start from scratch on non-adjacent clusters.
+The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness. Players are able to play in whatever worlds they wish - but they must start from scratch in non-adjacent clusters.
 
 % Clusters of worlds might be complete anarchy, others built on peace and justice. There will probably not be a connection between sections like this, which is perfectly fine.
 
 \subsection{Action Ledger traceback}
 \label{ALT}
-The system is not entirely trustless, the neighboring worlds need to trust each other. It is possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item $w_2$ consider to be too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$. Worlds that are not entirely trusted can be audited, consider Figure \ref{ThreeW} 
+The system is not entirely trustless, the neighboring worlds need to trust each other. It is possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item that $w_2$ considers too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$. Worlds that are not entirely trusted can be audited, consider Figure \ref{ThreeW} 
 
 \begin{figure}
 \caption{Three adjacent worlds}
@@ -190,18 +218,15 @@ The system is not entirely trustless, the neighboring worlds need to trust each 
 
 It is possible that $w_1$ might have conflicts with the rules of $w_3$, however $w_1$ did not choose be adjacent to $w_2$. During the worlds transfer, $w_1$ would not get the action ledger from $w_3$. Completely illegal action could have been committed in $w_3$ (eg. free money). In this case $w_1$ can request an \textbf{Action Ledger Traceback}(\ref{ALT}). If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. The world then needs to obtain $h_s{AL(P_k, w_{k:n})}$ from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. 
 \\\\
-If $AL(P_k, w_{k:n})$ contains illegal actions, the world has some options.
+Below are some mechanics that can be employed to combat illegal actions.
 
-\begin{itemize}
-\item Deny the player entry 
-\item Neglect rewards. This will cause \textbf{Action Ledger Fragmentation} (\ref{ALF}) 
-\end{itemize}
+% If $AL(P_k, w_{k:n})$ contains illegal actions, 
 
-If illegal options are seen, the world should consider a disconnect from the offending world.
+% there are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to change the rules. The third way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world.
 
 \subsection{World Disconnects}
 \label{WD}
-It is possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This could leave players orphaned in the disconnected world, see \textbf{Orphaned Players} (\ref{OP}).
+It is possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This is considered to be the more drastic and can leave players orphaned in the disconnected world, see \textbf{Orphaned Players} (\ref{OP}).
 
 % It would be logical for the world that issued the disconnect to accept \textbf{refugee packages} (\ref{RP}) from the orphaned player. The history of that player is now forked into two separate paths as the player will still be able to play on either worlds. It would be highly risky for the player to play on both accounts as it could risk an \textbf{action ledger conflict}(\ref{ALC})
 
@@ -209,14 +234,14 @@ It is possible a world may issue a disconnect of an adjacent world, this means t
 % \node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
 
 \subsection{One Way Gates} % This needs rework.
-Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW}, $w_1$ might have serious issues with $w_3$. There are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to use negotiation tactics with either $w_3$ or $w_2$ to change the rules or disconnect respectively. The third way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world. If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
+Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW} If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
 
 \subsection{World Economic Caps}
 It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets a hard cap to the amount of resources that can be distributed to players from the environment in a given time period. This can cap experience points, coins, items, etc...
 
 \subsection{Item Ledger}
 \label{IL}
-Worlds with more security requirements might require and item ledger. An item ledger is a data construct the holds the history of an item. The implementation and purpose are almost identical to an action ledger. To own an item, a plyer must own the most recent item ledger and for the hash to be verified by the world the player current resides.
+Worlds with greater security requirements might require and item ledger. An item ledger is a data construct the holds the history on and item. The first entry should be the items genesis. The ?implementation? and purpose are almost identical to an action ledger. To own an item, a player must own the most recent item ledger and for the hash to be verified by the world the player current resides.
 % TODO: Write more on this. 
 
 % 'Item history' is ledger dating back to the origin of the item.
@@ -228,7 +253,7 @@ Worlds with more security requirements might require and item ledger. An item le
 
 \subsection{Exchange Rates}
 \label{ER}
-Exchanges rates are a possible alternative to world economic caps. During a world transfer players would have the option to exchange their funds into the currency of the world they are entering.
+Exchanges rates are a possible alternative to world economic caps. During a world transfer players would have the option to exchange their funds into the currency of the world they are entering. The exchange rate can either be determined by an open market, or worlds may offer exchangeability for funds.
 
 % TODO: What is the exchange value
 % 1. Market determined - you need a buyer?!
@@ -239,7 +264,26 @@ Does this make sense?
 % Where is the money coming from?
 % This is literially the exact same thing as an action ledger traceback but with money?
 
-\section{Action Listing} %Why is there a space here?!
+\section{Items} 
+Items are defined and generated by worlds. 
+
+\subsection{Item Listing}
+Figure \ref{IList} shows an example of a possible item listing. The ItemID is defined in Equation \ref{ItemID}. ItemHome is the public key of the world where the item was generated. The translate field is used if the item translates into a native item of the world. The Multiplier field changed the item attributes, for worlds that are well aligned this should be $1$. There needs to be entry like this for every items that is to be used in a world.  
+
+\begin{equation}
+\label{ItemID}
+h_s(ItemHome || ItemName || ItemClass || ItemClassMembers)
+\end{equation}
+
+\subsection{Item Ledger}
+
+\begin{figure}
+\caption{Item Listing}
+\label{IList}
+\lstinputlisting[firstline=1,lastline=13]{../common/items/itemListing.yaml}
+\end{figure}
+
+\section{Action Listing} 
 \subsection{Construct}
 An \textit{action listing} is a data construct containing possible player actions. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: \textit{0x7F}. There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be fair. Illegal actions will simply not show up on a worlds action listing. Action ledger tracebacks (\ref{ALT}) can deal with the occurrence of illegal actions on players action ledgers. 
 
@@ -293,7 +337,7 @@ $Cy(R)$: & Signed Response\\
 \section{Outstanding Issues}
 \subsection{Action Ledger Fragmentation}
 \label{ALF}
-Action ledger fragmentation is when a significant portion of a players action ledger has become 'neglected' due to worlds with action disagreements. This should be scarce, as if there are worlds with disagreements they should be considering a disconnect or changing rules.
+Action ledger fragmentation is when a significant portion of a players action ledger has become 'neglected' due to worlds with action disagreements. This should be scarce, as worlds with disagreements should consider a disconnect or changing rules.
 
 \subsection{Malicious Worlds}
 Traditionally players would have no recourse against malicious worlds. But it possible that after a world disconnect adjacent worlds might allow players to rejoin, in addition they have the option to neglect the malicious activity.

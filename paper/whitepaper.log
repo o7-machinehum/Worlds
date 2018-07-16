@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2018.3.28)  10 JUL 2018 21:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2018.3.28)  16 JUL 2018 16:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -606,37 +606,41 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 80--84
+Underfull \hbox (badness 10000) in paragraph at lines 108--112
 
  []
 
 [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 191--194
+Underfull \hbox (badness 10000) in paragraph at lines 219--222
 
  []
 
 
-LaTeX Warning: Reference `OP' on page 4 undefined on input line 204.
+LaTeX Warning: Reference `OP' on page 4 undefined on input line 229.
 
 [4]
-LaTeX Font Info:    Try loading font information for T1+fvm on input line 249.
+LaTeX Font Info:    Try loading font information for T1+fvm on input line 283.
  (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 249.
+(Font)              scaled to size 8.09995pt on input line 283.
 
-(../common/ActionListing.yaml
+(../common/items/itemListing.yaml
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <9> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 8.09995pt on input line 1.
-) [5]
-Overfull \hbox (10.83965pt too wide) in paragraph at lines 289--290
+) [5] (../common/ActionListing.yaml)
+Overfull \hbox (10.83965pt too wide) in paragraph at lines 333--334
  [] 
  []
 
-[6] [7] (./whitepaper.aux)
+[6]
+Underfull \vbox (badness 1325) has occurred while \output is active []
+
+ [7]
+[8] (./whitepaper.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -645,15 +649,15 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 14626 strings out of 493013
- 286162 string characters out of 6135682
- 339628 words of memory out of 5000000
- 17878 multiletter control sequences out of 15000+600000
+ 14652 strings out of 493013
+ 286612 string characters out of 6135682
+ 345628 words of memory out of 5000000
+ 17900 multiletter control sequences out of 15000+600000
  19407 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,10n,56p,885b,1175s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texliv
-e/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/t
+ 55i,10n,56p,885b,1177s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf/
+fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texlive/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
@@ -661,19 +665,20 @@ msfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/bera/fvmro8a.pfb></usr/share/texmf/fonts/type1/public/cm-su
-per/sfbi1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx0900.pfb></u
-sr/share/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts
-/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-sup
-er/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></us
-r/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/
-type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-supe
-r/sfti0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on whitepaper.pdf (7 pages, 261437 bytes).
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/bera/fvmro8a.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
+bi1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx0900.pfb></usr/sha
+re/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfb
+x1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
+0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on whitepaper.pdf (8 pages, 275777 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
- 83 compressed objects within 1 object stream
+ 120 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
