@@ -1,4 +1,6 @@
 # Worlds
+![banner](Graphics/Header.png)
+
 Worlds is an open protocol for a distributed MMO. For detailed into please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/paper/whitepaper.pdf)
 
 ## TODO (Lots)

@@ -54,10 +54,12 @@
 \institute{} %Merp
 
 \maketitle
-%% Serious scrum area
+%% Scrum area
 % Player Experience points
 %		- How does this transcend worlds.
 %		- This should be
+%		- Worlds should recognize other worlds and scale their experience
+%		- Unrecognised worlds have a scale factor of zero
 % Zero Sum currency
 % 	- Based on an existing crypto
 %		- Has exchangeability for real monies
@@ -76,16 +78,16 @@
 A protocol defining how anyone can contribute to an unbounded universe could allow the flexibility to organically grow an MMO faster than any proprietary system. This paper overviews a protocol that enables developers to bolt their game into in common universe. 
 \end{abstract}
 
-\section{Introduction}
+\section{Worlds}
+\subsection{Introduction}
 For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that have negative consequences if managed improperly. The fairness and security of a game are dependent on it's network forming consensus. This is trivially done with conventional methods. A server maintains a secure connection with a player who pipes actions to the server. The server then provides ground truth for the network. Distributed systems require a very different approach. Blockchains present clear deficiencies, they are too slow and the chain would get too large. An alternate method will now be presented.
 
-\section{Worlds}
 \subsection{Overview}
 % A node the hosts players and provides an experience 
 % Provides that game client that renders player graphics
 % Hosts servers that run the worlds engine
 
-A world, defined as $w_k$, is a node that designs a user experience and hosts players. Worlds provide the game client that players interact with. In addition they host servers that form consensus among the worlds domain. A world can have up to four adjacent worlds determined by itself. Players, defined as $P_k$, can enter a world one of three ways. The first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}) and the third: a \textbf{refuge packages}(\ref{RP}). It is possible for players to transfer between adjacent worlds and keep their items and stats. This is done using the mechanics discussed below.
+A world, defined as $w_k$, is a node that designs a user experience and hosts players. Worlds provide the game client which the players interact with. In addition they host servers that form consensus among their world. A world can have up to four adjacent worlds determined by itself. This forms a network, which allows players to explore and share common items(\ref{items}), experience(\ref{exp}) and currency(\ref{money}) between worlds.
 
 \begin{small}
 \tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=3cm}}
@@ -110,10 +112,10 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \end{tikzpicture}
 \end{center}
 \end{small}
+The worlds engine is an application that manages all things relating to the player. 
 
-\subsection{Action Ledger}
-\label{AL}
-An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate a nuance with the action, then sign and send to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must follow the same process and send the signed payload to the players. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
+\section{Transport}
+Players, defined as $P_k$, can enter a world one of three ways. The first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}) and the third: a \textbf{refuge packages}(\ref{RP}). It is possible for players to transfer between adjacent worlds and keep their items and stats. This is done using the mechanics discussed below.
 
 \subsection{Transport Hash}
 \label{TH}
@@ -210,6 +212,69 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 \label{RP}
 A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage} (\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
+\section{Experience}
+\label{exp}
+Stuff here
+
+\section{Items} 
+\label{items}
+Items are defined and generated by worlds. They have transferability to other other worlds only if the two worlds have reached an agreement on their exchangability.
+
+\subsection{Item Listing}
+An items listing is a data construct that lives at beginning of the item ledger (\ref{IL}) for the item. Figure \ref{IList} shows an example of a possible item listing. The values are defined in figure \ref{ILexp}.
+
+\begin{figure}
+\caption{Item Listing Definitions}
+\label{ILexp}
+\begin{tabular}{l l}
+\textbf{ItemID:} & See Equation 1. \\
+\textbf{ItemHome:} & Public key of the world where the item was generated. \\
+\textbf{Translate:} & See section \ref{ITx}. \\
+\textbf{Multiplier:} & How the ItemClass attributed scale within the worlds \\
+\textbf{ItemClass:} & Structure that contains item info
+\end{tabular}
+\end{figure}
+
+\begin{equation}
+\label{ItemID}
+ID = h_s(ItemHome || ItemName || ItemClass || ItemClassMembers)
+\end{equation}
+
+\begin{figure}
+\caption{Item Listing}
+\label{IList}
+\lstinputlisting[firstline=1,lastline=13]{../common/items/itemListing.yaml}
+\end{figure}
+
+\subsection{Item Ledger}
+\label{IL}
+As described in section \ref{shIL} an item ledger contains the history. Using an item ledger it is possible to trace the item back to it's origin, this can combat the issue with item duplication outlined in section \ref{fALC}. In addition it's also possible to use this to understand how many items worlds are producing, which can be used to prove worlds are not obeying economic caps.
+
+\begin{itemize}
+\item{Header (Signed by World)}
+\begin{itemize}
+\item{ItemID (See item listing)}
+\item{UNIX time}
+\item{WorldPublicKey (Issuer of item)}
+\item{PlayerPublicKey (First player to get the item)}
+\end{itemize}
+\item{Single Transaction Example}
+\begin{itemize}
+\item{Hashed/Signed IL P1}
+\item{Hashed/Signed IL P2}
+\item{Hashed/Signed IL Wx}
+\end{itemize}
+\end{itemize}
+% Item Ledger construct
+% Wx now keeps a hash on file.
+
+\section{Currency}
+\label{money}
+A common currency between worlds is required. For the game theoretical elements to work this currency must be zero sum, meaning worlds cannot generate it. Ideally it is tracked through an existing blockchain. Implementing it should be as simple as building it into the Worlds engine. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions or exchangeability for items. No native currency has been selected at this time.
+
+\subsection{Tokens}
+Worlds may require a currency of their own, this offers the ability to distribute and print tokens. These tokens have exchangeability for the currency described above. Worlds are incentivised to not abuse the system to have decent exchange rates. These tokes should also be tracked on a Blockchain. It is possible that some worlds might acknowledge other worlds currency and offer rewards in game for them.
+
 \section{Engine Mechanics} 
 The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness. Players are able to play in whatever worlds they wish - but they must start from scratch in non-adjacent clusters.
 
@@ -259,72 +324,27 @@ It's possible that worlds may require neighboring worlds to employ a \textit{wor
 \label{shIL}
 Worlds with greater security requirements might require an item ledger upon world transfers. An item ledger is a data construct the holds an item's history. The first entry should be the items genesis, which is signed by the world that is issuing the item. To own an item, a player must own the most recent item ledger and for the hash to be verified by the world the player current resides. For more details see section \ref{IL}.
 
-\subsection{Exchange Rates}
-\label{ER}
-Exchanges rates are a possible alternative to world economic caps. During a world transfer players would have the option to exchange their funds into the currency of the world they are entering. The exchange rate can either be determined by an open market, or worlds may offer exchangeability for funds.
+% \subsection{Exchange Rates}
+% \label{ER}
+%Exchanges rates are a possible alternative to world economic caps. During a world transfer players would have the option to exchange their funds into the currency of the world they are entering. The exchange rate can either be determined by an open market, or worlds may offer exchangeability for funds.
 
 % TODO: What is the exchange value
 % 1. Market determined - you need a buyer?!
 % 2. Determined by the worlds. w1 give x monies for monies in w2.
 
-\subsection{Exchange Traceback}
-Does this make sense?
+% \subsection{Exchange Traceback}
+% Does this make sense?
 % Where is the money coming from?
 % This is literially the exact same thing as an action ledger traceback but with money?
 
-\section{Items} 
-Items are defined and generated by worlds.  
 
-\subsection{Item Listing}
-Figure \ref{IList} shows an example of a possible item listing. The values are defined in figure \ref{ILexp}. 
 
-\begin{figure}
-\label{ILexp}
-\caption{Item Listing Definitions}
-\begin{tabular}{l l}
-\textbf{ItemID:} & See Equation 1. \\
-\textbf{ItemHome:} & Public key of the world where the item was generated. \\
-\textbf{Translate:} & See section \ref{ITx}. \\
-\textbf{Multiplier:} & How the ItemClass attributed scale within the worlds \\
-\textbf{ItemClass:} & Structure that contains item info
-\end{tabular}
-\end{figure}
+\section{Actions}
+\subsection{Action Ledger}
+\label{AL}
+An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate a nuance with the action, then sign and send to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must follow the same process and send the signed payload to the players. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
 
-\begin{equation}
-\label{ItemID}
-ID = h_s(ItemHome || ItemName || ItemClass || ItemClassMembers)
-\end{equation}
-
-\begin{figure}
-\caption{Item Listing}
-\label{IList}
-\lstinputlisting[firstline=1,lastline=13]{../common/items/itemListing.yaml}
-\end{figure}
-
-\subsection{Item Ledger}
-\label{IL}
-As described in section \ref{shIL} an item ledger contains the history. Using an item ledger it is possible to trace the item back to it's origin, this can combat the issue with item duplication outlined in section \ref{fALC}. In addition it's also possible to use this to understand how many items worlds are producing, which can be used to prove worlds are not obeying economic caps.
-
-\begin{itemize}
-\item{Header (Signed by World)}
-\begin{itemize}
-\item{ItemID (See item listing)}
-\item{UNIX time}
-\item{WorldPublicKey (Issuer of item)}
-\item{PlayerPublicKey (First player to get the item)}
-\end{itemize}
-\item{Single Transaction Example}
-\begin{itemize}
-\item{Hashed/Signed IL P1}
-\item{Hashed/Signed IL P2}
-\item{Hashed/Signed IL Wx}
-\end{itemize}
-\end{itemize}
-% Item Ledger construct
-% Wx now keeps a hash on file.
-
-\section{Action Listing} 
-\subsection{Construct}
+\subsection{Action Listing}
 An \textit{action listing} is a data construct containing possible player actions. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: \textit{0x7F}. There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be fair. Illegal actions will simply not show up on a worlds action listing. Action ledger tracebacks (\ref{ALT}) can deal with the occurrence of illegal actions on players action ledgers. 
 
 \begin{figure}
@@ -335,6 +355,8 @@ An \textit{action listing} is a data construct containing possible player action
 
 \subsection{Action Listing Translation}
 Worlds might not share the exact same action listing. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
+
+
 
 \section{System Architecture}
 \begin{center}

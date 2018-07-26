@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.21)  17 JUL 2018 03:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  26 JUL 2018 13:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **whitepaper.tex
 (./whitepaper.tex
 LaTeX2e <2016/02/01>
-Babel <3.9q> and hyphenation patterns for 3 language(s) loaded.
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
 (./llncs.cls
 Document Class: llncs 2000/03/01 v2.7 
 LaTeX document class for Lecture Notes in Computer Science
@@ -605,80 +605,85 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 108--112
+Underfull \hbox (badness 10000) in paragraph at lines 126--130
 
  []
 
 [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 219--222
 
- []
+LaTeX Warning: Reference `ITx' on page 4 undefined on input line 232.
 
-
-LaTeX Warning: Reference `OP' on page 4 undefined on input line 229.
-
-[4]
-
-LaTeX Warning: Reference `ITx' on page 5 undefined on input line 271.
-
-LaTeX Font Info:    Try loading font information for T1+fvm on input line 285.
+LaTeX Font Info:    Try loading font information for T1+fvm on input line 246.
 (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 285.
+(Font)              scaled to size 8.09995pt on input line 246.
 
 (../common/items/itemListing.yaml
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <9> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 8.09995pt on input line 1.
-) [5] [6] (../common/ActionListing.yaml)
-Overfull \hbox (10.83965pt too wide) in paragraph at lines 357--358
- [] 
+) [4] [5]
+Underfull \hbox (badness 10000) in paragraph at lines 300--303
+
  []
 
 
-Underfull \vbox (badness 4479) has occurred while \output is active []
+LaTeX Warning: Reference `OP' on page 6 undefined on input line 310.
 
- [7]
-[8] [9] (./whitepaper.aux)
+[6] (../common/ActionListing.yaml)
+Overfull \hbox (10.83965pt too wide) in paragraph at lines 395--396
+ [] 
+ []
+
+[7]
+Underfull \vbox (badness 1325) has occurred while \output is active []
+
+ [8]
+
+LaTeX Warning: Reference `ER' on page 9 undefined on input line 436.
+
+[9] (./whitepaper.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 14651 strings out of 494953
- 286503 string characters out of 6180976
- 334421 words of memory out of 5000000
- 17641 multiletter control sequences out of 15000+600000
+ 14654 strings out of 493029
+ 286522 string characters out of 6136233
+ 341264 words of memory out of 5000000
+ 17895 multiletter control sequences out of 15000+600000
  19407 words of font info for 51 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
+ 1141 hyphenation exceptions out of 8191
  55i,10n,56p,885b,1175s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc} </home/machinehum
-/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </home/machinehum/.texm
-f-var/fonts/pk/ljfour/jknappen/ec/ecti0700.600pk> </home/machinehum/.texmf-var/
-fonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </home/machinehum/.texmf-var/fonts/
-pk/ljfour/jknappen/ec/ecbx1000.600pk> </home/machinehum/.texmf-var/fonts/pk/ljf
-our/jknappen/ec/ecbx1200.600pk> </home/machinehum/.texmf-var/fonts/pk/ljfour/jk
-nappen/ec/ecrm0900.600pk> </home/machinehum/.texmf-var/fonts/pk/ljfour/jknappen
-/ec/ecbx0900.600pk> </home/machinehum/.texmf-var/fonts/pk/ljfour/jknappen/ec/ec
-rm1000.600pk> </home/machinehum/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbi1440
-.600pk> </home/machinehum/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmro8a.pfb>
-Output written on whitepaper.pdf (9 pages, 196547 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texliv
+e/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/bera/fvmro8a.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
+bi1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx0900.pfb></usr/sha
+re/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfb
+x1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti
+0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on whitepaper.pdf (9 pages, 283932 bytes).
 PDF statistics:
- 430 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
+ 123 PDF objects out of 1000 (max. 8388607)
+ 90 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
