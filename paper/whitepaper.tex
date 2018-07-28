@@ -9,6 +9,7 @@
 \usepackage{listings}
 \usepackage{color}
 \usetikzlibrary{arrows,chains,positioning,scopes,quotes,calc}
+\usepackage{float}
 
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\endspace\ignorespaces#1}
@@ -120,19 +121,10 @@ The worlds engine is an application that manages the elements that are common th
 %			- It's possible 
 
 \section{Actions}
-Actions are submitted to the world using a secure method that ensures that the sender is actually from the owner of the private key.
-
-%Traditionally player actions are held on the servers of the game provider. In the effort of preserving data, a player "state" is kept, which contains the player location, health, items, etc. This works well for the purposes of a proprietary game, but will not work for this system. It is too difficult to properly keep track of a player state with so many different worlds. You run the risk of worlds cheating and player abuse. It lacks traceability and there is no way for world to scale experience. 
-
-%\subsection{Action Ledger}
-%\label{AL}
-%An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate a nuance with the action, then sign and send to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must follow the same process and send the signed payload to the players. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
+Actions are piped into the worlds engine from the game client, following this the engine hashes, signs and submits the actions to the worlds server. If these actions are to have a result, the worlds server engine hashes, signs and submits the actions back to the player.
 
 \subsection{Action Listing}
 An action listing is a data construct containing possible player actions. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: \textit{0x7F}. 
-
-% To be removed
-% There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be fair. Illegal actions will simply not show up on a worlds action listing. Action ledger tracebacks (\ref{ALT}) can deal with the occurrence of illegal actions on players action ledgers. 
 
 \begin{figure}
 \caption{Section of an Action Listing}
@@ -142,6 +134,12 @@ An action listing is a data construct containing possible player actions. It's p
 
 \subsection{Action Listing Translation}
 Worlds might not share the exact same action listing. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
+
+% New Transport engine
+% - Player proves 
+% - Evaluate player experience packages
+% - Evaluate player items and exchangeability
+% 	- Move all item hash to server
 
 \section{Transport}
 Players, defined as $P_k$, can enter a world one of two ways. The first being a \textbf{player genesis}(\ref{PG}) and the second being a \textbf{world transfer} (\ref{WT}). It is possible for players to transfer to whichever worlds they want. But it's may not be possible to keep their items and stats as typically only adjacent worlds have agreed on exchangeability of items. The world transfer is done using the mechanics discussed below.
@@ -241,66 +239,59 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 \label{RP}
 A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage} (\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
-%	- Experience packages are of the form
-%		- Public Key of player
-%		- UNIX time
-%		- Type of EXP
-%		- Amount of EXP earned
 \section{Experience}
 \label{exp}
-Stuff here
+Experience is distributed to players using experience packages. This is simply a package that is of the form shown by figure \ref{exppkg}. When a player is to received experiance this package is hashed, signed and sent to a player from the world. Players are expected to keep all these packages. This same technique can be used to distribute anything to players that doesn't required transferability or fungability. 
+
+\begin{figure}[H]
+\centering
+\label{exppkg}
+\caption{Experience Package}
+\begin{lstlisting}
+ExpPkg{
+	PlayerPublicKey
+	WorldPublicKey
+	ExpAmount
+	ExpType
+	UnixTime
+}
+\end{lstlisting}
+\end{figure}
 
 \section{Items} 
 \label{items}
-Items are defined and generated by worlds. They have transferability to other other worlds only if the two worlds have reached an agreement on their exchangability.
+Items are defined and generated by worlds. They have transferability to other other worlds only if the two worlds have reached an agreement on their exchangability. They are distributed using constructs similar to experience packages with the addition of tranferability.
 
-\subsection{Item Listing}
-An items listing is a data construct that lives at beginning of the item ledger (\ref{IL}) for the item. Figure \ref{IList} shows an example of a possible item listing. The values are defined in figure \ref{ILexp}.
-
-\begin{figure}
-\caption{Item Listing Definitions}
-\label{ILexp}
-\begin{tabular}{l l}
-\textbf{ItemID:} & See Equation 1. \\
-\textbf{ItemHome:} & Public key of the world where the item was generated. \\
-\textbf{Translate:} & See section \ref{ITx}. \\
-\textbf{Multiplier:} & How the ItemClass attributed scale within the worlds \\
-\textbf{ItemClass:} & Structure that contains item info
-\end{tabular}
-\end{figure}
-
-\begin{equation}
-\label{ItemID}
-ID = h_s(ItemHome || ItemName || ItemClass || ItemClassMembers)
-\end{equation}
-
-\begin{figure}
-\caption{Item Listing}
-\label{IList}
-\lstinputlisting[firstline=1,lastline=13]{../common/items/itemListing.yaml}
+\begin{figure}[H]
+\centering
+\label{itempkg}
+\caption{Item Package $i$}
+\begin{lstlisting}
+ItemPkg{
+	ItemID = 0xd89ce15212f82fb21b22f983cc6be1a8 //Hash ItemPkg 
+	ItemName = "Crossbow"
+	WorldPublicKey = 0x52fff7aaae823a5b5af4fb4b
+	PlayerPuclicKey = 0x6v78df6v78dfg7n78gf78fg
+	ItemAttributes = {Attack=10, Defence=12} 
+}
+\end{lstlisting}
 \end{figure}
 
 \subsection{Item Ledger}
 \label{IL}
-As described in section \ref{shIL} an item ledger contains the history. Using an item ledger it is possible to trace the item back to it's origin, this can combat the issue with item duplication outlined in section \ref{fALC}. In addition it's also possible to use this to understand how many items worlds are producing, which can be used to prove worlds are not obeying economic caps.
+An item ledger contains the history of an item. Using an item ledger it is possible to trace the item back to it's origin. It is possible to use this to understand how many items worlds are producing, which can be used to prove worlds are not obeying economic caps. In order to own an item, a player must hold the item ledger and for the most recent hash of the item ledger to reside on the servers of the current world the player is it.
 
-\begin{itemize}
-\item{Header (Signed by World)}
-\begin{itemize}
-\item{ItemID (See item listing)}
-\item{UNIX time}
-\item{WorldPublicKey (Issuer of item)}
-\item{PlayerPublicKey (First player to get the item)}
-\end{itemize}
-\item{Single Transaction Example}
-\begin{itemize}
-\item{Hashed/Signed IL P1}
-\item{Hashed/Signed IL P2}
-\item{Hashed/Signed IL Wx}
-\end{itemize}
-\end{itemize}
-% Item Ledger construct
-% Wx now keeps a hash on file.
+\begin{figure}[H]
+\centering
+\label{itemlgr}
+\caption{Item Ledger $il$}
+\begin{lstlisting}
+ItemLgr{
+	ItemPkg
+	Tx
+}
+\end{lstlisting}
+\end{figure}
 
 \section{Currency}
 \label{money}
