@@ -112,10 +112,39 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \end{tikzpicture}
 \end{center}
 \end{small}
-The worlds engine is an application that manages all things relating to the player. 
+The worlds engine is an application that manages the elements that are common throughout all worlds. Examples being: player private keys, item ledgers(\ref{IL}) and action ledgers(\ref{AL}). The world designer has full creative freedom over the game client and server engine. 
+
+% This needs to be completely rewritten.
+% 1. Actions that are committed on other worlds don't matter.
+%		- Item packages
+%			- It's possible 
+
+\section{Actions}
+Actions are submitted to the world using a secure method that ensures that the sender is actually from the owner of the private key.
+
+%Traditionally player actions are held on the servers of the game provider. In the effort of preserving data, a player "state" is kept, which contains the player location, health, items, etc. This works well for the purposes of a proprietary game, but will not work for this system. It is too difficult to properly keep track of a player state with so many different worlds. You run the risk of worlds cheating and player abuse. It lacks traceability and there is no way for world to scale experience. 
+
+%\subsection{Action Ledger}
+%\label{AL}
+%An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate a nuance with the action, then sign and send to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must follow the same process and send the signed payload to the players. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
+
+\subsection{Action Listing}
+An action listing is a data construct containing possible player actions. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: \textit{0x7F}. 
+
+% To be removed
+% There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be fair. Illegal actions will simply not show up on a worlds action listing. Action ledger tracebacks (\ref{ALT}) can deal with the occurrence of illegal actions on players action ledgers. 
+
+\begin{figure}
+\caption{Section of an Action Listing}
+\label{CodeAL}
+\lstinputlisting[firstline=1,lastline=13]{../common/ActionListing.yaml}
+\end{figure}
+
+\subsection{Action Listing Translation}
+Worlds might not share the exact same action listing. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
 
 \section{Transport}
-Players, defined as $P_k$, can enter a world one of three ways. The first being a \textbf{player genesis}(\ref{PG}). The second being a \textbf{world transfer} (\ref{WT}) and the third: a \textbf{refuge packages}(\ref{RP}). It is possible for players to transfer between adjacent worlds and keep their items and stats. This is done using the mechanics discussed below.
+Players, defined as $P_k$, can enter a world one of two ways. The first being a \textbf{player genesis}(\ref{PG}) and the second being a \textbf{world transfer} (\ref{WT}). It is possible for players to transfer to whichever worlds they want. But it's may not be possible to keep their items and stats as typically only adjacent worlds have agreed on exchangeability of items. The world transfer is done using the mechanics discussed below.
 
 \subsection{Transport Hash}
 \label{TH}
@@ -212,6 +241,11 @@ Player Genesis is the creation of a new player, for this to occur a player must 
 \label{RP}
 A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage} (\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
 
+%	- Experience packages are of the form
+%		- Public Key of player
+%		- UNIX time
+%		- Type of EXP
+%		- Amount of EXP earned
 \section{Experience}
 \label{exp}
 Stuff here
@@ -339,22 +373,6 @@ Worlds with greater security requirements might require an item ledger upon worl
 
 
 
-\section{Actions}
-\subsection{Action Ledger}
-\label{AL}
-An action ledger, defined as $AL(P_{k}, w_k)$, is a chronological list of all the signed actions and reactions that has happened to a player in a world. In order to commit an action a player must concatenate a nuance with the action, then sign and send to the world. If the action is legal, it is entered into the world's action ledger for that player. If reactions are to occur to a player, the world must follow the same process and send the signed payload to the players. Players are required to keep their actions ledger dating back to their genesis, worlds are only required to keep \textbf{transport hashes} (\ref{TH}).
-
-\subsection{Action Listing}
-An \textit{action listing} is a data construct containing possible player actions. It's possible for a world to make their own action listing, defining an unlimited amount of possible player actions. World reactions are also reside on this list and start at address code: \textit{0x7F}. There are three types of actions. \textbf{Legal Actions} are action that a world will accecpt into a players action ledger if presented, they reside in the worlds action listing. \textbf{Acceptable Actions} are action that are to be performed in other worlds only, results from these actions are respected. \textbf{Illegal Actions} are actions that a world does not consider to be fair. Illegal actions will simply not show up on a worlds action listing. Action ledger tracebacks (\ref{ALT}) can deal with the occurrence of illegal actions on players action ledgers. 
-
-\begin{figure}
-\caption{Section of an Action Listing}
-\label{CodeAL}
-\lstinputlisting[firstline=1,lastline=13]{../common/ActionListing.yaml}
-\end{figure}
-
-\subsection{Action Listing Translation}
-Worlds might not share the exact same action listing. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
 
 
 
