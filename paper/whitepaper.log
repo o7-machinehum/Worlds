@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.21)  28 JUL 2018 15:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.21)  14 AUG 2018 18:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -519,7 +519,11 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 ) (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-(./whitepaper.aux)
+(./whitepaper.aux
+
+LaTeX Warning: Label `itempkg' multiply defined.
+
+)
 \openout1 = `whitepaper.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
@@ -534,8 +538,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
 LaTeX Font Info:    ... okay on input line 44.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
 LaTeX Font Info:    ... okay on input line 44.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count145
 \scratchdimen=\dimen178
@@ -633,38 +636,43 @@ Underfull \hbox (badness 10000) in paragraph at lines 153--157
 
  []
 
-[3] [4] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 325--328
+[3] [4]
+LaTeX Font Info:    Font shape `T1/fvm/bx/n' in size <9> not available
+(Font)              Font shape `T1/fvm/b/n' tried instead on input line 272.
+LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
+(Font)              scaled to size 8.09995pt on input line 272.
+ [5]
+Underfull \hbox (badness 10000) in paragraph at lines 332--335
 
  []
 
 [6]
 
-LaTeX Warning: Reference `OP' on page 7 undefined on input line 335.
+LaTeX Warning: Reference `OP' on page 7 undefined on input line 342.
 
-
-Overfull \hbox (10.83965pt too wide) in paragraph at lines 404--405
+[7]
+Overfull \hbox (10.83965pt too wide) in paragraph at lines 411--412
  [] 
  []
 
-[7]
+[8]
 
-LaTeX Warning: Reference `ER' on page 8 undefined on input line 445.
+LaTeX Warning: Reference `ER' on page 9 undefined on input line 452.
 
-[8] [9] (./whitepaper.aux)
+[9] (./whitepaper.aux)
 
 LaTeX Warning: There were undefined references.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 14717 strings out of 494953
- 287254 string characters out of 6180976
+ 14711 strings out of 494953
+ 287117 string characters out of 6180976
  335786 words of memory out of 5000000
- 17707 multiletter control sequences out of 15000+600000
- 19407 words of font info for 51 fonts, out of 8000000 for 9000
+ 17699 multiletter control sequences out of 15000+600000
+ 20027 words of font info for 53 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  55i,10n,56p,805b,1181s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc} </home/machinehum
@@ -685,11 +693,12 @@ dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fv
-mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmro8a.pfb>
-Output written on whitepaper.pdf (9 pages, 182883 bytes).
+mb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/bera/fvmro8a.pfb>
+Output written on whitepaper.pdf (9 pages, 187413 bytes).
 PDF statistics:
- 406 PDF objects out of 1000 (max. 8388607)
- 96 compressed objects within 1 object stream
+ 416 PDF objects out of 1000 (max. 8388607)
+ 99 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
