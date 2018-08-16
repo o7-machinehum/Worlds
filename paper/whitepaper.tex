@@ -56,24 +56,9 @@
 
 \maketitle
 %% Scrum area
-% Player Experience points
-%		- How does this transcend worlds.
-%		- This should be
-%		- Worlds should recognize other worlds and scale their experience
-%		- Unrecognised worlds have a scale factor of zero
-% Zero Sum currency
-% 	- Based on an existing crypto
-%		- Has exchangeability for real monies
-%		- Worlds are trying to generate this
-%		- This can be done by
-%			- Offering exchangeability for a token that world offers
-%			- Charging an entrance fee
-%			- Charging for items
-% Game theoretical elements
-%			- Worlds want players to play in their world
-%			- They want to have
-%				- Common item exchange between worlds
-%				- Experience dished out to be recognised 
+%% TODO:
+% - EXP ?
+%		- Must worlds sign exp packages with WOR?
 
 \begin{abstract}
 A protocol defining how anyone can contribute to an unbounded universe could allow the flexibility to organically grow an MMO faster than any proprietary system. This paper overviews a protocol that enables developers to bolt their game into in common universe. 
@@ -259,8 +244,12 @@ ExpPkg{
 \end{figure}
 
 \section{Items} 
+% Outstanding issues
+% - Player Deaths. What happens to player items?
+% - Transferring items to other players. 
+
 \label{items}
-Items can be introduced by any node on the network. To spawn an item the item package, defined as $i_p$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. It is the worlds responsibility to judge which items are credible, this can be simply done by examining the public key in the item package, if it has been issued by an adjacent world the item can be considered canon.
+Items can be introduced by any node on the network. To spawn an item the item package, defined as $i$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. It is the worlds responsibility to judge which items are credible. This can be done by examining the \textit{WorldPublic} field in the item package, if it has been issued by an adjacent or trusted world the item can be considered real. It is also possible that some worlds might not care if players create items for themselves, in this case the \textit{WorldPublic} would match the \textit{PlayerPublic} field. These options are left completely up to the world creator.
 
 \begin{figure}[H]
 \centering
@@ -269,110 +258,50 @@ Items can be introduced by any node on the network. To spawn an item the item pa
 \begin{lstlisting}
 ItemName = 'Wood'
 ItemClass = 'Material'
-ItemHash = hash(ItemName, ItemClass);
+ItemHash = hash(ItemName | ItemClass);
+PlayerPublic = 0x5d7ac22131ad370e59fddb5f6079a354dbdd2dd9
+WorldPublic = 0xb1abdaf3ab936c99f5fd518122cf7d5b811a1a30
+Stake = 1WOR
 \end{lstlisting}
 \end{figure}
+
+\subsection{Worlds Smart Contact}
+The worlds smart contract is a contract that keeps track of player possessions. For a player to own an item, the player must possess the item package and for the hash of the item to live on the worlds smart contract. 
+
+\subsection{Item Transfers}
+For a player to transfer an item to another player, the player must call the TxItem(ItemHash, PlayerPublic) function.
+
+\subsection{Staked Amounts}
+In order for the game theoretical elements of the universe to balance, in order to create an item you must stake some WOR to the item.
+
+\subsection{Forging}
+It is possible to forge items by combining multiple items, thus forming a derivative item. In literal sense the act of forging it to call the function \textit{ForgeItem(Item1, Item2, ...)} on the WSC. This will then make a derivative item which is shown in Figure \ref{ForgedItem}. It is up to the worlds to decide on the item names and item classes of these subitems. To forge a sword a player could forge metal, fabric and a sharpening stone. As long at the world recognizes that the resulting hash of these items do in fact form a sword, then the player has crafted a sword for use in these worlds. The power of the sword would be proportional to the amount of stakes WOR in all the items that were used to craft the sword. Once items are forged into something they can no longer be used for anything else. It is possible to unforge an item.
 
 \begin{figure}[H]
 \centering
-\label{itempkg}
-\caption{Item Package $i$}
-\begin{lstlisting}
-ItemName = 'Crossbow'
-ItemClass = 'TwoHandedDistance'
-ItemHash = hash(ItemName, ItemClass);
+\caption{Forged Item $i_f$}
+\label{ForgedItem}
+\begin{lstlisting}[escapeinside={(*}{*)}]
+ItemHash = hash((*$ParentItemHash_0 | ... | ParentItemHash_n$*))
+PlayerPublic = 0x5d7ac22131ad370e59fddb5f6079a354dbdd2dd9
+Stake = sum(ParentItemStake)
 \end{lstlisting}
 \end{figure}
 
-\subsection{Item Ledger}
-\label{IL}
-An item ledger contains the history of an item. Using an item ledger it is possible to trace the item back to it's origin. It is possible to use this to understand how many items worlds are producing, which can be used to prove worlds are not obeying economic caps. In order to own an item, a player must hold the item ledger and for the most recent hash of the item ledger to reside on the servers of the current world the player is it.
+\subsection{Equipping Items}
+Depending on the requirement of the world, players may be required to stake items in order to use them. This is a special state where the items enters transient ownership between the player and the world. The world is required to send a signed "pulse" for the player to the WSC to indicate that the player is still alive. If the player is to die, the items will fall under ownership of the world. The world then has the choice to do anything with the items, such as distribute them around the players body for other to collect, return them to the dead player or keep the items as payment for playing in the world. It is wise for world to be transparent as to what happens to player items after the event of a death.
 
-\begin{figure}[H]
-\centering
-\label{itemlgr}
-\caption{Item Ledger $il$}
-\begin{lstlisting}
-ItemLgr{
-	ItemPkg
-	Tx
-}
-\end{lstlisting}
-\end{figure}
+\subsection{Using items}
+If a player wants to use an item, it must be transferred to the world the player is currently residing in. 
 
-\section{Currency}
+\section{Currency (WOR)}
 \label{money}
-A common currency between worlds is required. For the game theoretical elements to work this currency must be zero sum, meaning worlds cannot generate it. Ideally it is tracked through an existing blockchain. Implementing it should be as simple as building it into the Worlds engine. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions or exchangeability for items. No native currency has been selected at this time.
-
-\subsection{Tokens}
-Worlds may require a currency of their own, this offers the ability to distribute and print tokens. These tokens have exchangeability for the currency described above. Worlds are incentivised to not abuse the system to have decent exchange rates. These tokes should also be tracked on a Blockchain. It is possible that some worlds might acknowledge other worlds currency and offer rewards in game for them.
+A common currency between worlds will be used for staking and integration into the platform. To prevent abuse this currency must be zero sum, meaning worlds cannot generate it and it must start with a fixes supply. Ideally it is tracked through an existing blockchain. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions or purchasing items.
 
 \section{Engine Mechanics} 
 The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness. Players are able to play in whatever worlds they wish - but they must start from scratch in non-adjacent clusters.
 
 % Clusters of worlds might be complete anarchy, others built on peace and justice. There will probably not be a connection between sections like this, which is perfectly fine.
-
-\subsection{Action Ledger traceback}
-\label{ALT}
-The system is not entirely trustless, the neighboring worlds need to trust each other. It is possible for neighboring worlds to have disagreements and still function. For instance, $w_1$ might introduce an item that $w_2$ considers too powerful. In a case like this $w_1$ world can just neglect it. Actions presented using that item would be considered illegal and not entered into the action ledger of the $w_1$. Worlds that are not entirely trusted can be audited, consider Figure \ref{ThreeW} 
-
-\begin{figure}
-\caption{Three adjacent worlds}
-\label{ThreeW}
-\begin{center}
-\begin{tikzpicture}[>=stealth']
-{[start chain]
-\node[on chain] (A) {$w_1$};
-\node[on chain,join=by {-},right=of A] (B) {$w_2$};
-\node[on chain,join=by {-},right=of B] (C) {$w_3$};}
-\end{tikzpicture}
-\end{center}
-\end{figure}
-
-It is possible that $w_1$ might have conflicts with the rules of $w_3$, however $w_1$ did not choose be adjacent to $w_2$. During the worlds transfer, $w_1$ would not get the action ledger from $w_3$. Completely illegal action could have been committed in $w_3$ (eg. free money). In this case $w_1$ can request an \textbf{Action Ledger Traceback}(\ref{ALT}). If this is requested, the player must provide a list of action ledgers that date back to either the player genesis or to the last entry of the world committing the audit. The world then needs to obtain $h_s{AL(P_k, w_{k:n})}$ from $w_k$ to $w_n$. If the hashes match then the players history has been confirmed. 
-\\\\
-Below are some mechanics that can be employed to combat illegal actions.
-
-% If $AL(P_k, w_{k:n})$ contains illegal actions, 
-
-% there are three ways of dealing with this. The first is to issues a disconnect from $w_2$, this has the disadvantage of players now not being able to travel to $w_2$. The second is to change the rules. The third way to is implement a one-way-gate. This is a method of ensuring that illegal rules don't make their way into the issuing world.
-
-\subsection{World Disconnects}
-\label{WD}
-It is possible a world may issue a disconnect of an adjacent world, this means that players may no longer travel between these worlds. This is considered to be the more drastic and can leave players orphaned in the disconnected world, see \textbf{Orphaned Players} (\ref{OP}).
-
-% It would be logical for the world that issued the disconnect to accept \textbf{refugee packages} (\ref{RP}) from the orphaned player. The history of that player is now forked into two separate paths as the player will still be able to play on either worlds. It would be highly risky for the player to play on both accounts as it could risk an \textbf{action ledger conflict}(\ref{ALC})
-
-
-% \node (WS)[myblock,above of=WE, yshift=1cm]{Worlds Server};
-
-\subsection{One Way Gates} % This needs rework.
-Worlds can only control their adjacent neighbors, they have no way of controlling the neighbors of their neighbors. Consider Figure \ref{ThreeW} If $w_1$ issues a one-way-gate against $w_3$ player are no longer allowed to travel back into $w_1$ if they have traveled through $w_3$.
-
-\subsection{World Economic Caps}
-It's possible that worlds may require neighboring worlds to employ a \textit{world economic cap}. This sets a hard cap to the amount of resources that can be distributed to players from the environment in a given time period. This can cap experience points, coins, items, etc...
-
-\subsection{Item Ledger}
-\label{shIL}
-Worlds with greater security requirements might require an item ledger upon world transfers. An item ledger is a data construct the holds an item's history. The first entry should be the items genesis, which is signed by the world that is issuing the item. To own an item, a player must own the most recent item ledger and for the hash to be verified by the world the player current resides. For more details see section \ref{IL}.
-
-% \subsection{Exchange Rates}
-% \label{ER}
-%Exchanges rates are a possible alternative to world economic caps. During a world transfer players would have the option to exchange their funds into the currency of the world they are entering. The exchange rate can either be determined by an open market, or worlds may offer exchangeability for funds.
-
-% TODO: What is the exchange value
-% 1. Market determined - you need a buyer?!
-% 2. Determined by the worlds. w1 give x monies for monies in w2.
-
-% \subsection{Exchange Traceback}
-% Does this make sense?
-% Where is the money coming from?
-% This is literially the exact same thing as an action ledger traceback but with money?
-
-
-
-
-
 
 \section{System Architecture}
 \begin{center}
@@ -413,42 +342,7 @@ $Cy(R)$: & Signed Response\\
 \end{small}
 
 \section{Outstanding Issues}
-\subsection{Action Ledger Fragmentation}
-\label{ALF}
-Action ledger fragmentation is when a significant portion of a players action ledger has become 'neglected' due to worlds with action disagreements. This should be scarce, as worlds with disagreements should consider a disconnect or changing rules.
 
 \subsection{Malicious Worlds}
-Traditionally players would have no recourse against malicious worlds. But it possible that after a world disconnect adjacent worlds might allow players to rejoin, in addition they have the option to neglect the malicious activity.
-
-\subsection{World Outages}
-\label{WO}
-In the event of a server outages players may become stranded. The first line of defense for this should be server mirrors, these do no have to be as capable as the main servers but should allow players to exit. In the even of a permanent world outage, adjacent worlds should accept signed \textbf{refugee packages}(\ref{RP}).
-
-\subsection{Action Ledger Conflicts}
-\label{ALC}
-Figure \ref{fALC} depicts a possible scenario in which $w_2$ disconnects from $w_3$ and $w_5$. If a player resides in $w_{3:5}$ there is now no way to return to $w_{1:2}$. $w_{1:2}$ may accept a refugee package and reinstate the player. The player now has the option to play on either forks. In the event of a future path creation between $w_{3:5}$ and $w_{1:2}$
-it is possible that that player forks might collide.
-
-\begin{figure}
-\caption{Action Ledger Conflict}
-\label{fALC}
-\begin{center}
-\begin{tikzpicture}[>=stealth']
-{[start chain]
-\node[on chain] (A) {$w_1$};
-\node[on chain,join=by {-},right=of A] (B) {$w_2$};
-\node[on chain,join=by {-},right=of B] (C) {$w_3$};
-\node[on chain,join=by {-},above=of C] (D) {$w_4$};
-\node[on chain,join=by {-},above=of B] (E) {$w_5$};}
-\draw[-] (B) -- (E);
-\coordinate (MidWay) at ($(B.east)!0.5!(C.west)$);
-\draw [thick,-] ($(MidWay)-(\StrikeThru)$) -- ($(MidWay)+(\StrikeThru)$);
-\coordinate (MidWay2) at ($(B.east)!0.5!(E.west)$);
-\draw [thick,-] ($(MidWay2)-(\StrikeThru)$) -- ($(MidWay2)+(\StrikeThru)$);
-\end{tikzpicture}
-\end{center}
-\end{figure}
-
-This is called an action ledger conflict. Even with an action ledger traceback being done it is possible for items or funds to be duplicated. To mitigate situations like this is should be common practice to avoid joining worlds that have player history that collides. Another possible combatant is \textbf{item ledgers} (\ref{IL}) and \textbf{exchanges rates} (\ref{ER}).
 
 \end{document}
