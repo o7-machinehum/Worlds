@@ -59,6 +59,8 @@
 %% TODO:
 % - EXP ?
 %		- Must worlds sign exp packages with WOR?
+%		- Yes this makes sense
+%		- Players can state EXP as well when they enter a world
 
 \begin{abstract}
 A protocol defining how anyone can contribute to an unbounded universe could allow the flexibility to organically grow an MMO faster than any proprietary system. This paper overviews a protocol that enables developers to bolt their game into in common universe. 
@@ -121,10 +123,11 @@ An action listing is a data construct containing possible player actions. It's p
 Worlds might not share the exact same action listing. An action listing translation is a data construct used to translate actions from one worlds actions listing to another worlds action listing.
 
 % New Transport engine
-% - Player proves 
-% - Evaluate player experience packages
-% - Evaluate player items and exchangeability
-% 	- Move all item hash to server
+%	-> This is completely different. 
+% -> Still have adjacent worlds.
+% -> Transport is more chill.
+%	-> How to prevent players from playing on more then one world at at time?
+% -> Player location on WSC? This is a simple way of doing it.
 
 \section{Transport}
 Players, defined as $P_k$, can enter a world one of two ways. The first being a \textbf{player genesis}(\ref{PG}) and the second being a \textbf{world transfer} (\ref{WT}). It is possible for players to transfer to whichever worlds they want. But it's may not be possible to keep their items and stats as typically only adjacent worlds have agreed on exchangeability of items. The world transfer is done using the mechanics discussed below.
@@ -216,30 +219,23 @@ Neighbor & $w_2$ & $w_1$ \& $w_3$ & $w_2$\\
 \end{center}
 \end{figure}
 
-\subsection{Player Genesis} 
-\label{PG}
-Player Genesis is the creation of a new player, for this to occur a player must digitally sign a genesis package with unix time. The world must ensure there are no existing values entered for that player. The player is then instated into the world with all the initial player values set to zero. 
-
-\subsection{Refuge Package}
-\label{RP}
-A refugee package is an action ledger that dates to the time that the package is sent. This allows worlds to reinstate players without the need of a world transfer. This is useful for player that have been orphaned into a world. This typically happens during either a \textbf{world disconnect} (\ref{WD}) or \textbf{world outage} (\ref{WO}). This has the effect of splitting the player's history into two forks, which opens the possibility of an \textbf{action ledger conflicts} (\ref{ALC}).
-
 \section{Experience}
 \label{exp}
-Experience is distributed to players using experience packages. This is simply a package that is of the form shown by figure \ref{exppkg}. When a player is to received experiance this package is hashed, signed and sent to a player from the world. Players are expected to keep all these packages. This same technique can be used to distribute anything to players that doesn't required transferability or fungability. 
+Experience is distributed to players using experience packages, defined as $e$. These are simply a package of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (WSC) \ref{WSC}. The world must state some WOR in order to grant experience, the effect of the experiance of the player is directly proportional to the amount of WOR that is staked. Experience is distributed very similar to items, although it is not transferable. It is possible for experience to be liquidated back into WOR.
+
+\subsection{Staking Experience}
+Some worlds might require you to stake some experience before entering. The experience enters a special state where it is owned by neither the player or the world. The world is required to send a signed "pulse" for the player to the WSC to indicate that the player is still alive. If the player is to die, the experience will fall under ownership of the world. If the world is PVP then it might distribute the EXP to the player that killed the other player, or the world might keep the experience for redistribution.
 
 \begin{figure}[H]
 \centering
 \label{exppkg}
-\caption{Experience Package}
+\caption{Experience Package $e$ - Sword Fighting}
 \begin{lstlisting}
-ExpPkg{
-	PlayerPublicKey
-	WorldPublicKey
-	ExpAmount
-	ExpType
-	UnixTime
-}
+ExpClass = 'SwordFighting'
+ExpHash = hash(ExpClass);
+PlayerPublic = 0x5d7ac22131ad370e59fddb5f6079a354dbdd2dd9
+WorldPublic = 0xb1abdaf3ab936c99f5fd518122cf7d5b811a1a30
+Stake = 1WOR
 \end{lstlisting}
 \end{figure}
 
@@ -249,7 +245,7 @@ ExpPkg{
 % - Transferring items to other players. 
 
 \label{items}
-Items can be introduced by any node on the network. To spawn an item the item package, defined as $i$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. It is the worlds responsibility to judge which items are credible. This can be done by examining the \textit{WorldPublic} field in the item package, if it has been issued by an adjacent or trusted world the item can be considered real. It is also possible that some worlds might not care if players create items for themselves, in this case the \textit{WorldPublic} would match the \textit{PlayerPublic} field. These options are left completely up to the world creator.
+Items can be introduced by any node on the network. To spawn an item the item package, defined as $i$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. It is the worlds responsibility to judge which items are credible. This can be done by examining the \textit{WorldPublic} field in the item package, if it has been issued by an adjacent or trusted world the item can be considered real. It is also possible that some worlds might not care if players create items for themselves, in this case the \textit{WorldPublic} would match the \textit{PlayerPublic} field. These options are left completely up to the world creator. It is possible for items to be liquidated back into WOR.
 
 \begin{figure}[H]
 \centering
@@ -265,8 +261,6 @@ Stake = 1WOR
 \end{lstlisting}
 \end{figure}
 
-\subsection{Worlds Smart Contact}
-The worlds smart contract is a contract that keeps track of player possessions. For a player to own an item, the player must possess the item package and for the hash of the item to live on the worlds smart contract. 
 
 \subsection{Item Transfers}
 For a player to transfer an item to another player, the player must call the TxItem(ItemHash, PlayerPublic) function.
@@ -297,6 +291,14 @@ If a player wants to use an item, it must be transferred to the world the player
 \section{Currency (WOR)}
 \label{money}
 A common currency between worlds will be used for staking and integration into the platform. To prevent abuse this currency must be zero sum, meaning worlds cannot generate it and it must start with a fixes supply. Ideally it is tracked through an existing blockchain. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions or purchasing items.
+
+\section{Worlds Smart Contact (WSC)}
+\label{WSC}
+The worlds smart contract is a contract that form consensus among the network. It contains functions and data elements that are used as various forms of proof that require interoperability between worlds. 
+
+\subsection{Function Listing}
+% TODO
+
 
 \section{Engine Mechanics} 
 The mechanics below are simply suggestions. As the engine is completely open, worlds are free to impose whatever mechanics they wish. Worlds with drastically different game mechanics will probably not be bordering, this limits gameplay but maintains fairness. Players are able to play in whatever worlds they wish - but they must start from scratch in non-adjacent clusters.
