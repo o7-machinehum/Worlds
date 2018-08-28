@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.21)  27 AUG 2018 03:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.21)  27 AUG 2018 20:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -639,27 +639,26 @@ Overfull \hbox (31.9577pt too wide) in paragraph at lines 188--189
 
 [4] [5]
 
-LaTeX Warning: Reference `Pay2Win' on page 6 undefined on input line 230.
+LaTeX Warning: Reference `Pay2Win' on page 6 undefined on input line 231.
+
+[6]
+
+LaTeX Warning: Reference `Forging' on page 7 undefined on input line 289.
 
 
-Overfull \hbox (10.83965pt too wide) in paragraph at lines 273--274
- [] 
- []
+LaTeX Warning: Reference `ItemTranslations' on page 7 undefined on input line 2
+89.
 
-
-Underfull \vbox (badness 1803) has occurred while \output is active []
-
- [6]
 [7] (./whitepaper.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 14597 strings out of 494953
- 285559 string characters out of 6180976
- 336785 words of memory out of 5000000
- 17590 multiletter control sequences out of 15000+600000
+ 14601 strings out of 494953
+ 285396 string characters out of 6180976
+ 336786 words of memory out of 5000000
+ 17594 multiletter control sequences out of 15000+600000
  20027 words of font info for 53 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  55i,9n,56p,893b,1202s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -677,15 +676,15 @@ rm1000.600pk> </home/machinehum/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbi1440
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/f
-vmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmro8a.pfb>
-Output written on whitepaper.pdf (7 pages, 178346 bytes).
+dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fv
+mb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/bera/fvmro8a.pfb>
+Output written on whitepaper.pdf (7 pages, 177669 bytes).
 PDF statistics:
- 413 PDF objects out of 1000 (max. 8388607)
+ 404 PDF objects out of 1000 (max. 8388607)
  95 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)

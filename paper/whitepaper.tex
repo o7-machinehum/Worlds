@@ -77,8 +77,8 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \begin{center}
 \begin{tikzpicture}
 \label{Hello}
-\node(WE)[myblock]{\begin{tabular}{c}Worlds Engine \\ {\scriptsize wClient.py} \\\end{tabular}};
-\node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Server \\ {\scriptsize wServer.py} \\\end{tabular}};
+\node(WE)[myblock]{\begin{tabular}{c}Worlds Engine \\ {\scriptsize Worlds.py} \\\end{tabular}};
+\node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Server \\ {\scriptsize Worlds.py} \\\end{tabular}};
 \node (WC)[myblock,left of=WE, xshift=-3cm]{\begin{tabular}{c}Game Client \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
 \node (SE)[myblock,left of=WS, xshift=-3cm]{\begin{tabular}{c}Server Engine \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
 \node (WSC)[myblock,right of=WS, xshift=3cm, yshift=-1cm]{\begin{tabular}{c}Smart Contract (\ref{WSC}) \\ {\scriptsize \textit{On Chain}} \\\end{tabular}};
@@ -118,7 +118,7 @@ The worlds smart contract is used to form consensus among the network. It contai
 Actions are defined as anything a node can do to effect the network. Messages and data packages are to be considered actions in this context.
 
 \subsection{Direct Action}
-A direct action is any action that is travels between the Server Engine and the Game Client. These actions have the lowest latency and lowest security. An example of an action like this might be the Server engine telling the Game Client of some in game event.
+A direct action is any action that is travels between the Server Engine and the Game Client. These actions have the lowest latency . An example of an action like this might be the Server engine telling the Game Client of some in game event. Before there can be communication like this the there needs to be a symmetric key exchange. 
 
 \subsection{Proof Action}
 A proof action are actions that require the use of private keys for signing, but then relay the signed package from the Game Client to the Server Engine. For nodes that require higher security it is possible to hold the Worlds Server or Worlds Engine offline therefor keeping their keys offline. 
@@ -176,17 +176,21 @@ By calling the TxItem(ItemHash, PlayerPublic) function on the WSC it is possible
 In order to have a balanced economy the monetary system needs to be net zero \ref{money}. The same holds true for experience and items, this balance is achieved by staking WOR into items and EXP. Without this mechanic worlds would be able to create as much wealth as the want resulting in over powered items and EXP.
 
 \subsection{Forging}
-It is possible to forge items by combining multiple items, thus forming a derivative item. In literal sense the act of forging it to call the function \textit{ForgeItem(Item1, Item2, ...)} on the WSC. This will then make a derivative item which is shown in Figure \ref{ForgedItem}. It is up to the worlds to decide on the item names and item classes of these subitems. As an example, a player may forge a sword by combining metal, fabric and a sharpening stone. As long at the world recognizes that the resulting hash of these items do in fact form a sword, then the player has crafted a sword for use in these worlds. The power of the sword would be proportional to the amount of stakes WOR in all the items that were used to craft the sword. Once items are forged into something they can no longer be used for anything else. It is possible to unforge an item.
+It is possible to forge items by combining multiple items, thus forming a derivative item. In literal sense the act of forging it to call the function \textit{ForgeItem(Item1, Item2, ...)} on the WSC. This will then make a derivative item which is shown in Figure \ref{ForgedItem}. It is up to the worlds to decide on the item names and item classes of these subitems. As an example, a player may forge a sword by combining metal, fabric and a sharpening stone. As long at the world recognizes that the ForgeHash of the item do in fact form a sword, then the player has crafted a sword for use in these worlds. The power of the sword would be proportional to the amount of stakes WOR in all the items that were used to craft the sword. Once items are forged into something they can no longer be used for anything else. It is possible to unforge an item.
 
 \begin{figure}[H]
 \centering
 \caption{Forged Item $i_f$}
 \label{ForgedItem}
 \begin{lstlisting}[escapeinside={(*}{*)}]
-ItemHash = hash((*$i_0[ItemName] |  i_0[ItemClass] | ... | i_n[ItemName] | i_n[ItemClass]$*))
+ForgeHash = hash((*$i_0[ItemName] |  i_0[ItemClass] | ... | i_n[ItemName] | i_n[ItemClass]$*))
 PlayerPublic = 0x5d7ac22131ad370e59fddb5f6079a354dbdd2dd9
 WorldPublic[0 .. n] = # Public Key of all the worlds that issued the sub items
+ItemHash[0 .. n] = # Item hashes of items in the forge
+UnixTimeGen = # Time the item was created
+UnixTimeTX = # Time the item was last transmitted
 Stake = sum(ParentItemStake)
+ItemHash = hash(ForgeHash | ... | Stake);
 \end{lstlisting}
 \end{figure}
 
@@ -233,9 +237,62 @@ Static items are assets that may not transcend worlds, an example being virtual 
 
 \section{Outstanding Issues}
 \subsection{Malicious Worlds}
-Players may be required to stake items into 
+Players may be required to stake items, WOR or EXP to enter a world \ref{Staking}. As the universe grows, worlds may be required to manage lots of wealth, which opens the possibility of an exit scam.
 
-\subsection{}
+\subsection{Neighbor Conflict}
+Depending on the topology of worlds there may be neighbor conflicts. In the grid model, Figure \ref{GRID}, $w_5$ may wish to be adjacent to $w_2$ but not next to $w_4$. 
+
+\begin{figure}
+\centering
+\caption{GRID}
+\label{GRID}
+\begin{tikzpicture}
+\node[shape=rectangle,draw=black, minimum height=0.5cm, minimum width=0.5cm] (w1) at (0,0) {$w_1$};
+\node[shape=rectangle,draw=black, minimum height=0.5cm, minimum width=0.5cm, left of=w1] (w2) {$w_2$};
+\node[shape=rectangle,draw=black, minimum height=0.5cm, minimum width=0.5cm, left of=w2] (w3) {$w_3$};
+\node[shape=rectangle,draw=black, minimum height=0.5cm, minimum width=0.5cm, above of=w3] (w4) {$w_4$};
+\node[shape=rectangle,draw=black, minimum height=0.5cm, minimum width=0.5cm, above of=w2] (w5) {$w_5$};
+
+\draw [-] (w1) -- (w2);
+\draw [-] (w2) -- (w3);
+\draw [-] (w3) -- (w4);
+\draw [-] (w2) -- (w5);
+\end{tikzpicture}
+\end{figure}
+
+Using a dag, figure \ref{Graph} it's possible to treat the worlds like nodes on a graph. This allows four neighboring connections on every node. I am not sure what this means for the physical universe yet.
+
+\begin{figure}
+\centering
+\caption{DAG}
+\label{Graph}
+\begin{tikzpicture}
+\node[shape=circle,draw=black] (w1) at (-0.3cm,0.1cm) {$w_1$};
+\node[shape=circle,draw=black, left of=w1, yshift=0.5cm] (w2) {$w_2$};
+\node[shape=circle,draw=black, left of=w2, yshift=-0.5cm] (w3) {$w_3$};
+\node[shape=circle,draw=black, above of=w3, xshift=0.3cm] (w4) {$w_4$};
+\node[shape=circle,draw=black, above of=w2] (w5) {$w_5$};
+\node[shape=circle,draw=black, left of=w5, xshift=-0.2cm, yshift=0.5cm] (w6) {$w_6$};
+
+\draw [-] (w1) -- (w2);
+\draw [-] (w2) -- (w3);
+\draw [-] (w3) -- (w4);
+\draw [-] (w2) -- (w5);
+\draw [-] (w5) -- (w6);
+\end{tikzpicture}
+\end{figure}
+
+\subsection{Developers}
+With the initial implementation of the engine there will not be many worlds at first. It will take time for the universe to manifest itself as something massive. It is possible this will never happen due to a lack of developer interest. After building the token cap tables some of the WOR reserve will be used to fund developers.
+
+\subsection{Blockchain Technology}
+We are keeping our eyes open for a suitable blockchain for developing the smart contract. But the space requirements are high, ideally players can bring their own blockchain storage to the party, meaning players pay a small amount for each item they wish to keep. 
+
+\subsection{Unification}
+Worlds may have issues forming consensus on forged items (\ref{Forging}). The derivative hash will be the same if all of the items that go into the forge are the same from forge to forge. Although the resultant item of the forge can be controversial. It is possible that worlds can use item translations (\ref{ItemTranslations}, these can be used to funnel many items into a single for use in the world.
+
+\subsection{Congruent Worlds}
+As it is possible for each world to have their own client the game may suffer from a disconnect, as players move from world to world and the engine fetches new clients for each world the universe may seem to be disconnected. This may be either positive or negative based on the player. After the development of the Worlds Engine and smart contract, we are confident that there will be clusters of worlds that use the same client for players that want more fluid game play.
 
 \end{document}
 
