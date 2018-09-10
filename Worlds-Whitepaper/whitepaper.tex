@@ -47,7 +47,7 @@
 \mainmatter  % start of an individual contribution
 
 % This needs some work, big time.
-\title{\SystemName: A distributed MMO \textit{(DRAFT)}}
+\title{\SystemName: A distributed MMO}
 
 \author{Ryan Walker\\
 				ryan.cjw@gmail.com}
@@ -67,18 +67,18 @@ A protocol defining how anyone can contribute to an unbounded universe could all
 
 \section{Worlds}
 \subsection{Introduction}
-For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that have negative consequences if managed improperly. Forming consensus on a network is trivially done with conventional methods. A server maintains a secure connection with a player who pipes actions to the server. The server then provides ground truth for the network. Our model replacing a centralized organization with a smart contract which forms consensus and balances the economics of the universe. The user experience is designed by anyone who wishes to contribute.
+For an open software ecosystem to grow organically there should be outlets for contribution. In the context of a massively multiplayer online game the outlets become more complicated then a simple code repository. Fair game mechanics are built on a fragile ecosystem that have negative consequences if managed improperly. Forming consensus on a network is trivially done with conventional methods. A server maintains a secure connection with a player who pipes actions to the server. The server then provides ground truth for the network. Our model replaces a centralized organization with a smart contract which forms consensus and balances the economics of the universe. The user experience is designed by anyone who wishes to contribute.
 
 \subsection{Overview}
-A world, defined as $w_k$, is a node that designs a user experience and hosts players. Worlds provide the game client which the players interact with. In addition they govern their world and create the elements that make it unique. A world can have up to four adjacent worlds determined by itself. Thus forming a network, which allows players to explore and move common items (\ref{items}), experience (\ref{exp}) and currency (\ref{money}) between worlds.
+A world, defined as $w_k$, is a node that designs a user experience and hosts players. Worlds provide the game client which the players interact with. In addition they govern their world and create the elements that make it unique. A world can have up to four adjacent worlds determined by itself. This forms a network, which allows players to explore and move common items (\ref{items}), experience (\ref{exp}) and currency (\ref{money}) between worlds.
 
 \begin{small}
 \tikzset{myblock/.style = {rectangle, draw, minimum height=1cm, minimum width=3cm}}
 \begin{center}
 \begin{tikzpicture}
 \label{Hello}
-\node(WE)[myblock]{\begin{tabular}{c}Worlds Engine \\ {\scriptsize Worlds.py} \\\end{tabular}};
-\node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Server \\ {\scriptsize Worlds.py} \\\end{tabular}};
+\node(WE)[myblock]{\begin{tabular}{c}Worlds Engine \\ {\scriptsize Worlds.js} \\\end{tabular}};
+\node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Engine\\ {\scriptsize Worlds.js} \\\end{tabular}};
 \node (WC)[myblock,left of=WE, xshift=-3cm]{\begin{tabular}{c}Game Client \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
 \node (SE)[myblock,left of=WS, xshift=-3cm]{\begin{tabular}{c}Server Engine \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
 \node (WSC)[myblock,right of=WS, xshift=3cm, yshift=-1cm]{\begin{tabular}{c}Smart Contract (\ref{WSC}) \\ {\scriptsize \textit{On Chain}} \\\end{tabular}};
@@ -100,35 +100,34 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \end{tikzpicture}
 \end{center}
 \end{small}
-The worlds engine is an application that manages the elements that are common throughout all worlds, such as player keys, hashing+signing and fetching the files required to run the game client. The world designer have full creative freedom over the game client and server engine. This is what enables the highest flexibility and the most unique universe. It is possible for clusters of worlds to share a single game client, yet design their own experience. Conversely, adjacent worlds might have completely different game clients, where players might move from a text based MUD into a fully 3D world.
-
-The worlds client takes care of fetching the executable game client from the worlds server.
+The worlds engine is an application that manages the elements that are common throughout all worlds, such as player keys, hashing+signing and fetching the files required to run the Game Client. The world designer has full creative freedom over the game client and server engine. This enables the highest flexibility and the most unique universe. It is possible for clusters of worlds to share a single game client, yet design their own experience. Conversely, adjacent worlds might have completely different game clients, where players might move from a text based MUD into a fully 3D world. The worlds client takes care of fetching the executable game client from the worlds server.
 
 \section{Worlds Smart Contact (WSC)}
 \label{WSC}
-The worlds smart contract is used to form consensus among the network. It contains functions and data elements that are used as various forms of proof that require interoperability between worlds. An appropriate blockchain with the following requirements has not yet been selected.
+The worlds smart contract is used to form consensus among the network. It contains functions and data elements that are used as various forms of proof that require interoperability between worlds. An appropriate blockchain with the following requirements has not yet been selected, it must satisfy the following requirements. 
 
 \begin{itemize}
 \item{Low networks fees}
 \item{Fast transactions for in game purchases}
-\item{Decent data capacity to hold merkal proofs}
+\item{Decent data capacity to hold merkle proofs}
 \end{itemize}
 
 \section{Actions}
 Actions are defined as anything a node can do to effect the network. Messages and data packages are to be considered actions in this context.
 
 \subsection{Direct Action}
-A direct action is any action that is travels between the Server Engine and the Game Client. These actions have the lowest latency . An example of an action like this might be the Server engine telling the Game Client of some in game event. Before there can be communication like this the there needs to be a symmetric key exchange. 
+A direct action is any action that is travels between the Server Engine and the Game Client. These actions have the lowest latency. An example of an action like this might be the Server engine telling the Game Client of some in game event. Before there can be communication like this the there needs to be a symmetric key exchange. 
 
 \subsection{Proof Action}
-A proof action are actions that require the use of private keys for signing, but then relay the signed package from the Game Client to the Server Engine. For nodes that require higher security it is possible to hold the Worlds Server or Worlds Engine offline therefor keeping their keys offline. 
+A proof action are actions that require the use of private keys for signing, but then relay the signed package from the Game Client to the Server Engine. For nodes that require higher security it is possible to hold the Worlds Engine offline therefor keeping their keys offline. 
 
 \subsection{Contract Action}
-Contract actions are any actions that communicate with the Worlds Smart Contract. They can be issues from the Worlds Engine directly, or the Game Client can pipe action requests into the worlds engine. 
+Contract actions are any actions that communicate with the Worlds Smart Contract. They can be issued from the Worlds Engine directly, or the Game Client can pipe action requests into the worlds engine. 
 
 \section{Experience}
 \label{exp}
-Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable. It is possible for experience to be liquidated back into WOR by the players. Worlds can decide the effect of player experience, typically the more WOR that is staked the larger the effect can be. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
+Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable. It is possible for experience to be liquidated back into WOR by the players. Worlds determine the effect of player experience, typically the more WOR that is staked the larger the effect can be. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
+
 
 \begin{figure}[H]
 \centering
@@ -145,12 +144,11 @@ Stake = 0.1WOR
 \end{figure}
 
 \subsection{Receiving Experience} 
-In the interest is keeping latency low, experience is distributed to players when they leave the world. Although players may use gained experience immediately in their current world. 
-% To save space on the blockchain it is possible to form a merkel tree of all received experience. The player is required to keep all the original data. - ?
+In the interest is keeping latency low and conserving space onchain, experience is distributed to players when they leave the world. Although players may use gained experience immediately in their current world.
 
 \section{Items} 
 \label{items}
-Items can be introduced by any node on the network. To spawn an item the item package, defined as $i$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. The smart contract verifies that the WorldPublic field is the public key of the node issuing the item, assigns current unix time and then moves the WOR into the smart contract. Worlds have the option to credit or discredit certain items based on the WorldPublic field.  It is possible for items to be liquidated back into WOR by calling a function on the WSC. As only the hash of the item package is kept on-chain players are required to keep the entire item package.
+Items can be introduced by any node on the network. To spawn an item the item package, defined as $i$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. The smart contract verifies that the WorldPublic field is the public key of the node issuing the item, assigns current unix time and then moves the WOR into the smart contract from the issuers account. Worlds have the option to credit or discredit certain items based on the WorldPublic field.  It is possible for items to be liquidated back into WOR by calling a function on the WSC. As only the hash of the item package is kept on-chain players are required to keep the entire item package.
 
 \begin{figure}[H]
 \centering
@@ -173,9 +171,10 @@ ItemHash = hash(ItemName | ... | Stake);
 By calling the TxItem(ItemHash, PlayerPublic) function on the WSC it is possible to transfer items to other players.
 
 \subsection{Staked WOR}
-In order to have a balanced economy the monetary system needs to be net zero \ref{money}. The same holds true for experience and items, this balance is achieved by staking WOR into items and EXP. Without this mechanic worlds would be able to create as much wealth as the want resulting in over powered items and EXP.
+In order to have a balanced economy the monetary system needs to be net zero (\ref{money}). The same holds true for experience and items, this balance is achieved by staking WOR into items and EXP. Without this mechanic worlds would be able to create as much wealth as they want, resulting in over powered items and EXP. 
 
 \subsection{Forging}
+\label{Forging}
 It is possible to forge items by combining multiple items, thus forming a derivative item. In literal sense the act of forging it to call the function \textit{ForgeItem(Item1, Item2, ...)} on the WSC. This will then make a derivative item which is shown in Figure \ref{ForgedItem}. It is up to the worlds to decide on the item names and item classes of these subitems. As an example, a player may forge a sword by combining metal, fabric and a sharpening stone. As long at the world recognizes that the ForgeHash of the item do in fact form a sword, then the player has crafted a sword for use in these worlds. The power of the sword would be proportional to the amount of stakes WOR in all the items that were used to craft the sword. Once items are forged into something they can no longer be used for anything else. It is possible to unforge an item.
 
 \begin{figure}[H]
@@ -195,17 +194,17 @@ ItemHash = hash(ForgeHash | ... | Stake);
 \end{figure}
 
 \subsection{Using Items}
-In order reduce the latency of item usage, things must be taken off-chain. Please see the section \ref{Staking} for more information on this.
+In order reduce the latency of item usage, certain actions must be taken off-chain. Please see the section \ref{Staking} for more information on this.
 
 \section{Currency (WOR)}
 \label{money}
-A common currency between worlds will be used for staking and integration into the platform. To prevent abuse this currency must be zero sum, meaning worlds cannot generate it and it must start with a fixed supply. Ideally it is tracked through an existing blockchain. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions, purchasing items or keeping players items upon a death. Please read more in section \ref{MakeMoney}
+A common currency between worlds will be used for staking and integration into the platform. To prevent abuse this currency must be zero sum, meaning worlds cannot generate it and it must start with a fixed supply. Ideally it is tracked through an existing blockchain. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions, purchasing items, or keeping players items upon a death. Please read more in section \ref{MakeMoney}.
 
 \section{Transport}
 To prevent players from playing on multiple worlds concurrently a player location is kept on the worlds smart contract. This location is the public key of the world that the player currently resides. In order for this to be valid it must be signed by the player and the world the player resides in. If a player wishes to travel to a world... 
 
 \begin{itemize}
-\item{The player must send a signed entry request package must be sent to the world.}
+\item{The player must send a signed entry request to the world.}
 \item{If the world only allows travel from adjacent worlds, the player must reside in an adjacent world.}
 \item{The player provides proof of items and experience.}
 \item{The world might check the public key stamped the items/exp to ensure they are from creditable sources.}
@@ -215,29 +214,29 @@ To prevent players from playing on multiple worlds concurrently a player locatio
 
 \section{World Incentivisation}
 \label{MakeMoney}
-If worlds want to distribute items or experience they must stake some WOR into items. As WOR has monetary value worlds need a way to generate some revenue. In order for a world to profit, the sum of all revenue generation methods must be less their their distributed items.
+If worlds want to distribute items or experience they must stake some WOR into items. As WOR has monetary value worlds need a way to generate some revenue. In order for a world to profit, the sum of all revenue generation methods must be less their their distributed items. Some revenue strategies are similar to existing games, some are completely new. 
 
 \subsection{Staking}
 \label{Staking}
-Some worlds may require you to stake some experience, items or WOR before entering. This is effectively temporarily moving these things into possession of the world. This allows the game to move at a realtime pace that can be much quicker than the blocktime. If the player is to die, the staked things will fall under ownership of the world. The world then has the option to...
+Some worlds may require you to stake some experience, items or WOR before entering. This is effectively temporarily moving these into possession of the world. If the player is to die, the staked things will fall under ownership of the world. The world then has the option to...
 
 \begin{itemize}
-\item{Redistribute the items among other player.}
-\item{Liquidate the items for WOR.}
-\item{Give the items, or some of the items, back to the player.}
+\item{Redistribute the items among other player, skimming some fee of the top.}
+\item{Liquidate all the items for WOR.}
+\item{Give all the items, or some of the items, back to the player.}
 \end{itemize}
 
 \subsection{Fees}
-Just like conventional games, it is possible the worlds might charge an entrance fees. These could be one time or reoccurring.
+Just like conventional games, it is possible the worlds might charge an entrance fees. These could be one time or reoccurring. This would be transparent as the player moves about worlds. Ideally the fees would be built into the lore of the game.
 
 \subsection{In Game Purchases}
-Worlds might wish to sell items for WOR, this is a grey area as it can be considered pay-to-win. This may be  moderated by the entire ecosystem as worlds have the option to deny items that are issued by certain worlds, this is spoken more to in section \ref{Pay2Win}. 
+Worlds might wish to sell items for WOR, this is a grey area as it can be considered pay-to-win. This may be  moderated by the entire ecosystem as worlds have the option to deny items that are issued by certain worlds, this is spoken more to in section \ref{Pay2Win}.\\
 
-Static items are assets that may not transcend worlds, an example being virtual land or housing. These are provided solely by the world of issuance and are not required to be held in the WSC. Worlds are not required to stake WOR against these assets, but may wish to sell them for WOR. Items of this class might prove to be an alternate revenue stream.
+Static items are assets that may not transcend worlds, an example being virtual land or housing. These are provided solely by the world of issuance and the value is determined by that world. It is possible they may be kept in the WSC with a staked value of 0 WOR. As worlds are not required to stake WOR against these assets they may profit from selling them for WOR. Items of this class might prove to be an alternate revenue stream.
 
 \section{Outstanding Issues}
 \subsection{Malicious Worlds}
-Players may be required to stake items, WOR or EXP to enter a world \ref{Staking}. As the universe grows, worlds may be required to manage lots of wealth, which opens the possibility of an exit scam.
+Players may be required to stake items, WOR or EXP to enter a world (\ref{Staking}). As the universe grows, worlds may be required to manage lots of wealth, which opens the possibility of an exit scam or hacking.
 
 \subsection{Neighbor Conflict}
 Depending on the topology of worlds there may be neighbor conflicts. In the grid model, Figure \ref{GRID}, $w_5$ may wish to be adjacent to $w_2$ but not next to $w_4$. 
@@ -260,7 +259,7 @@ Depending on the topology of worlds there may be neighbor conflicts. In the grid
 \end{tikzpicture}
 \end{figure}
 
-Using a dag, figure \ref{Graph} it's possible to treat the worlds like nodes on a graph. This allows four neighboring connections on every node. I am not sure what this means for the physical universe yet.
+Using a network, Figure \ref{Graph} it's possible to treat the worlds like nodes on a graph. This allows four neighboring connections on every node. How this effects the physical universe is yet to be determined.
 
 \begin{figure}
 \centering
@@ -283,7 +282,7 @@ Using a dag, figure \ref{Graph} it's possible to treat the worlds like nodes on 
 \end{figure}
 
 \subsection{Developers}
-With the initial implementation of the engine there will not be many worlds at first. It will take time for the universe to manifest itself as something massive. It is possible this will never happen due to a lack of developer interest. After building the token cap tables some of the WOR reserve will be used to fund developers.
+With the initial implementation of the engine there will not be many worlds at first. It will take time for the universe to manifest itself as something massive. It is possible this will never happen due to a lack of developer interest.
 
 \subsection{Blockchain Technology}
 We are keeping our eyes open for a suitable blockchain for developing the smart contract. But the space requirements are high, ideally players can bring their own blockchain storage to the party, meaning players pay a small amount for each item they wish to keep. 
