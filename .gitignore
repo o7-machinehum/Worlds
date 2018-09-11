@@ -2,3 +2,6 @@ Worldcmd.pyc
 __pycache__
 *.pem
 AL/*
+Worlds-Whitepaper/whitepaper.aux
+Worlds-Whitepaper/whitepaper.log
+Worlds-Engine/node_modules/*

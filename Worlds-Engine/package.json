@@ -1,0 +1,15 @@
+{
+  "name": "worlds-engine",
+  "version": "0.0.1",
+  "description": "The Worlds Engine is the application that lives in between the Game Engine and the Worlds Smart Contract (WSC)",
+  "main": "Worlds.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "machinehum",
+  "license": "ISC",
+  "dependencies": {
+    "eosjs": "^16.0.6",
+    "repl": "^0.1.3"
+  }
+}
