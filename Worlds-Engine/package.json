@@ -9,7 +9,8 @@
   "author": "machinehum",
   "license": "ISC",
   "dependencies": {
-    "eosjs": "^16.0.6",
+    "dgram": "^1.0.1",
+    "eosjs": "^16.0.7",
     "repl": "^0.1.3"
   }
 }
