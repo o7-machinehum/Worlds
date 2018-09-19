@@ -1,6 +1,7 @@
-#include <eosiolib/eosio.hpp>
+#include "WSC.hpp"
 
 using namespace eosio;
+
 
 struct item {
 	char ItemName[30];
@@ -11,18 +12,22 @@ struct item {
 	time GenesisTime;
 	time TXtime;
 	float Stake;
-}
+};
+
 
 class WSC: public eosio::contract {
 	public:
 		using contract::contract;
 		
-		checksum CreateItem(const account_name user ,const asset& quantity) {
+			void createitem(account_name user) {
     	require_auth( user );
 			
-			item.GenesisTime = now()
+			/*Local Variables*/
+			checksum256 calc_hash;
+
+			// item.GenesisTime = now();
 
       }
 };
 
-EOSIO_ABI( hello, (hi) )
+EOSIO_ABI( WSC, (createitem) )
