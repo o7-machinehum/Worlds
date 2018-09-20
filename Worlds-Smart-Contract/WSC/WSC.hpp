@@ -2,12 +2,17 @@
  *  @file
  *  @copyright defined in eos/LICENSE.txt
  */
+
+#include <utility>
+#include <vector>
+#include <string>
+
 #include <eosiolib/asset.hpp>
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/crypto.h>
 #include <eosiolib/types.h>
-
-#include <string>
+#include <eosiolib/time.hpp>
+#include <eosiolib/contract.hpp>
 
 using namespace eosio;
 using std::string;
@@ -29,7 +34,7 @@ class WSC: public contract{
 		};
 		
 		// @ abi action
-		void createitem(account_name Owner, struct item Fitem);
+		void createitem(account_name Owner, string ItemName, string ItemClass, asset Stake);
 
 	private:
 		// @abi table itemProof i64
