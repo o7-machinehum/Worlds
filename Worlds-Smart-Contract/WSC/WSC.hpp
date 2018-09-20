@@ -7,7 +7,10 @@
 #include <eosiolib/crypto.h>
 #include <eosiolib/types.h>
 
+#include <string>
+
 using namespace eosio;
+using std::string;
 
 class WSC: public contract{
 	public:
@@ -15,14 +18,14 @@ class WSC: public contract{
 		
 		/*This can just be a normal Struct*/
 		struct item {
-			char ItemName[30];
-			char ItemClass[30];
+			string ItemName;
+			string ItemClass;
 			account_name Owner;
 			account_name PreviousOwner;
 			account_name OriginWorld;
 			time GenesisTime;
 			time TXtime;
-			float Stake;
+			asset Stake;
 		};
 		
 		// @ abi action
