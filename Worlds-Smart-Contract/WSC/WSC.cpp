@@ -1,8 +1,19 @@
+/** @file WSC.cpp
+ *  @brief This is code the manages the Worlds Smart Contract..
+ *	@author Ryan Walker
+ */
+
 #include "WSC.hpp"
+#include "../WOR/WOR.hpp"
 
 using namespace eosio;
 
-void WSC::createitem(account_name Owner, string ItemName, string ItemClass, asset Stake){
+void WSC::createitem( account_name Owner, // Creator of this item.
+											string ItemName,    // Name of the item.
+											string ItemClass,   // Class of the item.
+											asset Stake         // How much WOR to stake into the item.
+										)
+{
 	require_auth( Owner );
 	
 	eosio_assert( Stake.is_valid(), "invalid quantity" );                                                                    
@@ -49,23 +60,20 @@ void WSC::createitem(account_name Owner, string ItemName, string ItemClass, asse
 		p.itemHash = calc_hash;
 		p.Owner = Owner;
 	});
-	
 
 	print("\nHash Stored to blockchain.");
 	
-	/* Now we need to enter this into a table to keep the hash. */
-
 };
 
 
-//void WSC::transfer( account_name   from, /* Who's sending the item.     */
-//                      account_name to,   /* Who's getting the item      */
-//                      checksum256  hash  /* What's the hash of the item */
-//									)
-//{
-//	require_auth( from );	
-//	require_auth( to );	
+void WSC::transfer( account_name   from, // Who's sending the item.     
+                    account_name   to,   // Who's getting the item      
+                    checksum256    hash  // What's the hash of the item 
+									)
+{
+	require_auth( from );	
+	require_auth( to );	
 
-//}
+}
 
 // EOSIO_ABI( WSC, (createitem) )

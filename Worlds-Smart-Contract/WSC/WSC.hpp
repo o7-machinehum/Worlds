@@ -1,6 +1,6 @@
-/**
- *  @file
- *  @copyright defined in eos/LICENSE.txt
+/** @file WSC.cpp
+ *  @brief This file contains the classes to be used in the WSC.
+ *	@author Ryan Walker
  */
 
 #include <utility>
