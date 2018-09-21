@@ -1,3 +1,7 @@
 #!/bin/bash
 
-cleos get table turnip turnip itemProofs
+owner=wsc.code
+scope=turnip
+table=itemproofs
+
+cleos get table $owner $scope $table 

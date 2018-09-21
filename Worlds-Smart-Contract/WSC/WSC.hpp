@@ -34,22 +34,22 @@ class WSC: public contract{
     };
     
     // @ abi action
-    void create_item(account_name Owner, string ItemName, string ItemClass, asset Stake);
+    void createitem(account_name Owner, string ItemName, string ItemClass, asset Stake);
     // @ abi action
-    void transfer_item( account_name from, account_name to, checksum256 hash); 
+    void transferitem( account_name from, account_name to, checksum256 hash); 
 
   private:
-    // @abi table itemProof i64
-    struct itemProof{
+    // @abi table itemproofs i64
+    struct itemproof{
       account_name Owner;
       checksum256  itemHash;
       
-      account_name primary_key() const {return Owner;} // Double check this is the future! These should really be ref'd by their hash!
-      EOSLIB_SERIALIZE(itemProof, (Owner)(itemHash))
+      account_name primary_key() const {return Owner;} 
+      EOSLIB_SERIALIZE(itemproof, (Owner)(itemHash))
     };
 
-    typedef eosio::multi_index<N(itemProofs), itemProof> itemProof_table;
+    typedef eosio::multi_index<N(itemproofs), itemproof> itemProof_table;
 
 };
 
-EOSIO_ABI(WSC, (create_item)(transfer_item))
+EOSIO_ABI(WSC, (createitem)(transferitem))
