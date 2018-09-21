@@ -42,7 +42,7 @@ class WSC: public contract{
 			account_name Owner;
 			checksum256  itemHash;
 			
-			account_name primary_key() const {return Owner;}
+			account_name primary_key() const {return Owner;} // Double check this is the future! These should really be ref'd by their hash!
 			EOSLIB_SERIALIZE(itemProof, (Owner)(itemHash))
 		};
 
