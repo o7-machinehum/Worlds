@@ -6,7 +6,11 @@ WOR is the contract that manages the WOR tokens that are designed to be used in 
 ## WSC
 The worlds smart contact is a contract that lives onchain. It is responsible for managing player assets.
 
-### Open Questions
+##TODO
+- LiquidateItem() 
+- TransferItem()
+
+## Open Questions
 - itemProof should be referenced by it hash. Which is checksum265, I'm not sure how to use this as a ref.
 
 - Do we need to keep the Owner onchain? This is in the proof package, so I think all we need is the hash.
