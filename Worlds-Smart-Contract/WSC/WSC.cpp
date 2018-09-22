@@ -53,26 +53,34 @@ void WSC::createitem( account_name Owner, // Creator of this item.
     Arg1 - Contract Code Name.
     Arg2 - Scope. Do we want this in scope of the Owner?
   */
-  itemProof_table itemProof(_self, Owner);
+  itemProof_table itemProof(_self, _self);
 
   /* Place the hash onchain */  
   itemProof.emplace(Owner, [&](auto& p) {
+    p.Owner = Owner;
     p.itemHash = calc_hash;
-    // p.Owner = Owner;
   });
+	
+	// Sub Balance from users token balance!
 
   print("\nHash Stored to blockchain.");
   
 };
 
-
 void WSC::transferitem( account_name   from,     // Who's sending the item.     
                         account_name   to,       // Who's getting the item      
-                        checksum256    hash      // What's the hash of the item 
+                        item 				   TXitem,
+												checksum256    hash      // What's the hash of the item 
                       )
 {
-  require_auth( from ); 
-  require_auth( to ); 
+  require_auth( from );
+	
+  checksum256 calc_hash;
+  sha256((char*) &TXitem.ItemName, sizeof(TXitem), &calc_hash);
+	
+	eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash
+	// Then ensure it's on the DB!	
+	
 
 }
 

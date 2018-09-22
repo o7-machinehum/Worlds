@@ -36,7 +36,7 @@ class WSC: public contract{
     // @ abi action
     void createitem(account_name Owner, string ItemName, string ItemClass, asset Stake);
     // @ abi action
-    void transferitem( account_name from, account_name to, checksum256 hash); 
+    void transferitem( account_name from, account_name to, item TxItem, checksum256 hash); 
 
   private:
     // @abi table itemproofs i64
@@ -44,8 +44,10 @@ class WSC: public contract{
       account_name Owner;
       checksum256  itemHash;
       
-      account_name primary_key() const {return Owner;} 
-      EOSLIB_SERIALIZE(itemproof, (Owner)(itemHash))
+      account_name primary_key() const {return Owner;}				// Primary Indices.
+      checksum256 get_secondary_1() const {return itemHash;}	// Secondary Indicies.
+			
+			EOSLIB_SERIALIZE(itemproof, (Owner)(itemHash))
     };
 
     typedef eosio::multi_index<N(itemproofs), itemproof> itemProof_table;

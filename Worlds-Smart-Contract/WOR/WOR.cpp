@@ -79,7 +79,6 @@ void token::transfer( account_name from,
     eosio_assert( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
     eosio_assert( memo.size() <= 256, "memo has more than 256 bytes" );
 
-
     sub_balance( from, quantity );
     add_balance( to, quantity, from );
 }
