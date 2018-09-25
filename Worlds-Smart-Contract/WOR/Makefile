@@ -1,7 +1,7 @@
 # Makefile for the worlds smart contact
 
 CC=eosiocpp
-Contract=WOR
+Contract=wor.token
 
 all:
 	@echo "Building"
@@ -14,4 +14,4 @@ clean:
 	rm -f $(Contract).wasm
 
 deploy: all
-	cleos set contract wsc.code ../$(Contract) -p wsc.code@active
+	cleos set contract wor.token ../$(Contract) -p wor.token@active

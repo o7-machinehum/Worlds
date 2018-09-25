@@ -7,7 +7,7 @@
 
 namespace eosio {
 
-void token::create( account_name issuer,
+void WOR::create( account_name issuer,
                     asset        maximum_supply )
 {
     require_auth( _self );
@@ -29,7 +29,7 @@ void token::create( account_name issuer,
 }
 
 
-void token::issue( account_name to, asset quantity, string memo )
+void WOR::issue( account_name to, asset quantity, string memo )
 {
     auto sym = quantity.symbol;
     eosio_assert( sym.is_valid(), "invalid symbol name" );
@@ -59,7 +59,7 @@ void token::issue( account_name to, asset quantity, string memo )
     }
 }
 
-void token::transfer( account_name from,
+void WOR::transfer( account_name from,
                       account_name to,
                       asset        quantity,
                       string       memo )
@@ -83,7 +83,7 @@ void token::transfer( account_name from,
     add_balance( to, quantity, from );
 }
 
-void token::sub_balance( account_name owner, asset value ) {
+void WOR::sub_balance( account_name owner, asset value ) {
    accounts from_acnts( _self, owner );
 
    const auto& from = from_acnts.get( value.symbol.name(), "no balance object found" );
@@ -99,7 +99,7 @@ void token::sub_balance( account_name owner, asset value ) {
    }
 }
 
-void token::add_balance( account_name owner, asset value, account_name ram_payer )
+void WOR::add_balance( account_name owner, asset value, account_name ram_payer )
 {
    accounts to_acnts( _self, owner );
    auto to = to_acnts.find( value.symbol.name() );
@@ -116,4 +116,4 @@ void token::add_balance( account_name owner, asset value, account_name ram_payer
 
 } /// namespace eosio
 
-EOSIO_ABI( eosio::token, (create)(issue)(transfer) )
+EOSIO_ABI( eosio::WOR, (create)(issue)(transfer) )

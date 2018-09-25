@@ -60,9 +60,9 @@ void WSC::createitem( account_name Owner, // Creator of this item.
     p.Owner = Owner;
     p.itemHash = calc_hash;
   });
-	
-	// Sub Balance from users token balance!
-
+  
+  //Send the WOR to the WSC. 
+  action(permission_level{Owner, N(Active)}, N(wor.code), N(transfer), std::make_tuple(Owner, _self, Stake, "Hi")).send(); 
   print("\nHash Stored to blockchain.");
   
 };
@@ -80,7 +80,6 @@ void WSC::transferitem( account_name   from,     // Who's sending the item.
 	
 	eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash
 	// Then ensure it's on the DB!	
-	
 
 }
 

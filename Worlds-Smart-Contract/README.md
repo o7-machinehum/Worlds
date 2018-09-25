@@ -18,7 +18,7 @@ The worlds smart contact is a contract that lives onchain. It is responsible for
 
 - How do we lock funds in the WSC? sub_balance and add_balance are both private functions in the tokens contract. Maybe we just have to mash them togeather.
 	- Try importing table from WOR into the WSC class then try to modify it from there, 
-		change the permissions of the table.
+		change the permissions of the table - ?.
 
 - How do you get unix time out of the function so the user can calculate the hash?
 
