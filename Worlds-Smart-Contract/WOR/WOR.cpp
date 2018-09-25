@@ -12,6 +12,8 @@ void WOR::create( account_name issuer,
 {
     require_auth( _self );
 
+		print("Making Coins $$$");
+		
     auto sym = maximum_supply.symbol;
     eosio_assert( sym.is_valid(), "invalid symbol name" );
     eosio_assert( maximum_supply.is_valid(), "invalid supply");

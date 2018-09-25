@@ -1,17 +1,17 @@
 # Makefile for the worlds smart contact
 
-CC=eosiocpp
-Contract=wor.token
+CC=eosio-cpp
+Contract=WOR
 
 all:
 	@echo "Building"
-	$(CC) -o $(Contract).wast $(Contract).cpp 
-	$(CC) -g $(Contract).abi $(Contract).cpp
+	$(CC) $(Contract).cpp -o $(Contract).wasm --abigen
 
 clean:
 	rm -f $(Contract).wast
-	rm -f $(Contract).abi
+	rm -f *.abi
 	rm -f $(Contract).wasm
 
 deploy: all
+	# cleos set contract wor.token ../$(Contract) -p wor.token@active
 	cleos set contract wor.token ../$(Contract) -p wor.token@active

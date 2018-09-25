@@ -21,30 +21,32 @@ namespace eosio {
    class WOR: public contract {
       public:
          WOR( account_name self ):contract(self){}
-
+				 
+				 [[eosio::action]]
          void create( account_name issuer,
                       asset        maximum_supply);
-
-         void issue( account_name to, asset quantity, string memo );
-
+ 				 
+				 [[eosio::action]]        
+				 void issue( account_name to, asset quantity, string memo );
+				 
+				 [[eosio::action]]
          void transfer( account_name from,
                         account_name to,
                         asset        quantity,
                         string       memo );
-      
       
          inline asset get_supply( symbol_name sym )const;
          
          inline asset get_balance( account_name owner, symbol_name sym )const;
 
       private:
-         struct account {
+         struct [[eosio::table]] account {
             asset    balance;
 
             uint64_t primary_key()const { return balance.symbol.name(); }
          };
 
-         struct currency_stats {
+         struct [[eosio::table]] currency_stats {
             asset          supply;
             asset          max_supply;
             account_name   issuer;
