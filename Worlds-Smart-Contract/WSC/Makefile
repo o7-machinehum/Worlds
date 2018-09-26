@@ -5,12 +5,13 @@ Contract=WSC
 
 all:
 	@echo "Building"
-	$(CC) $(Contract).cpp -o $(Contract).wasm --abigen
+	# $(CC) $(Contract).cpp -o $(Contract).wasm --abigen
+	$(CC) $(Contract).cpp -o $(Contract).wasm
 
 clean:
 	rm -f $(Contract).wast
 	rm -f *.abi
 	rm -f $(Contract).wasm
 
-deploy: all
+deploy:
 	cleos set contract wsc.code ../$(Contract) -p wsc.code@active

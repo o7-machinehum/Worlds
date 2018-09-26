@@ -89,7 +89,7 @@ void WSC::transferitem( account_name   from,     // Who's sending the item.
 }
 
 void WSC::createwor( account_name issuer,
-                    asset        maximum_supply )
+                     asset        maximum_supply )
 {
     require_auth( _self );
 
