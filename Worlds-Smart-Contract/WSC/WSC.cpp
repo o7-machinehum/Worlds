@@ -15,11 +15,17 @@ void WSC::createitem( account_name Owner, // Creator of this item.
                     )
 {
   require_auth( Owner );
-  eosio_assert( Stake.is_valid(), "invalid quantity" );                                                                    
+	require_recipient(Owner);
+  
+	auto sym = Stake.symbol.name();
+  stats statstable( _self, sym );
+  const auto& st = statstable.get( sym );
+	
+	eosio_assert( Stake.is_valid(), "invalid quantity" );                                                                    
   eosio_assert( Stake.amount > 0, "must transfer positive quantity" );
-  // eosio_assert( Stake.symbol == st.supply.symbol, "symbol precision mismatch" );
-
-  checksum256 calc_hash;
+  eosio_assert( Stake.symbol == st.supply.symbol, "symbol precision mismatch" );
+  
+	checksum256 calc_hash;
   item item;
 
   /* Fill the structure. */
@@ -59,7 +65,8 @@ void WSC::createitem( account_name Owner, // Creator of this item.
     p.Owner = Owner;
     p.itemHash = calc_hash;
   });
- 
+
+
  	// Move the Funds into the item.
   sub_balance( Owner, Stake );
   
@@ -81,7 +88,7 @@ void WSC::transferitem( account_name   from,     // Who's sending the item.
 
 }
 
-void WSC::create( account_name issuer,
+void WSC::createwor( account_name issuer,
                     asset        maximum_supply )
 {
     require_auth( _self );
@@ -105,7 +112,7 @@ void WSC::create( account_name issuer,
 }
 
 
-void WSC::issue( account_name to, asset quantity, string memo )
+void WSC::issuewor( account_name to, asset quantity, string memo )
 {
     auto sym = quantity.symbol;
     eosio_assert( sym.is_valid(), "invalid symbol name" );
@@ -131,11 +138,11 @@ void WSC::issue( account_name to, asset quantity, string memo )
     add_balance( st.issuer, quantity, st.issuer );
 
     if( to != st.issuer ) {
-       SEND_INLINE_ACTION( *this, transfer, {st.issuer,N(active)}, {st.issuer, to, quantity, memo} );
+       SEND_INLINE_ACTION( *this, transferwor, {st.issuer,N(active)}, {st.issuer, to, quantity, memo} );
     }
 }
 
-void WSC::transfer( account_name from,
+void WSC::transferwor( account_name from,
                       account_name to,
                       asset        quantity,
                       string       memo )
@@ -143,7 +150,8 @@ void WSC::transfer( account_name from,
     eosio_assert( from != to, "cannot transfer to self" );
     require_auth( from );
     eosio_assert( is_account( to ), "to account does not exist");
-    auto sym = quantity.symbol.name();
+    
+		auto sym = quantity.symbol.name();
     stats statstable( _self, sym );
     const auto& st = statstable.get( sym );
 

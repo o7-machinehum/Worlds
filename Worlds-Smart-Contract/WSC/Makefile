@@ -13,4 +13,4 @@ clean:
 	rm -f $(Contract).wasm
 
 deploy: all
-	cleos set contract wsc.code ../$(Contract) -p wor.code@active
+	cleos set contract wsc.code ../$(Contract) -p wsc.code@active

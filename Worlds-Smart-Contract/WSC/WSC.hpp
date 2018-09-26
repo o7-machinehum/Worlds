@@ -39,21 +39,18 @@ class WSC: public contract{
 		[[eosio::action]]        
     void transferitem( account_name from, account_name to, item TxItem, checksum256 hash); 
          
-		// WOR( account_name self ):contract(self){}
-
 		/** Token Actions **/
 		[[eosio::action]]
-		void create( account_name issuer,
-								asset        maximum_supply);
+		void createwor( account_name issuer, asset maximum_supply);
 
 		[[eosio::action]]        
-		void issue( account_name to, asset quantity, string memo );
+		void issuewor( account_name to, asset quantity, string memo );
 
 		[[eosio::action]]
-		void transfer( account_name from,
-									account_name to,
-									asset        quantity,
-									string       memo );
+		void transferwor( account_name from,
+											account_name to,
+											asset        quantity,
+											string       memo );
 
 		inline asset get_supply( symbol_name sym )const;
 
@@ -76,7 +73,6 @@ class WSC: public contract{
 			
 			EOSLIB_SERIALIZE(itemproof, (Owner)(itemHash))
     };
-    typedef eosio::multi_index<N(itemproofs), itemproof> itemProof_table;
 
 		/** Token Private Members **/
 		struct [[eosio::table]] account {
@@ -93,8 +89,9 @@ class WSC: public contract{
 			uint64_t primary_key()const { return supply.symbol.name(); }
 		};
 
-		typedef eosio::multi_index<N(accounts), account> accounts;
-		typedef eosio::multi_index<N(stat), currency_stats> stats;
+		typedef multi_index<N(accounts), account> accounts;
+		typedef multi_index<N(stat), currency_stats> stats;
+    typedef multi_index<N(itemproofs), itemproof> itemProof_table;
 
 		void sub_balance( account_name owner, asset value );
 		void add_balance( account_name owner, asset value, account_name ram_payer );
@@ -115,4 +112,4 @@ asset WSC::get_supply( symbol_name sym )const
       return ac.balance;
    }
 
-EOSIO_ABI(WSC, (createitem)(transferitem))
+EOSIO_ABI(WSC, (createitem)(transferitem)(createwor)(issuewor)(transferwor))
