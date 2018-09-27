@@ -8,35 +8,35 @@
 
 using namespace eosio;
 
-void WSC::createitem( account_name Owner, // Creator of this item.
-                      string ItemName,    // Name of the item.
-                      string ItemClass,   // Class of the item.
-                      asset Stake         // How much WOR to stake into the item.
+void WSC::createitem( account_name owner, // Creator of this item.
+                      string 			 item_name,    // Name of the item.
+                      string 			 item_class,   // Class of the item.
+                      asset 			 stake         // How much WOR to stake into the item.
                     )
 {
-  require_auth( Owner );
-	require_recipient(Owner);
+  require_auth( owner );
+	require_recipient( owner );
   
-	auto sym = Stake.symbol.name();
+	auto sym = stake.symbol.name();
   stats statstable( _self, sym );
   const auto& st = statstable.get( sym );
 	
-	eosio_assert( Stake.is_valid(), "invalid quantity" );                                                                    
-  eosio_assert( Stake.amount > 0, "must transfer positive quantity" );
-  eosio_assert( Stake.symbol == st.supply.symbol, "symbol precision mismatch" );
+	eosio_assert( stake.is_valid(), "invalid quantity" );                                                                    
+  eosio_assert( stake.amount > 0, "must transfer positive quantity" );
+  eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
   
 	checksum256 calc_hash;
   item item;
 
   /* Fill the structure. */
-  item.ItemName = ItemName;
-  item.ItemClass = ItemClass;
-  item.Owner = Owner;
+  item.ItemName = item_name;
+  item.ItemClass = item_class;
+  item.Owner = owner;
   item.PreviousOwner = 0x00;
-  item.OriginWorld = Owner;
+  item.OriginWorld = owner;
   item.GenesisTime = now();
   item.TXtime = 0x00;
-  item.Stake = Stake;
+  item.Stake = stake;
   
   /*Make this hash match!*/
   print("ItemName: ", item.ItemName, "\n");
@@ -61,27 +61,27 @@ void WSC::createitem( account_name Owner, // Creator of this item.
   itemProof_table itemProof(_self, _self);
 
   /* Place the hash onchain */  
-  itemProof.emplace(Owner, [&](auto& p) {
-    p.Owner = Owner;
+  itemProof.emplace(owner, [&](auto& p) {
+    // p.Owner = Owner;
     p.itemHash = calc_hash;
   });
 
 
  	// Move the Funds into the item.
-  sub_balance( Owner, Stake );
+  sub_balance( owner, stake );
   
 };
 
 void WSC::transferitem( account_name   from,     // Who's sending the item.     
                         account_name   to,       // Who's getting the item      
-                        item 				   TXitem,
+                        item 				   tx_item,
 												checksum256    hash      // What's the hash of the item 
                       )
 {
   require_auth( from );
 	
   checksum256 calc_hash;
-  sha256((char*) &TXitem.ItemName, sizeof(TXitem), &calc_hash);
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
 	
 	eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash
 	// Then ensure it's on the DB!	

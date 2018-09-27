@@ -10,7 +10,7 @@ all:
 
 clean:
 	rm -f $(Contract).wast
-	rm -f *.abi
+	# rm -f *.abi
 	rm -f $(Contract).wasm
 
 deploy:

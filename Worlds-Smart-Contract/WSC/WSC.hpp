@@ -34,10 +34,10 @@ class WSC: public contract{
     };
     
 		[[eosio::action]]        
-    void createitem(account_name Owner, string ItemName, string ItemClass, asset Stake);
+    void createitem(account_name owner, string item_name, string item_class, asset stake);
 		
 		[[eosio::action]]        
-    void transferitem( account_name from, account_name to, item TxItem, checksum256 hash); 
+    void transferitem( account_name from, account_name to, item tx_item, checksum256 hash); 
          
 		/** Token Actions **/
 		[[eosio::action]]
@@ -65,13 +65,11 @@ class WSC: public contract{
 
   private:
     struct [[eosio::table]] itemproof{
-      account_name Owner;
       checksum256  itemHash;
       
-      account_name primary_key() const {return Owner;}				// Primary Indices.
-      checksum256 get_secondary_1() const {return itemHash;}	// Secondary Indicies.
+      uint64_t primary_key() const {return *(uint64_t*)&itemHash;}				// Primary Indices.
 			
-			EOSLIB_SERIALIZE(itemproof, (Owner)(itemHash))
+			EOSLIB_SERIALIZE(itemproof, (itemHash))
     };
 
 		/** Token Private Members **/
