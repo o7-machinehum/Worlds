@@ -1,3 +1,3 @@
 #!/bin/bash
 # arg1 = Name
-cleos get currency balance wor.token $1 WOR
+cleos get currency balance wsc.code $1 WOR

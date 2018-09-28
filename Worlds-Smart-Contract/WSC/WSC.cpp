@@ -9,23 +9,23 @@
 using namespace eosio;
 
 void WSC::createitem( account_name owner, // Creator of this item.
-                      string 			 item_name,    // Name of the item.
-                      string 			 item_class,   // Class of the item.
-                      asset 			 stake         // How much WOR to stake into the item.
+                      string       item_name,    // Name of the item.
+                      string       item_class,   // Class of the item.
+                      asset        stake         // How much WOR to stake into the item.
                     )
 {
   require_auth( owner );
-	require_recipient( owner );
+  require_recipient( owner );
   
-	auto sym = stake.symbol.name();
+  auto sym = stake.symbol.name();
   stats statstable( _self, sym );
   const auto& st = statstable.get( sym );
-	
-	eosio_assert( stake.is_valid(), "invalid quantity" );                                                                    
+  
+  eosio_assert( stake.is_valid(), "invalid quantity" );                           
   eosio_assert( stake.amount > 0, "must transfer positive quantity" );
   eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
   
-	checksum256 calc_hash;
+  checksum256 calc_hash;
   item item;
 
   /* Fill the structure. */
@@ -67,24 +67,24 @@ void WSC::createitem( account_name owner, // Creator of this item.
   });
 
 
- 	// Move the Funds into the item.
+  // Move the Funds into the item.
   sub_balance( owner, stake );
   
 };
 
 void WSC::transferitem( account_name   from,     // Who's sending the item.     
                         account_name   to,       // Who's getting the item      
-                        item 				   tx_item,
-												checksum256    hash      // What's the hash of the item 
+                        item           tx_item,
+                        checksum256    hash      // What's the hash of the item 
                       )
 {
   require_auth( from );
-	
+  
   checksum256 calc_hash;
   sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
-	
-	eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash
-	// Then ensure it's on the DB!	
+  
+  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash
+  // Then ensure it's on the DB!  
 
 }
 
@@ -93,8 +93,8 @@ void WSC::createwor( account_name issuer,
 {
     require_auth( _self );
 
-		print("Making Coins $$$");
-		
+    print("Making Coins $$$");
+    
     auto sym = maximum_supply.symbol;
     eosio_assert( sym.is_valid(), "invalid symbol name" );
     eosio_assert( maximum_supply.is_valid(), "invalid supply");
@@ -151,7 +151,7 @@ void WSC::transferwor( account_name from,
     require_auth( from );
     eosio_assert( is_account( to ), "to account does not exist");
     
-		auto sym = quantity.symbol.name();
+    auto sym = quantity.symbol.name();
     stats statstable( _self, sym );
     const auto& st = statstable.get( sym );
 

@@ -1,13 +1,13 @@
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Sep 27 13:48:32 2018",
     "version": "eosio::abi/1.0",
-		"types": [{
+    "types": [{
       "new_type_name": "account_name",
       "type": "name"
-	 },{
-	 		"new_type_name": "time",
-			"type": "uint32"
-	}],
+   },{
+      "new_type_name": "time",
+      "type": "uint32"
+  }],
     "structs": [
         {
             "name": "account",

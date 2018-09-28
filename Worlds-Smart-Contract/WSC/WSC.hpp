@@ -18,7 +18,7 @@ using namespace eosio;
 using std::string;
 
 class WSC: public contract{
-	public:
+  public:
     WSC(account_name self) : contract(self) {}
     
     /*This can just be a normal Struct*/
@@ -33,66 +33,66 @@ class WSC: public contract{
       asset Stake;
     };
     
-		[[eosio::action]]        
+    [[eosio::action]]        
     void createitem(account_name owner, string item_name, string item_class, asset stake);
-		
-		[[eosio::action]]        
+    
+    [[eosio::action]]        
     void transferitem( account_name from, account_name to, item tx_item, checksum256 hash); 
          
-		/** Token Actions **/
-		[[eosio::action]]
-		void createwor( account_name issuer, asset maximum_supply);
+    /** Token Actions **/
+    [[eosio::action]]
+    void createwor( account_name issuer, asset maximum_supply);
 
-		[[eosio::action]]        
-		void issuewor( account_name to, asset quantity, string memo );
+    [[eosio::action]]        
+    void issuewor( account_name to, asset quantity, string memo );
 
-		[[eosio::action]]
-		void transferwor( account_name from,
-											account_name to,
-											asset        quantity,
-											string       memo );
+    [[eosio::action]]
+    void transferwor( account_name from,
+                      account_name to,
+                      asset        quantity,
+                      string       memo );
 
-		inline asset get_supply( symbol_name sym )const;
+    inline asset get_supply( symbol_name sym )const;
 
-		inline asset get_balance( account_name owner, symbol_name sym )const;
+    inline asset get_balance( account_name owner, symbol_name sym )const;
 
-		struct transfer_args {
-			account_name  from;
-			account_name  to;
-			asset         quantity;
-			string        memo;
-		};
+    struct transfer_args {
+      account_name  from;
+      account_name  to;
+      asset         quantity;
+      string        memo;
+    };
 
   private:
     struct [[eosio::table]] itemproof{
       checksum256  itemHash;
       
-      uint64_t primary_key() const {return *(uint64_t*)&itemHash;}				// Primary Indices.
-			
-			EOSLIB_SERIALIZE(itemproof, (itemHash))
+      uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
+      
+      EOSLIB_SERIALIZE(itemproof, (itemHash))
     };
 
-		/** Token Private Members **/
-		struct [[eosio::table]] account {
-			asset    balance;
+    /** Token Private Members **/
+    struct [[eosio::table]] account {
+      asset    balance;
 
-			uint64_t primary_key()const { return balance.symbol.name(); }
-		};
+      uint64_t primary_key()const { return balance.symbol.name(); }
+    };
 
-		struct [[eosio::table]] currency_stats {
-			asset          supply;
-			asset          max_supply;
-			account_name   issuer;
+    struct [[eosio::table]] currency_stats {
+      asset          supply;
+      asset          max_supply;
+      account_name   issuer;
 
-			uint64_t primary_key()const { return supply.symbol.name(); }
-		};
+      uint64_t primary_key()const { return supply.symbol.name(); }
+    };
 
-		typedef multi_index<N(accounts), account> accounts;
-		typedef multi_index<N(stat), currency_stats> stats;
+    typedef multi_index<N(accounts), account> accounts;
+    typedef multi_index<N(stat), currency_stats> stats;
     typedef multi_index<N(itemproofs), itemproof> itemProof_table;
 
-		void sub_balance( account_name owner, asset value );
-		void add_balance( account_name owner, asset value, account_name ram_payer );
+    void sub_balance( account_name owner, asset value );
+    void add_balance( account_name owner, asset value, account_name ram_payer );
 
 };
 
