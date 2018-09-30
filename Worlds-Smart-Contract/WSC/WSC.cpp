@@ -58,11 +58,10 @@ void WSC::createitem( account_name owner, // Creator of this item.
     Arg1 - Contract Code Name.
     Arg2 - Scope. Do we want this in scope of the Owner?
   */
-  itemProof_table itemProof(_self, _self);
+  itemProof_table itemProof(_self, owner);
 
   /* Place the hash onchain */  
   itemProof.emplace(owner, [&](auto& p) {
-    // p.Owner = Owner;
     p.itemHash = calc_hash;
   });
 
