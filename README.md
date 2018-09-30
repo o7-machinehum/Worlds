@@ -12,9 +12,9 @@ The worlds smart contract current based on eosio. It will be deployed on the EOS
 * [eosio.cdt](https://github.com/EOSIO/eosio.cdt)
 
 ### Building
-'''bash
+```bash
 cd Worlds-Smart-Contract/WSC/ ; make
-'''
+```
 
 ## Worlds Client (Worlds.js)
 The worlds client uses eosjs to communicate with the WSC.
