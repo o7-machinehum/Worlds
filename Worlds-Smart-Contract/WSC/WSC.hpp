@@ -33,11 +33,14 @@ class WSC: public contract{
       asset Stake;
     };
     
-    [[eosio::action]]        
-    void createitem(account_name owner, string item_name, string item_class, asset stake);
+    [[eosio::action]]
+    void createitem( account_name owner, string item_name, string item_class, asset stake );
     
-    [[eosio::action]]        
-    void transferitem( account_name from, account_name to, item tx_item, checksum256 hash); 
+    [[eosio::action]]
+    void liquidateitem( account_name owner, item tx_item, checksum256 hash );
+    
+    [[eosio::action]] 
+    void transferitem( account_name from, account_name to, item tx_item, checksum256 hash ); 
          
     /** Token Actions **/
     [[eosio::action]]
@@ -93,7 +96,9 @@ class WSC: public contract{
 
     void sub_balance( account_name owner, asset value );
     void add_balance( account_name owner, asset value, account_name ram_payer );
-
+    
+    checksum256 hashItem(account_name owner, string item_name, string item_class, asset stake);
+    checksum256 hashItemTransfer(account_name NewOwner, item item);
 };
 
 asset WSC::get_supply( symbol_name sym )const

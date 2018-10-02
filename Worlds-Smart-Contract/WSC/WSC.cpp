@@ -26,67 +26,67 @@ void WSC::createitem( account_name owner, // Creator of this item.
   eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
   
   checksum256 calc_hash;
-  item item;
-
-  /* Fill the structure. */
-  item.ItemName = item_name;
-  item.ItemClass = item_class;
-  item.Owner = owner;
-  item.PreviousOwner = 0x00;
-  item.OriginWorld = owner;
-  item.GenesisTime = now();
-  item.TXtime = 0x00;
-  item.Stake = stake;
   
-  /*Make this hash match!*/
-  print("ItemName: ", item.ItemName, "\n");
-  print("ItemClass: ", item.ItemClass, "\n");
-  print("ItemOwner: ", item.Owner, "\n");
-  print("PreviousOwner: ", item.PreviousOwner, "\n");
-  print("OriginWorld: ", item.OriginWorld, "\n");
-  print("GenesisTime: ", item.GenesisTime, "\n");
-  print("TXtime: ", item.TXtime, "\n");
-  print("Stake: ", item.Stake, "\n");
-
-  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
-  
-  // for (int i = 0 ; i < 32 ; i++)
-  print("Sha256: ");
-  printhex((const void*)&calc_hash, 32);
-
-  /*Create the table to hold the item.
-    Arg1 - Contract Code Name.
-    Arg2 - Scope. Do we want this in scope of the Owner?
-  */
+  calc_hash = hashItem(owner, item_name, item_class, stake);
   itemProof_table itemProof(_self, owner);
 
   /* Place the hash onchain */  
   itemProof.emplace(owner, [&](auto& p) {
     p.itemHash = calc_hash;
   });
-
-
-  // Move the Funds into the item.
+  
   sub_balance( owner, stake );
   
 };
 
-void WSC::transferitem( account_name   from,     // Who's sending the item.     
-                        account_name   to,       // Who's getting the item      
-                        item           tx_item,
-                        checksum256    hash      // What's the hash of the item 
+void WSC::liquidateitem( account_name   owner,    // Who's the owner.
+                         item           tx_item,  // Actual item package.
+                         checksum256    hash      // What's the hash of the item.
+                      )
+{
+  require_auth( owner );
+  require_recipient( owner );
+
+  checksum256 calc_hash;
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
+  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash.
+  
+  itemProof_table itemProof(_self, owner);
+  auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
+  eosio_assert(chainHash == hash, "Hash on chain does not match!");
+  itemProofFrom.erase(*(uint64_t*)&hash); // Remove the hash from the table.
+
+  add_balance( owner, tx_item.stake );
+}
+
+void WSC::transferitem( account_name   from,     // Who's sending the item.
+                        account_name   to,       // Who's getting the item.
+                        item           tx_item,  // Actual item package.
+                        checksum256    hash      // What's the hash of the item.
                       )
 {
   require_auth( from );
-  
+  require_recipient( from );
+  require_recipient( to );
+
   checksum256 calc_hash;
   sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
+  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash.
   
-  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash
-  // Then ensure it's on the DB!  
+  itemProof_table itemProofFrom(_self, from);
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
+  eosio_assert(chainHash == hash, "Hash on chain does not match!");
+  itemProofFrom.erase(*(uint64_t*)&hash); // Remove the hash from the table.
 
+  itemProof_table itemProofTo(_self, to);
+  calc_hash = hashItemTransfer(to, tx_item);
+
+  itemProofTo.emplace(from, [&](auto& p) {
+    p.itemHash = calc_hash;
+  });
 }
 
+/* Token Functions below. */
 void WSC::createwor( account_name issuer,
                      asset        maximum_supply )
 {
@@ -195,4 +195,57 @@ void WSC::add_balance( account_name owner, asset value, account_name ram_payer )
         a.balance += value;
       });
    }
+}
+
+checksum256 hashItemTransfer(account_name NewOwner, item item){
+  checksum256 calc_hash;
+
+  item.Owner = NewOwner;
+  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
+  
+  /*Make this hash match!*/
+  print("ItemName: ", item.ItemName, "\n");
+  print("ItemClass: ", item.ItemClass, "\n");
+  print("ItemOwner: ", item.Owner, "\n");
+  print("PreviousOwner: ", item.PreviousOwner, "\n");
+  print("OriginWorld: ", item.OriginWorld, "\n");
+  print("GenesisTime: ", item.GenesisTime, "\n");
+  print("TXtime: ", item.TXtime, "\n");
+  print("Stake: ", item.Stake, "\n");
+  
+  return(calc_hash); 
+}
+
+checksum256 hashItemCreate(account_name owner, string item_name, string item_class, asset stake)
+{
+  checksum256 calc_hash;
+  item item;
+
+  /* Fill the structure. */
+  item.ItemName = item_name;
+  item.ItemClass = item_class;
+  item.Owner = owner;
+  item.PreviousOwner = 0x00;
+  item.OriginWorld = owner;
+  item.GenesisTime = now();
+  item.TXtime = 0x00;
+  item.Stake = stake;
+  
+  /*Make this hash match!*/
+  print("ItemName: ", item.ItemName, "\n");
+  print("ItemClass: ", item.ItemClass, "\n");
+  print("ItemOwner: ", item.Owner, "\n");
+  print("PreviousOwner: ", item.PreviousOwner, "\n");
+  print("OriginWorld: ", item.OriginWorld, "\n");
+  print("GenesisTime: ", item.GenesisTime, "\n");
+  print("TXtime: ", item.TXtime, "\n");
+  print("Stake: ", item.Stake, "\n");
+
+  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
+  
+  // for (int i = 0 ; i < 32 ; i++)
+  print("Sha256: ");
+  printhex((const void*)&calc_hash, 32);
+  
+  return(calc_hash);
 }
