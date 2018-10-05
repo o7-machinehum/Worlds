@@ -62,8 +62,7 @@
 %	-> How are these fetched?
 
 \begin{abstract}
-% A protocol defining how anyone can contribute to an unbounded universe could allow the flexibility to organically grow an MMO faster than any proprietary system. This paper overviews a protocol that enables developers to bolt their game into in common universe. 
-This paper overviews a protocol that aims to manage the large scale economic components of a distributed MMO. Following the implementation of the Worlds protocol it becomes possible to fairly scale a game universe based on games developed by completely independent parties. 
+This paper overviews a protocol that aims to manage the large scale economic components of a distributed MMO. Following the implementation of the Worlds protocol it becomes possible to fairly scale a universe based on games developed by completely independent parties. 
 \end{abstract}
 
 \section{Worlds}
@@ -101,17 +100,20 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \end{tikzpicture}
 \end{center}
 \end{small}
-The worlds engine is an application that manages the elements that are common throughout all worlds, such as player keys, hashing+signing and fetching the files required to run the Game Client. The world designer has full creative freedom over the game client and server engine. This enables the highest flexibility and the most unique universe. It is possible for clusters of worlds to share a single game client, yet design their own experience. Conversely, adjacent worlds might have completely different game clients, where players might move from a text based MUD into a fully 3D world. The worlds client takes care of fetching the executable game client from the worlds server.
+The worlds engine is an application that manages the elements that are common throughout all worlds, such as player keys, hashing+signing and fetching the files required to run the Game Client. The world designer has full creative freedom over the game client and server engine. This enables the highest flexibility and the most unique universe. It is possible for clusters of worlds to share a single game client, yet design their own experience. Conversely, adjacent worlds might have completely different game clients, where players might move from a text based MUD into a fully 3D world. The worlds client takes care of fetching the executable game client.
 
 \section{Worlds Smart Contact (WSC)}
 \label{WSC}
-The worlds smart contract is used to form consensus among the network. It contains functions and data elements that are used as various forms of proof that require interoperability between worlds. An appropriate blockchain with the following requirements has not yet been selected, it must satisfy the following requirements. 
+The worlds smart contract is used to balance the economy across the network. It contains functions and data elements that are used as various forms of proof that require interoperability between worlds. An appropriate blockchain with the following requirements has not yet been selected, it must satisfy the following requirements. 
 
 \begin{itemize}
 \item{Low networks fees}
 \item{Fast transactions for in game purchases}
 \item{Decent data capacity to hold merkle proofs}
 \end{itemize}
+
+\subsection{Staking} % Need to write more one this. I think this is a good spot?
+Staking is the fundamental mechanic that balances the economy. This allows a node to lock the WOR token against a hash. This hash can be a proof for experience, items, or any arbitrary chunk of data that that has meaning within the World universe. It is up to the Worlds creator to interpret the data. There are some specific functions in the worlds smart contract that are to form a continuity across the universe. But it is ultimately up to the worlds creators. 
 
 \section{Actions}
 Actions are defined as anything a node can do to effect the network. Messages and data packages are to be considered actions in this context.
@@ -145,11 +147,11 @@ Stake = 0.1WOR
 \end{figure}
 
 \subsection{Receiving Experience} 
-In the interest is keeping latency low and conserving space onchain, experience is distributed to players when they leave the world. Although players may use gained experience immediately in their current world.
+Players may receive lots of small chunks of experience during gameplay, this can be taxing on a blockchain. For this reason worlds may wish to issue a lumped sum package when the player leaves the world or requests their package. Even thought experience is kept off-chain during gameplay in this scenario it's still possible that the benefits may be realized immediately.  
 
 \section{Items} 
 \label{items}
-Items can be introduced by any node on the network. To spawn an item the item package, defined as $i$, must be signed by the node and submitted to the \textit{worlds smart contract} to prove ownership and lock the funds associated with the item. The smart contract verifies that the WorldPublic field is the public key of the node issuing the item, assigns current unix time and then moves the WOR into the smart contract from the issuers account. Worlds have the option to credit or discredit certain items based on the WorldPublic field.  It is possible for items to be liquidated back into WOR by calling a function on the WSC. As only the hash of the item package is kept on-chain players are required to keep the entire item package.
+Items may be introduced by any node on the network. In order to spawn an item, the item package must be signed by the node and submitted to the \textit{worlds smart contract}. This serves to proves ownership and lock the funds associated with the item. The smart contract then verifies that the WorldPublic field is the public key of the node issuing the item, assigns current unix time and then moves the WOR into the smart contract from the issuers account. The sha256 hash of the item package is kept on-chain, it is the responsibility of the owner of the item to keep the item package contents. 
 
 \begin{figure}[H]
 \centering
@@ -168,11 +170,14 @@ ItemHash = hash(ItemName | ... | Stake);
 \end{lstlisting}
 \end{figure}
 
-\subsection{Item Transfers}
-By calling the TxItem(ItemHash, PlayerPublic) function on the WSC it is possible to transfer items to other players.
+% Speak more on this
+Worlds have the option to credit or discredit certain items based on the WorldPublic field.  It is possible for items to be liquidated back into WOR by calling a function on the WSC. As only the hash of the item package is kept on-chain players are required to keep the entire item package.
 
-\subsection{Staked WOR}
-In order to have a balanced economy the monetary system needs to be net zero (\ref{money}). The same holds true for experience and items, this balance is achieved by staking WOR into items and EXP. Without this mechanic worlds would be able to create as much wealth as they want, resulting in over powered items and EXP. 
+\subsection{Item Transfers}
+It's possible to transfer items to other players simply by calling a function on the WSC.
+
+% \subsection{Staked WOR}
+% In order to have a balanced economy the monetary system needs to be net zero (\ref{money}). The same holds true for experience and items, this balance is achieved by staking WOR into items and EXP. Without this mechanic worlds would be able to create as much wealth as they want, resulting in over powered items and EXP. 
 
 \subsection{Forging}
 \label{Forging}

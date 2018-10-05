@@ -1,25 +1,16 @@
 # Worlds Smart Contract
 
-## WOR
-WOR is the contract that manages the WOR tokens that are designed to be used in the Worlds universe.
-
 ## WSC
-The worlds smart contact is a contract that lives onchain. It is responsible for managing player assets.
+The worlds smart contact is a contract that lives onchain. It is responsible for managing player assets. It also manages WOR, which is the token that can be staked against items. The token can also be used as a means of currency in the Worlds universe.
 
 ##TODO
-- LiquidateItem() 
-- TransferItem()
+- LiquidateItem() - Done. 
+- TransferItem() - Done.
 
 ## Open Questions
-- itemProof should be referenced by it hash. Which is checksum265, I'm not sure how to use this as a ref.
-	- Is the possible to use the first 64 bits?
-
-- Do we need to keep the Owner onchain? This is in the proof package, so I think all we need is the hash.
-
-- How do we lock funds in the WSC? sub_balance and add_balance are both private functions in the tokens contract. Maybe we just have to mash them togeather.
-	- Try importing table from WOR into the WSC class then try to modify it from there, 
-		change the permissions of the table - ?.
+- itemProof should be referenced by it hash. Which is checksum265, I'm not sure how to use this as a ref. It's possible to reference them by hash, but after the lookup you must check the entire hash.
 
 - How do you get unix time out of the function so the user can calculate the hash?
+  - I still don't know how to do this.
 
 - In the transfer item function, I need a way to move the ram 

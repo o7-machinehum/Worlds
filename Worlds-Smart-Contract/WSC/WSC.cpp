@@ -8,7 +8,7 @@
 
 using namespace eosio;
 
-void WSC::createitem( account_name owner, // Creator of this item.
+void WSC::createitem( account_name owner,        // Creator of this item.
                       string       item_name,    // Name of the item.
                       string       item_class,   // Class of the item.
                       asset        stake         // How much WOR to stake into the item.
@@ -42,7 +42,7 @@ void WSC::createitem( account_name owner, // Creator of this item.
 void WSC::liquidateitem( account_name   owner,    // Who's the owner.
                          item           tx_item,  // Actual item package.
                          checksum256    hash      // What's the hash of the item.
-                      )
+                       )
 {
   require_auth( owner );
   require_recipient( owner );
@@ -71,10 +71,14 @@ void WSC::transferitem( account_name   from,     // Who's sending the item.
 
   checksum256 calc_hash;
   sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
-  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash.
+  
+  // Ensure the hash matches the item hash.
+  eosio_assert(calc_hash == hash, "Hash does not match"); 
   
   itemProof_table itemProofFrom(_self, from);
-  auto chainHash = itemProofFrom.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
+  
+  // Check to see if the item is onchain.
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&hash); 
   eosio_assert(chainHash == hash, "Hash on chain does not match!");
   itemProofFrom.erase(*(uint64_t*)&hash); // Remove the hash from the table.
 
