@@ -113,7 +113,7 @@ The worlds smart contract is used to balance the economy across the network. It 
 \end{itemize}
 
 \subsection{Staking} % Need to write more one this. I think this is a good spot?
-Staking is the fundamental mechanic that balances the economy. This allows a node to lock the WOR token against a hash. This hash can be a proof for experience, items, or any arbitrary chunk of data that that has meaning within the World universe. It is up to the Worlds creator to interpret the data. There are some specific functions in the worlds smart contract that are to form a continuity across the universe. But it is ultimately up to the worlds creators. 
+Staking is the fundamental mechanic that balances the economy. This allows a node to lock the WOR token against a hash. This hash can be a proof for experience, items, or any arbitrary chunk of data that that has meaning within the World universe. It is up to the World creators to interpret the data.
 
 \section{Actions}
 Actions are defined as anything a node can do to effect the network. Messages and data packages are to be considered actions in this context.
@@ -131,7 +131,6 @@ Contract actions are any actions that communicate with the Worlds Smart Contract
 \label{exp}
 Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable. It is possible for experience to be liquidated back into WOR by the players. Worlds determine the effect of player experience, typically the more WOR that is staked the larger the effect can be. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
 
-
 \begin{figure}[H]
 \centering
 \caption{Experience Package - Sword Fighting}
@@ -147,11 +146,11 @@ Stake = 0.1WOR
 \end{figure}
 
 \subsection{Receiving Experience} 
-Players may receive lots of small chunks of experience during gameplay, this can be taxing on a blockchain. For this reason worlds may wish to issue a lumped sum package when the player leaves the world or requests their package. Even thought experience is kept off-chain during gameplay in this scenario it's still possible that the benefits may be realized immediately.  
+Players may receive lots of small chunks of experience during gameplay, this can be taxing on a blockchain. For this reason worlds may wish to issue a lumped sum package when the player leaves the world or requests their package. Even thought experience is kept off-chain during gameplay in this scenario, it's still possible that the benefits may be realized immediately.  
 
 \section{Items} 
 \label{items}
-Items may be introduced by any node on the network. In order to spawn an item, the item package must be signed by the node and submitted to the \textit{worlds smart contract}. This serves to proves ownership and lock the funds associated with the item. The smart contract then verifies that the WorldPublic field is the public key of the node issuing the item, assigns current unix time and then moves the WOR into the smart contract from the issuers account. The sha256 hash of the item package is kept on-chain, it is the responsibility of the owner of the item to keep the item package contents. 
+Items may be introduced by any node on the network. In order to spawn an item, the item package must be signed by the node and submitted to the \textit{worlds smart contract}. This serves to proves ownership and lock the WOR associated with the item. The smart contract then verifies that the WorldPublic field is the public key of the node issuing the item, assigns current unix time and then moves the WOR into the smart contract from the issuers account. The sha256 hash of the item package is kept on-chain, it is the responsibility of the owner of the item to keep the item package contents. If the user wishes to liquidate or transfer the item the item's hash is required, this is done to preserve space onchain.
 
 \begin{figure}[H]
 \centering
@@ -171,13 +170,13 @@ ItemHash = hash(ItemName | ... | Stake);
 \end{figure}
 
 % Speak more on this
-Worlds have the option to credit or discredit certain items based on the WorldPublic field.  It is possible for items to be liquidated back into WOR by calling a function on the WSC. As only the hash of the item package is kept on-chain players are required to keep the entire item package.
+As with experience, Worlds have the option to credit or discredit certain items based on the WorldPublic field.
 
 \subsection{Item Transfers}
 It's possible to transfer items to other players simply by calling a function on the WSC.
 
-% \subsection{Staked WOR}
-% In order to have a balanced economy the monetary system needs to be net zero (\ref{money}). The same holds true for experience and items, this balance is achieved by staking WOR into items and EXP. Without this mechanic worlds would be able to create as much wealth as they want, resulting in over powered items and EXP. 
+\subsection{Item Liquidation}
+It's possible to liquidate an item back into the WOR that's stakes against it. This is simply done be calling a function on the worlds smart contract.
 
 \subsection{Forging}
 \label{Forging}
@@ -202,6 +201,9 @@ ItemHash = hash(ForgeHash | ... | Stake);
 \subsection{Using Items}
 In order reduce the latency of item usage, certain actions must be taken off-chain. Please see the section \ref{Staking} for more information on this.
 
+\subsection{Item and Exp Value}
+The value and effect of items and experience will most likely not be directly correlated to the amount of WOR that is staked into them. The two other factors are Genesis time and Genesis world. As the game moves forward, many items will become 
+
 \section{Currency (WOR)}
 \label{money}
 A common currency between worlds will be used for staking and integration into the platform. To prevent abuse this currency must be zero sum, meaning worlds cannot generate it and it must start with a fixed supply. Ideally it is tracked through an existing blockchain. Worlds can introduce mechanics for generating revenue, like entrance fees, subscriptions, purchasing items, or keeping players items upon a death. Please read more in section \ref{MakeMoney}.
@@ -220,11 +222,11 @@ To prevent players from playing on multiple worlds concurrently a player locatio
 
 \section{World Incentivisation}
 \label{MakeMoney}
-If worlds want to distribute items or experience they must stake some WOR into items. As WOR has monetary value worlds need a way to generate some revenue. In order for a world to profit, the sum of all revenue generation methods must be less their their distributed items. Some revenue strategies are similar to existing games, some are completely new. 
+If worlds want to distribute items or experience they must stake some WOR into items. As WOR has monetary value worlds need a way to generate some revenue. In order for a world to profit, the sum of all revenue generation methods must be less their their distributed items plus their overhead. Some revenue strategies are similar to existing games, some are completely new. 
 
-\subsection{Staking}
+\subsection{Burying}
 \label{Staking}
-Some worlds may require you to stake some experience, items or WOR before entering. This is effectively temporarily moving these into possession of the world. If the player is to die, the staked things will fall under ownership of the world. The world then has the option to...
+Some worlds may require you to "bury" some experience, items or WOR before entering. This is effectively temporarily moving these into possession of the world. If the player is to die, the staked things will fall under ownership of the world. The world then has the option to...
 
 \begin{itemize}
 \item{Redistribute the items among other player, skimming some fee of the top.}
@@ -236,7 +238,7 @@ Some worlds may require you to stake some experience, items or WOR before enteri
 Just like conventional games, it is possible the worlds might charge an entrance fees. These could be one time or reoccurring. This would be transparent as the player moves about worlds. Ideally the fees would be built into the lore of the game.
 
 \subsection{In Game Purchases}
-Worlds might wish to sell items for WOR, this is a grey area as it can be considered pay-to-win. This may be  moderated by the entire ecosystem as worlds have the option to deny items that are issued by certain worlds, this is spoken more to in section \ref{Pay2Win}.\\
+Worlds might wish to sell items for WOR, this is a grey area as it can be considered pay-to-win. This may be moderated by the ecosystem as worlds have the option to deny items that are issued by certain worlds.\\
 
 Static items are assets that may not transcend worlds, an example being virtual land or housing. These are provided solely by the world of issuance and the value is determined by that world. It is possible they may be kept in the WSC with a staked value of 0 WOR. As worlds are not required to stake WOR against these assets they may profit from selling them for WOR. Items of this class might prove to be an alternate revenue stream.
 
