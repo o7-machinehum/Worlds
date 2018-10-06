@@ -97,7 +97,7 @@ class WSC: public contract{
     void sub_balance( account_name owner, asset value );
     void add_balance( account_name owner, asset value, account_name ram_payer );
     
-    checksum256 hashItem(account_name owner, string item_name, string item_class, asset stake);
+    checksum256 hashItemCreate(account_name owner, string item_name, string item_class, asset stake);
     checksum256 hashItemTransfer(account_name NewOwner, item item);
 };
 

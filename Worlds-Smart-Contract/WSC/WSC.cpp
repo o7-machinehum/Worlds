@@ -27,7 +27,7 @@ void WSC::createitem( account_name owner,        // Creator of this item.
   
   checksum256 calc_hash;
   
-  calc_hash = hashItem(owner, item_name, item_class, stake);
+  calc_hash = hashItemCreate(owner, item_name, item_class, stake);
   itemProof_table itemProof(_self, owner);
 
   /* Place the hash onchain */  
@@ -52,11 +52,14 @@ void WSC::liquidateitem( account_name   owner,    // Who's the owner.
   eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash.
   
   itemProof_table itemProof(_self, owner);
-  auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
-  eosio_assert(chainHash == hash, "Hash on chain does not match!");
-  itemProofFrom.erase(*(uint64_t*)&hash); // Remove the hash from the table.
+  // auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
+  auto itr = itemProof.find(*(uint64_t*)&calc_hash);
+  auto chainHash = itemProof.get(*(uint64_t*)&calc_hash); 
 
-  add_balance( owner, tx_item.stake );
+  eosio_assert(chainHash.itemHash == hash, "Hash on chain does not match!");
+  itemProof.erase(itr); // Remove the hash from the table.
+
+  add_balance( owner, tx_item.Stake, owner );
 }
 
 void WSC::transferitem( account_name   from,     // Who's sending the item.
@@ -78,9 +81,11 @@ void WSC::transferitem( account_name   from,     // Who's sending the item.
   itemProof_table itemProofFrom(_self, from);
   
   // Check to see if the item is onchain.
-  auto chainHash = itemProofFrom.get(*(uint64_t*)&hash); 
-  eosio_assert(chainHash == hash, "Hash on chain does not match!");
-  itemProofFrom.erase(*(uint64_t*)&hash); // Remove the hash from the table.
+  auto itr = itemProofFrom.find(*(uint64_t*)&calc_hash);
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&calc_hash);
+
+  eosio_assert(chainHash.itemHash == hash, "Hash on chain does not match!");
+  itemProofFrom.erase(itr); // Remove the hash from the table.
 
   itemProof_table itemProofTo(_self, to);
   calc_hash = hashItemTransfer(to, tx_item);
@@ -201,7 +206,7 @@ void WSC::add_balance( account_name owner, asset value, account_name ram_payer )
    }
 }
 
-checksum256 hashItemTransfer(account_name NewOwner, item item){
+checksum256 WSC::hashItemTransfer(account_name NewOwner, WSC::item item){
   checksum256 calc_hash;
 
   item.Owner = NewOwner;
@@ -220,10 +225,10 @@ checksum256 hashItemTransfer(account_name NewOwner, item item){
   return(calc_hash); 
 }
 
-checksum256 hashItemCreate(account_name owner, string item_name, string item_class, asset stake)
+checksum256 WSC::hashItemCreate(account_name owner, string item_name, string item_class, asset stake)
 {
   checksum256 calc_hash;
-  item item;
+  WSC::item item;
 
   /* Fill the structure. */
   item.ItemName = item_name;
