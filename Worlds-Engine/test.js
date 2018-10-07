@@ -1,3 +1,20 @@
+/* Item Structure
+  - Just for testing..
+*/
+Item.ItemName = 'Sword'
+Item.ItemClass = 'Weapon'
+Item.Owner = 'turnip'
+Item.PreviousOwner = ''
+Item.OriginWorld = ''
+Item.GenesisTime = ''
+Item.TXtime = ''
+Item.Stake =  ''
+
+function CreateItem(eos){
+  const actions = (await eos.getActions('turnip')).actions;
+  console.log(actions.map(a => a.action_trace));
+}
+
 Eos = require('eosjs')
 
 // Private key or keys (array) provided statically or by way of a function.
@@ -16,7 +33,16 @@ const config = {
 
 const eos = Eos(config);
 
+CreateItem(eos);
+
+/*Get account actions*/
+
 /*
 eos.contract('wsc.code').then(wsccode => {wsccode.createitem("turnip", "Sword", "Weapon", "1.00 WOR")})
 - This doesn't work :-(
+
+https://eosio.stackexchange.com/questions/1422/how-to-get-operations-history-of-account
+  - This talks about how to get actions from an account.
+
+
 */
