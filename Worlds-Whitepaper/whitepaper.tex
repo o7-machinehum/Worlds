@@ -137,11 +137,11 @@ Experience is distributed to players using experience packages. These are of the
 \label{exppkg}
 \begin{lstlisting}
 ExpClass = 'SwordFighting'
-ExpHash = hash(ExpClass);
 PlayerPublic = 0x5d7ac22131ad370e59fddb5f6079a354dbdd2dd9
 WorldPublic = 0xb1abdaf3ab936c99f5fd518122cf7d5b811a1a30
 IssueTime = UnixTime #Time of Issue
 Stake = 0.1WOR
+ExpHash = hash(ExpClass | ... | Stake);
 \end{lstlisting}
 \end{figure}
 
@@ -199,10 +199,14 @@ ItemHash = hash(ForgeHash | ... | Stake);
 \end{figure}
 
 \subsection{Using Items}
-In order reduce the latency of item usage, certain actions must be taken off-chain. Please see the section \ref{Staking} for more information on this.
+In order reduce the latency of item usage, certain actions must be taken off-chain. Please see the section \ref{Burying} for more information on this.
 
 \subsection{Item and Exp Value}
 The value and effect of items and experience will most likely not be directly correlated to the amount of WOR that is staked into them. The two other factors are Genesis time and Genesis world. As the game moves forward, many items will become 
+
+\subsection{Item Translations}
+\label{ItemTranslations}
+Worlds maintain a list of all items they recognize, during a world transfer some player items may not be on this list. This means the player will not be able to use these items. To minimize this problem worlds may use an item translation. This is effectively a list of items that funnel into one. 
 
 \section{Currency (WOR)}
 \label{money}
@@ -225,26 +229,26 @@ To prevent players from playing on multiple worlds concurrently a player locatio
 If worlds want to distribute items or experience they must stake some WOR into items. As WOR has monetary value worlds need a way to generate some revenue. In order for a world to profit, the sum of all revenue generation methods must be less their their distributed items plus their overhead. Some revenue strategies are similar to existing games, some are completely new. 
 
 \subsection{Burying}
-\label{Staking}
-Some worlds may require you to "bury" some experience, items or WOR before entering. This is effectively temporarily moving these into possession of the world. If the player is to die, the staked things will fall under ownership of the world. The world then has the option to...
+\label{Burying}
+Some worlds may require you to "bury" some experience, items or WOR before entering. This is effectively temporarily moving these into possession of the world. Worlds may introduce in game mechanics which result in the retention of these items, such as a player death. The world then has freedom over what happens to these items. Some profit models are described below.
 
 \begin{itemize}
-\item{Redistribute the items among other player, skimming some fee of the top.}
+\item{Redistribute the assets to other player, skimming some of the top.}
 \item{Liquidate all the items for WOR.}
-\item{Give all the items, or some of the items, back to the player.}
+\item{Give some of the items back to the player.}
 \end{itemize}
 
 \subsection{Fees}
 Just like conventional games, it is possible the worlds might charge an entrance fees. These could be one time or reoccurring. This would be transparent as the player moves about worlds. Ideally the fees would be built into the lore of the game.
 
 \subsection{In Game Purchases}
-Worlds might wish to sell items for WOR, this is a grey area as it can be considered pay-to-win. This may be moderated by the ecosystem as worlds have the option to deny items that are issued by certain worlds.\\
+Worlds might wish to sell items for WOR, as an example there might be an NPC store that sells some items which have special abilities within the world of issuance. The amount of WOR staked into the items would be less than the amount it is sold for. Neighboring world may wish to grant similar abilities in exchange for having some of their items more powerful in worlds adjacent to themselves. This may be considered pay-to-win, however the economics can be moderated by the ecosystem and community, as worlds have the option to deny items that are issued by certain worlds.\\
 
 Static items are assets that may not transcend worlds, an example being virtual land or housing. These are provided solely by the world of issuance and the value is determined by that world. It is possible they may be kept in the WSC with a staked value of 0 WOR. As worlds are not required to stake WOR against these assets they may profit from selling them for WOR. Items of this class might prove to be an alternate revenue stream.
 
 \section{Outstanding Issues}
 \subsection{Malicious Worlds}
-Players may be required to stake items, WOR or EXP to enter a world (\ref{Staking}). As the universe grows, worlds may be required to manage lots of wealth, which opens the possibility of an exit scam or hacking.
+Players may be required to bury assets to enter a world (\ref{Burying}). As the universe grows, worlds may be required to manage lots of wealth, which opens the possibility of an exit scam or hacking.
 
 \subsection{Neighbor Conflict}
 Depending on the topology of worlds there may be neighbor conflicts. In the grid model, Figure \ref{GRID}, $w_5$ may wish to be adjacent to $w_2$ but not next to $w_4$. 
@@ -267,11 +271,11 @@ Depending on the topology of worlds there may be neighbor conflicts. In the grid
 \end{tikzpicture}
 \end{figure}
 
-Using a network, Figure \ref{Graph} it's possible to treat the worlds like nodes on a graph. This allows four neighboring connections on every node. How this effects the physical universe is yet to be determined.
+Using a network, Figure \ref{Graph} it's possible to treat the worlds like nodes on a graph. This allows four neighboring connections on every node.
 
 \begin{figure}
 \centering
-\caption{DAG}
+\caption{Graph}
 \label{Graph}
 \begin{tikzpicture}
 \node[shape=circle,draw=black] (w1) at (-0.3cm,0.1cm) {$w_1$};
@@ -290,13 +294,13 @@ Using a network, Figure \ref{Graph} it's possible to treat the worlds like nodes
 \end{figure}
 
 \subsection{Developers}
-With the initial implementation of the engine there will not be many worlds at first. It will take time for the universe to manifest itself as something massive. It is possible this will never happen due to a lack of developer interest.
+It is possible that development may never catch on, developers may be turned away from the staking mechanic. As they are use to distributing digital assets without consequences. 
 
 \subsection{Blockchain Technology}
-We are keeping our eyes open for a suitable blockchain for developing the smart contract. But the space requirements are high, ideally players can bring their own blockchain storage to the party, meaning players pay a small amount for each item they wish to keep. 
+We are keeping our eyes open for a suitable blockchain for developing the smart contract. But the space requirements are high, ideally players can bring their own blockchain storage, meaning players pay a small amount for each item they wish to keep. 
 
 \subsection{Unification}
-Worlds may have issues forming consensus on forged items (\ref{Forging}). The derivative hash will be the same if all of the items that go into the forge are the same from forge to forge. Although the resultant item of the forge can be controversial. It is possible that worlds can use item translations (\ref{ItemTranslations}, these can be used to funnel many items into a single for use in the world.
+Worlds may have issues forming consensus on forged items (\ref{Forging}). The derivative hash will be the same if all of the items that go into the forge are the same from forge to forge. Although the resultant item of the forge can be controversial. It is possible that worlds can use item translations (\ref{ItemTranslations}), these can be used to funnel many items into a single for use in the world.
 
 \subsection{Congruent Worlds}
 As it is possible for each world to have their own client the game may suffer from a disconnect, as players move from world to world and the engine fetches new clients for each world the universe may seem to be disconnected. This may be either positive or negative based on the player. After the development of the Worlds Engine and smart contract, we are confident that there will be clusters of worlds that use the same client for players that want more fluid game play.
