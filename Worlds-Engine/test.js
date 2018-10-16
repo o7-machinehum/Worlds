@@ -31,6 +31,11 @@ options = {
   sign: true
 }
 
+/*
+Load in all these structures
+var file = fs.readFileSync("config.json");
+let config = JSON.parse(config);
+*/
 const eos = Eos(config);
 
 eos.contract('wsc.code').then(wsccode => {wsccode.createitem("turnip", "Sword", "Weapon", "1.00 WOR", options)})
@@ -46,6 +51,4 @@ eos.contract('wsc.code').then(wsccode => {wsccode.createitem("turnip", "Sword", 
 
 https://eosio.stackexchange.com/questions/1422/how-to-get-operations-history-of-account
   - This talks about how to get actions from an account.
-
-
 */
