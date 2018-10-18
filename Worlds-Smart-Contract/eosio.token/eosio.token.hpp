@@ -6,6 +6,7 @@
 
 #include <eosiolib/asset.hpp>
 #include <eosiolib/eosio.hpp>
+#include <eosiolib/crypto.h>
 
 #include <string>
 
@@ -17,31 +18,52 @@ namespace eosio {
 
    using std::string;
 
-   class [[eosio::contract("eosio.token")]] token : public contract {
+   class [[eosio::contract("wsc.code")]] WSC : public contract {
       public:
          using contract::contract;
 
+    /*This can just be a normal Struct*/
+    struct item {
+      string ItemName;
+      string ItemClass;
+      name Owner;
+      name PreviousOwner;
+      name OriginWorld;
+      uint32_t GenesisTime;
+      uint32_t TXtime;
+      asset Stake;
+    };
+
          [[eosio::action]]
-         void create( name   issuer,
+         void createitem( name owner, string item_name, string item_class, asset stake );
+        
+         [[eosio::action]]
+         void liquidateitem( name owner, item tx_item, capi_checksum256 hash );
+        
+         [[eosio::action]] 
+         void transferitem( name from, name to, item tx_item, capi_checksum256 hash ); 
+
+         [[eosio::action]]
+         void createwor( name   issuer,
                       asset  maximum_supply);
 
          [[eosio::action]]
-         void issue( name to, asset quantity, string memo );
+         void issuewor( name to, asset quantity, string memo );
 
          [[eosio::action]]
-         void retire( asset quantity, string memo );
+         void retirewor( asset quantity, string memo );
 
          [[eosio::action]]
-         void transfer( name    from,
+         void transferwor( name    from,
                         name    to,
                         asset   quantity,
                         string  memo );
 
          [[eosio::action]]
-         void open( name owner, const symbol& symbol, name ram_payer );
+         void openwor( name owner, const symbol& symbol, name ram_payer );
 
          [[eosio::action]]
-         void close( name owner, const symbol& symbol );
+         void closewor( name owner, const symbol& symbol );
 
          static asset get_supply( name token_contract_account, symbol_code sym_code )
          {
@@ -58,6 +80,14 @@ namespace eosio {
          }
 
       private:
+
+        struct [[eosio::table]] itemproof{
+          capi_checksum256  itemHash;
+          
+          uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
+          EOSLIB_SERIALIZE(itemproof, (itemHash))
+        };
+
          struct [[eosio::table]] account {
             asset    balance;
 
@@ -74,9 +104,15 @@ namespace eosio {
 
          typedef eosio::multi_index< "accounts"_n, account > accounts;
          typedef eosio::multi_index< "stat"_n, currency_stats > stats;
+         typedef eosio::multi_index< "itemproofs"_n, itemproof > itemProof_table;
 
          void sub_balance( name owner, asset value );
          void add_balance( name owner, asset value, name ram_payer );
+
+    capi_checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
+    capi_checksum256 hashItemTransfer(name NewOwner, item item);
+
    };
 
 } /// namespace eosio
+EOSIO_DISPATCH( eosio::WSC, (createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )

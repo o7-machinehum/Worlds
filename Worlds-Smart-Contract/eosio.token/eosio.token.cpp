@@ -5,9 +5,105 @@
 
 #include "eosio.token.hpp"
 
-namespace eosio {
+namespace eosio{
 
-void token::create( name   issuer,
+
+void WSC::createitem( name         owner,        // Creator of this item.
+                      string       item_name,    // Name of the item.
+                      string       item_class,   // Class of the item.
+                      asset        stake         // How much WOR to stake into the item.
+                    )
+{
+
+  require_auth( owner );
+  require_recipient( owner );
+  
+  auto sym = stake.symbol;
+
+  stats statstable( _self, sym.raw() );
+  const auto& st = statstable.get( sym.raw() );
+  
+  eosio_assert( stake.is_valid(), "invalid quantity" );                           
+  eosio_assert( stake.amount > 0, "must transfer positive quantity" );
+  eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
+  
+  capi_checksum256 calc_hash;
+  
+  calc_hash = hashItemCreate(owner, item_name, item_class, stake);
+  
+  itemProof_table itemProof(_self, owner);
+
+  // Place the hash onchain   
+  itemProof.emplace(owner, [&](auto& p) {
+    p.itemHash = calc_hash;
+  });
+  
+  sub_balance( owner, stake );
+  
+};
+
+void WSC::liquidateitem( name                owner,    // Who's the owner.
+                         item                tx_item,  // Actual item package.
+                         capi_checksum256    hash      // What's the hash of the item.
+                       )
+{
+/*
+  require_auth( owner );
+  require_recipient( owner );
+
+  capi_checksum256 calc_hash;
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
+  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash.
+  
+  itemProof_table itemProof(_self, owner);
+  // auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
+  auto itr = itemProof.find(*(uint64_t*)&calc_hash);
+  auto chainHash = itemProof.get(*(uint64_t*)&calc_hash); 
+
+  eosio_assert(chainHash.itemHash == hash, "Hash on chain does not match!");
+  itemProof.erase(itr); // Remove the hash from the table.
+
+  add_balance( owner, tx_item.Stake, owner );
+*/
+}
+
+void WSC::transferitem( name   from,     // Who's sending the item.
+                        name   to,       // Who's getting the item.
+                        item           tx_item,  // Actual item package.
+                        capi_checksum256    hash      // What's the hash of the item.
+                      )
+{
+/*
+  require_auth( from );
+  require_recipient( from );
+  require_recipient( to );
+
+  capi_checksum256 calc_hash;
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
+  
+  // Ensure the hash matches the item hash.
+  eosio_assert(calc_hash == hash, "Hash does not match"); 
+  
+  itemProof_table itemProofFrom(_self, from);
+  
+  // Check to see if the item is onchain.
+  auto itr = itemProofFrom.find(*(uint64_t*)&calc_hash);
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&calc_hash);
+
+  eosio_assert(chainHash.itemHash == hash, "Hash on chain does not match!");
+  itemProofFrom.erase(itr); // Remove the hash from the table.
+
+  itemProof_table itemProofTo(_self, to);
+  calc_hash = hashItemTransfer(to, tx_item);
+
+  itemProofTo.emplace(from, [&](auto& p) {
+    p.itemHash = calc_hash;
+  });
+*/
+}
+
+
+void WSC::createwor( name   issuer,
                     asset  maximum_supply )
 {
     require_auth( _self );
@@ -29,7 +125,7 @@ void token::create( name   issuer,
 }
 
 
-void token::issue( name to, asset quantity, string memo )
+void WSC::issuewor( name to, asset quantity, string memo )
 {
     auto sym = quantity.symbol;
     eosio_assert( sym.is_valid(), "invalid symbol name" );
@@ -54,13 +150,13 @@ void token::issue( name to, asset quantity, string memo )
     add_balance( st.issuer, quantity, st.issuer );
 
     if( to != st.issuer ) {
-      SEND_INLINE_ACTION( *this, transfer, { {st.issuer, "active"_n} },
+      SEND_INLINE_ACTION( *this, transferwor, { {st.issuer, "active"_n} },
                           { st.issuer, to, quantity, memo }
       );
     }
 }
 
-void token::retire( asset quantity, string memo )
+void WSC::retirewor( asset quantity, string memo )
 {
     auto sym = quantity.symbol;
     eosio_assert( sym.is_valid(), "invalid symbol name" );
@@ -84,7 +180,7 @@ void token::retire( asset quantity, string memo )
     sub_balance( st.issuer, quantity );
 }
 
-void token::transfer( name    from,
+void WSC::transferwor( name    from,
                       name    to,
                       asset   quantity,
                       string  memo )
@@ -110,7 +206,7 @@ void token::transfer( name    from,
     add_balance( to, quantity, payer );
 }
 
-void token::sub_balance( name owner, asset value ) {
+void WSC::sub_balance( name owner, asset value ) {
    accounts from_acnts( _self, owner.value );
 
    const auto& from = from_acnts.get( value.symbol.code().raw(), "no balance object found" );
@@ -121,7 +217,7 @@ void token::sub_balance( name owner, asset value ) {
       });
 }
 
-void token::add_balance( name owner, asset value, name ram_payer )
+void WSC::add_balance( name owner, asset value, name ram_payer )
 {
    accounts to_acnts( _self, owner.value );
    auto to = to_acnts.find( value.symbol.code().raw() );
@@ -136,7 +232,7 @@ void token::add_balance( name owner, asset value, name ram_payer )
    }
 }
 
-void token::open( name owner, const symbol& symbol, name ram_payer )
+void WSC::openwor( name owner, const symbol& symbol, name ram_payer )
 {
    require_auth( ram_payer );
 
@@ -155,7 +251,7 @@ void token::open( name owner, const symbol& symbol, name ram_payer )
    }
 }
 
-void token::close( name owner, const symbol& symbol )
+void WSC::closewor( name owner, const symbol& symbol )
 {
    require_auth( owner );
    accounts acnts( _self, owner.value );
@@ -165,6 +261,62 @@ void token::close( name owner, const symbol& symbol )
    acnts.erase( it );
 }
 
-} /// namespace eosio
+capi_checksum256 WSC::hashItemTransfer(name NewOwner, WSC::item item)
+{
+  capi_checksum256 calc_hash;
 
-EOSIO_DISPATCH( eosio::token, (create)(issue)(transfer)(open)(close)(retire) )
+  item.Owner = NewOwner;
+  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
+  
+  // Make this hash match!
+  print("ItemName: ", item.ItemName, "\n");
+  print("ItemClass: ", item.ItemClass, "\n");
+  print("ItemOwner: ", item.Owner, "\n");
+  print("PreviousOwner: ", item.PreviousOwner, "\n");
+  print("OriginWorld: ", item.OriginWorld, "\n");
+  print("GenesisTime: ", item.GenesisTime, "\n");
+  print("TXtime: ", item.TXtime, "\n");
+  print("Stake: ", item.Stake, "\n");
+  
+  return(calc_hash); 
+
+}
+
+
+capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_class, asset stake)
+{
+
+  capi_checksum256 calc_hash;
+  WSC::item item;
+
+  // Fill the structure. 
+  item.ItemName = item_name;
+  item.ItemClass = item_class;
+  item.Owner = owner;
+  // item.PreviousOwner = 0x00;
+  item.OriginWorld = owner;
+  item.GenesisTime = now();
+  item.TXtime = 0x00;
+  item.Stake = stake;
+  
+  // Make this hash match!
+  print("ItemName: ", item.ItemName, "\n");
+  print("ItemClass: ", item.ItemClass, "\n");
+  print("ItemOwner: ", item.Owner, "\n");
+  print("PreviousOwner: ", item.PreviousOwner, "\n");
+  print("OriginWorld: ", item.OriginWorld, "\n");
+  print("GenesisTime: ", item.GenesisTime, "\n");
+  print("TXtime: ", item.TXtime, "\n");
+  print("Stake: ", item.Stake, "\n");
+
+  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
+  
+  // for (int i = 0 ; i < 32 ; i++)
+  print("Sha256: ");
+  printhex((const void*)&calc_hash, 32);
+  
+  return(calc_hash);
+
+
+}
+}
