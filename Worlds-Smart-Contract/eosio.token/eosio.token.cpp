@@ -31,7 +31,7 @@ void WSC::createitem( name         owner,        // Creator of this item.
   
   calc_hash = hashItemCreate(owner, item_name, item_class, stake);
   
-  itemProof_table itemProof(_self, owner);
+  itemProof_table itemProof(_self, owner.value);
 
   // Place the hash onchain   
   itemProof.emplace(owner, [&](auto& p) {
@@ -47,24 +47,20 @@ void WSC::liquidateitem( name                owner,    // Who's the owner.
                          capi_checksum256    hash      // What's the hash of the item.
                        )
 {
-/*
   require_auth( owner );
   require_recipient( owner );
 
-  capi_checksum256 calc_hash;
-  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
-  eosio_assert(calc_hash == hash, "Hash does not match"); // Ensure the hash matches the item hash.
-  
-  itemProof_table itemProof(_self, owner);
-  // auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
-  auto itr = itemProof.find(*(uint64_t*)&calc_hash);
-  auto chainHash = itemProof.get(*(uint64_t*)&calc_hash); 
+  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash); // Ensure hash matches matches
 
-  eosio_assert(chainHash.itemHash == hash, "Hash on chain does not match!");
+  itemProof_table itemProof(_self, owner.value);
+
+  auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
+  auto itr = itemProof.find(*(uint64_t*)&hash);
+
+  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
   itemProof.erase(itr); // Remove the hash from the table.
 
   add_balance( owner, tx_item.Stake, owner );
-*/
 }
 
 void WSC::transferitem( name   from,     // Who's sending the item.
@@ -181,9 +177,9 @@ void WSC::retirewor( asset quantity, string memo )
 }
 
 void WSC::transferwor( name    from,
-                      name    to,
-                      asset   quantity,
-                      string  memo )
+                       name    to,
+                       asset   quantity,
+                       string  memo )
 {
     eosio_assert( from != to, "cannot transfer to self" );
     require_auth( from );

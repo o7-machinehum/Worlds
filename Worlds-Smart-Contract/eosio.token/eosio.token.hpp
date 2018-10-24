@@ -22,17 +22,17 @@ namespace eosio {
       public:
          using contract::contract;
 
-    /*This can just be a normal Struct*/
-    struct item {
-      string ItemName;
-      string ItemClass;
-      name Owner;
-      name PreviousOwner;
-      name OriginWorld;
-      uint32_t GenesisTime;
-      uint32_t TXtime;
-      asset Stake;
-    };
+        /*This can just be a normal Struct*/
+        struct item {
+          string ItemName;
+          string ItemClass;
+          name Owner;
+          name PreviousOwner;
+          name OriginWorld;
+          uint32_t GenesisTime;
+          uint32_t TXtime;
+          asset Stake;
+        };
 
          [[eosio::action]]
          void createitem( name owner, string item_name, string item_class, asset stake );
