@@ -63,41 +63,36 @@ void WSC::liquidateitem( name                owner,    // Who's the owner.
   add_balance( owner, tx_item.Stake, owner );
 }
 
-void WSC::transferitem( name   from,     // Who's sending the item.
-                        name   to,       // Who's getting the item.
-                        item           tx_item,  // Actual item package.
+void WSC::transferitem( name                from,     // Who's sending the item.
+                        name                to,       // Who's getting the item.
+                        item                tx_item,  // Actual item package.
                         capi_checksum256    hash      // What's the hash of the item.
                       )
 {
-/*
+  capi_checksum256 calc_hash;
+  
   require_auth( from );
   require_recipient( from );
   require_recipient( to );
 
-  capi_checksum256 calc_hash;
-  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &calc_hash);
+  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash); // Ensure hash matches matches
   
-  // Ensure the hash matches the item hash.
-  eosio_assert(calc_hash == hash, "Hash does not match"); 
-  
-  itemProof_table itemProofFrom(_self, from);
+  itemProof_table itemProofFrom(_self, from.value);
   
   // Check to see if the item is onchain.
-  auto itr = itemProofFrom.find(*(uint64_t*)&calc_hash);
-  auto chainHash = itemProofFrom.get(*(uint64_t*)&calc_hash);
+  auto itr = itemProofFrom.find(*(uint64_t*)&hash);
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&hash);
 
-  eosio_assert(chainHash.itemHash == hash, "Hash on chain does not match!");
+  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
   itemProofFrom.erase(itr); // Remove the hash from the table.
 
-  itemProof_table itemProofTo(_self, to);
+  itemProof_table itemProofTo(_self, to.value);
   calc_hash = hashItemTransfer(to, tx_item);
 
   itemProofTo.emplace(from, [&](auto& p) {
     p.itemHash = calc_hash;
   });
-*/
 }
-
 
 void WSC::createwor( name   issuer,
                     asset  maximum_supply )
@@ -289,7 +284,7 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
   item.ItemName = item_name;
   item.ItemClass = item_class;
   item.Owner = owner;
-  // item.PreviousOwner = 0x00;
+  item.PreviousOwner.value = 0x00;
   item.OriginWorld = owner;
   item.GenesisTime = now();
   item.TXtime = 0x00;
@@ -315,4 +310,4 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
 
 
 }
-}
+} // namespace eosio

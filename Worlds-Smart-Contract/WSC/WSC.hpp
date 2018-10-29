@@ -1,118 +1,118 @@
-/** @file WSC.cpp
- *  @brief This file contains the classes to be used in the WSC.
- *  @author Ryan Walker
+/**
+ *  @file
+ *  @copyright defined in eos/LICENSE.txt
  */
-
-#include <utility>
-#include <vector>
-#include <string>
+#pragma once
 
 #include <eosiolib/asset.hpp>
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/crypto.h>
-#include <eosiolib/types.h>
-#include <eosiolib/time.hpp>
-#include <eosiolib/contract.hpp>
 
-using namespace eosio;
-using std::string;
+#include <string>
 
-class WSC: public contract{
-  public:
-    WSC(account_name self) : contract(self) {}
-    
-    /*This can just be a normal Struct*/
-    struct item {
-      string ItemName;
-      string ItemClass;
-      account_name Owner;
-      account_name PreviousOwner;
-      account_name OriginWorld;
-      time GenesisTime;
-      time TXtime;
-      asset Stake;
-    };
-    
-    [[eosio::action]]
-    void createitem( account_name owner, string item_name, string item_class, asset stake );
-    
-    [[eosio::action]]
-    void liquidateitem( account_name owner, item tx_item, checksum256 hash );
-    
-    [[eosio::action]] 
-    void transferitem( account_name from, account_name to, item tx_item, checksum256 hash ); 
-         
-    /** Token Actions **/
-    [[eosio::action]]
-    void createwor( account_name issuer, asset maximum_supply);
+namespace eosiosystem {
+   class system_contract;
+}
 
-    [[eosio::action]]        
-    void issuewor( account_name to, asset quantity, string memo );
+namespace eosio {
 
-    [[eosio::action]]
-    void transferwor( account_name from,
-                      account_name to,
-                      asset        quantity,
-                      string       memo );
+   using std::string;
 
-    inline asset get_supply( symbol_name sym )const;
+   class [[eosio::contract("wsc.code")]] WSC : public contract {
+      public:
+         using contract::contract;
 
-    inline asset get_balance( account_name owner, symbol_name sym )const;
+        /*This can just be a normal Struct*/
+        struct item {
+          string ItemName;
+          string ItemClass;
+          name Owner;
+          name PreviousOwner;
+          name OriginWorld;
+          uint32_t GenesisTime;
+          uint32_t TXtime;
+          asset Stake;
+        };
 
-    struct transfer_args {
-      account_name  from;
-      account_name  to;
-      asset         quantity;
-      string        memo;
-    };
+         [[eosio::action]]
+         void createitem( name owner, string item_name, string item_class, asset stake );
+        
+         [[eosio::action]]
+         void liquidateitem( name owner, item tx_item, capi_checksum256 hash );
+        
+         [[eosio::action]] 
+         void transferitem( name from, name to, item tx_item, capi_checksum256 hash ); 
 
-  private:
-    struct [[eosio::table]] itemproof{
-      checksum256  itemHash;
-      
-      uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
-      
-      EOSLIB_SERIALIZE(itemproof, (itemHash))
-    };
+         [[eosio::action]]
+         void createwor( name   issuer,
+                         asset  maximum_supply);
 
-    /** Token Private Members **/
-    struct [[eosio::table]] account {
-      asset    balance;
+         [[eosio::action]]
+         void issuewor( name to, asset quantity, string memo );
 
-      uint64_t primary_key()const { return balance.symbol.name(); }
-    };
+         [[eosio::action]]
+         void retirewor( asset quantity, string memo );
 
-    struct [[eosio::table]] currency_stats {
-      asset          supply;
-      asset          max_supply;
-      account_name   issuer;
+         [[eosio::action]]
+         void transferwor( name    from,
+                        name    to,
+                        asset   quantity,
+                        string  memo );
 
-      uint64_t primary_key()const { return supply.symbol.name(); }
-    };
+         [[eosio::action]]
+         void openwor( name owner, const symbol& symbol, name ram_payer );
 
-    typedef multi_index<N(accounts), account> accounts;
-    typedef multi_index<N(stat), currency_stats> stats;
-    typedef multi_index<N(itemproofs), itemproof> itemProof_table;
+         [[eosio::action]]
+         void closewor( name owner, const symbol& symbol );
 
-    void sub_balance( account_name owner, asset value );
-    void add_balance( account_name owner, asset value, account_name ram_payer );
-    
-    checksum256 hashItemCreate(account_name owner, string item_name, string item_class, asset stake);
-    checksum256 hashItemTransfer(account_name NewOwner, item item);
-};
+         static asset get_supply( name token_contract_account, symbol_code sym_code )
+         {
+            stats statstable( token_contract_account, sym_code.raw() );
+            const auto& st = statstable.get( sym_code.raw() );
+            return st.supply;
+         }
 
-asset WSC::get_supply( symbol_name sym )const
-   {
-      stats statstable( _self, sym );
-      const auto& st = statstable.get( sym );
-      return st.supply;
-   }
+         static asset get_balance( name token_contract_account, name owner, symbol_code sym_code )
+         {
+            accounts accountstable( token_contract_account, owner.value );
+            const auto& ac = accountstable.get( sym_code.raw() );
+            return ac.balance;
+         }
 
-   asset WSC::get_balance( account_name owner, symbol_name sym )const
-   {
-      accounts accountstable( _self, owner );
-      const auto& ac = accountstable.get( sym );
-      return ac.balance;
-   }
+      private:
 
-EOSIO_ABI(WSC, (createitem)(transferitem)(createwor)(issuewor)(transferwor))
+        struct [[eosio::table]] itemproof{
+          capi_checksum256  itemHash;
+          
+          uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
+          EOSLIB_SERIALIZE(itemproof, (itemHash))
+        };
+
+         struct [[eosio::table]] account {
+            asset    balance;
+
+            uint64_t primary_key()const { return balance.symbol.code().raw(); }
+         };
+
+         struct [[eosio::table]] currency_stats {
+            asset    supply;
+            asset    max_supply;
+            name     issuer;
+
+            uint64_t primary_key()const { return supply.symbol.code().raw(); }
+         };
+
+         typedef eosio::multi_index< "accounts"_n, account > accounts;
+         typedef eosio::multi_index< "stat"_n, currency_stats > stats;
+         typedef eosio::multi_index< "itemproofs"_n, itemproof > itemProof_table;
+
+         void sub_balance( name owner, asset value );
+         void add_balance( name owner, asset value, name ram_payer );
+
+    capi_checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
+    capi_checksum256 hashItemTransfer(name NewOwner, item item);
+
+   };
+
+} /// namespace eosio
+EOSIO_DISPATCH( eosio::WSC, (createitem)(liquidateitem)(transferitem)(createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )
