@@ -1,10 +1,239 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Wed Oct 24 18:11:05 2018",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Sep 27 13:48:32 2018",
     "version": "eosio::abi/1.0",
-    "structs": [],
-    "types": [],
-    "actions": [],
-    "tables": [],
+    "types": [{
+      "new_type_name": "account_name",
+      "type": "name"
+   },{
+      "new_type_name": "time",
+      "type": "uint32"
+  }],
+    "structs": [
+        {
+            "name": "account",
+            "base": "",
+            "fields": [
+                {
+                    "name": "balance",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "createitem",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "item_name",
+                    "type": "string"
+                },
+                {
+                    "name": "item_class",
+                    "type": "string"
+                },
+                {
+                    "name": "stake",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "createwor",
+            "base": "",
+            "fields": [
+                {
+                    "name": "issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "maximum_supply",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "currency_stats",
+            "base": "",
+            "fields": [
+                {
+                    "name": "supply",
+                    "type": "asset"
+                },
+                {
+                    "name": "max_supply",
+                    "type": "asset"
+                },
+                {
+                    "name": "issuer",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "issuewor",
+            "base": "",
+            "fields": [
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "item",
+            "base": "",
+            "fields": [
+                {
+                    "name": "ItemName",
+                    "type": "string"
+                },
+                {
+                    "name": "ItemClass",
+                    "type": "string"
+                },
+                {
+                    "name": "Owner",
+                    "type": "name"
+                },
+                {
+                    "name": "PreviousOwner",
+                    "type": "name"
+                },
+                {
+                    "name": "OriginWorld",
+                    "type": "name"
+                },
+                {
+                    "name": "GenesisTime",
+                    "type": "time"
+                },
+                {
+                    "name": "TXtime",
+                    "type": "time"
+                },
+                {
+                    "name": "Stake",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "itemproof",
+            "base": "",
+            "fields": [
+                {
+                    "name": "itemHash",
+                    "type": "checksum256"
+                }
+            ]
+        },
+        {
+            "name": "transferitem",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "tx_item",
+                    "type": "item"
+                },
+                {
+                    "name": "hash",
+                    "type": "checksum256"
+                }
+            ]
+        },
+        {
+            "name": "transferwor",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "createitem",
+            "type": "createitem",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "createwor",
+            "type": "createwor",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "issuewor",
+            "type": "issuewor",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "transferitem",
+            "type": "transferitem",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "transferwor",
+            "type": "transferwor",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "accounts",
+            "type": "account",
+            "index_type": "i64",
+            "key_names": ["itemHash"],
+            "key_types": ["uint64"]
+        },
+        {
+            "name": "stat",
+            "type": "currency_stats",
+            "index_type": "i64",
+            "key_names": ["currency"],
+            "key_types": ["uint64"]
+        },
+        {
+            "name": "itemproofs",
+            "type": "itemproof",
+            "index_type": "i64",
+            "key_names": ["currency"],
+            "key_types": ["uint64"]
+        }
+    ],
     "ricardian_clauses": [],
     "abi_extensions": []
 }

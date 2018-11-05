@@ -5,8 +5,8 @@ Contract=WSC
 
 all:
 	@echo "Building"
-	$(CC) $(Contract).cpp -o $(Contract).wasm --abigen
-	# $(CC) $(Contract).cpp -o $(Contract).wasm
+	# $(CC) $(Contract).cpp -o $(Contract).wasm --abigen
+	$(CC) $(Contract).cpp -o $(Contract).wasm
 
 clean:
 	rm -f $(Contract).wast

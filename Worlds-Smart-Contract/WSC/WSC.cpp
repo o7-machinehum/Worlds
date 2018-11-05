@@ -20,8 +20,8 @@ void WSC::createitem( name         owner,        // Creator of this item.
   
   auto sym = stake.symbol;
 
-  stats statstable( _self, sym.raw() );
-  const auto& st = statstable.get( sym.raw() );
+  stats statstable( _self, sym.code().raw() );
+  const auto& st = statstable.get( sym.code().raw() );
   
   eosio_assert( stake.is_valid(), "invalid quantity" );                           
   eosio_assert( stake.amount > 0, "must transfer positive quantity" );
@@ -95,7 +95,7 @@ void WSC::transferitem( name                from,     // Who's sending the item.
 }
 
 void WSC::createwor( name   issuer,
-                    asset  maximum_supply )
+                     asset  maximum_supply )
 {
     require_auth( _self );
 
@@ -279,6 +279,7 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
 
   capi_checksum256 calc_hash;
   WSC::item item;
+  string output;
 
   // Fill the structure. 
   item.ItemName = item_name;
@@ -289,14 +290,14 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
   item.GenesisTime = now();
   item.TXtime = 0x00;
   item.Stake = stake;
-  
+
   // Make this hash match!
+  print("GenesisTime: ", item.GenesisTime, "\n");
   print("ItemName: ", item.ItemName, "\n");
   print("ItemClass: ", item.ItemClass, "\n");
   print("ItemOwner: ", item.Owner, "\n");
   print("PreviousOwner: ", item.PreviousOwner, "\n");
   print("OriginWorld: ", item.OriginWorld, "\n");
-  print("GenesisTime: ", item.GenesisTime, "\n");
   print("TXtime: ", item.TXtime, "\n");
   print("Stake: ", item.Stake, "\n");
 
