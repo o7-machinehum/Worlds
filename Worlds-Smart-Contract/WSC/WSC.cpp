@@ -26,19 +26,19 @@ void WSC::createitem( name         owner,        // Creator of this item.
   eosio_assert( stake.is_valid(), "invalid quantity" );                           
   eosio_assert( stake.amount > 0, "must transfer positive quantity" );
   eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
+  sub_balance( owner, stake );
   
   capi_checksum256 calc_hash;
   
   calc_hash = hashItemCreate(owner, item_name, item_class, stake);
   
   itemProof_table itemProof(_self, owner.value);
-
+  
   // Place the hash onchain   
   itemProof.emplace(owner, [&](auto& p) {
     p.itemHash = calc_hash;
   });
   
-  sub_balance( owner, stake );
   
 };
 
