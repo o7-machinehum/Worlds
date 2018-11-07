@@ -38,7 +38,7 @@ namespace eosio {
          void createitem( name owner, string item_name, string item_class, asset stake );
         
          [[eosio::action]]
-         void liquidateitem( name owner, item tx_item, capi_checksum256 hash );
+         void liquiditem( name owner, item tx_item, capi_checksum256 hash );
         
          [[eosio::action]] 
          void transferitem( name from, name to, item tx_item, capi_checksum256 hash ); 

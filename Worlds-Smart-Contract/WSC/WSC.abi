@@ -7,6 +7,9 @@
    },{
       "new_type_name": "time",
       "type": "uint32"
+   },{
+      "new_type_name": "capi_checksum256",
+      "type": "checksum256"
   }],
     "structs": [
         {
@@ -38,6 +41,24 @@
                 {
                     "name": "stake",
                     "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "liquiditem",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "tx_item",
+                    "type": "item"
+                },
+                {
+                    "name": "hash",
+                    "type": "capi_checksum256"
                 }
             ]
         },
@@ -190,6 +211,11 @@
             "type": "createitem",
             "ricardian_contract": ""
         },
+        {
+            "name": "liquiditem",
+            "type": "liquiditem",
+            "ricardian_contract": ""
+        },       
         {
             "name": "createwor",
             "type": "createwor",

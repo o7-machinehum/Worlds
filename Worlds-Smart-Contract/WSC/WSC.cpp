@@ -26,7 +26,7 @@ void WSC::createitem( name         owner,        // Creator of this item.
   eosio_assert( stake.is_valid(), "invalid quantity" );                           
   eosio_assert( stake.amount > 0, "must transfer positive quantity" );
   eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
-  sub_balance( owner, stake );
+  sub_balance( owner, stake ); // Subtract Balance.
   
   capi_checksum256 calc_hash;
   
@@ -42,7 +42,7 @@ void WSC::createitem( name         owner,        // Creator of this item.
   
 };
 
-void WSC::liquidateitem( name                owner,    // Who's the owner.
+void WSC::liquiditem( name                owner,    // Who's the owner.
                          item                tx_item,  // Actual item package.
                          capi_checksum256    hash      // What's the hash of the item.
                        )
