@@ -1,6 +1,9 @@
-/* Item Structure
-  - Just for testing..
+/* Blockchain Actions
+    Example:
+      const actions = require('./actions')
+      actions.createItem("turnip", "Sword", "Weapon", "1.00 WOR")
 */
+
 const item = {
   ItemName: 'Sword',
   ItemClass: 'Weapon',
@@ -11,8 +14,6 @@ const item = {
   TXtime: '',
   Stake: '',
 }
-
-Eos = require('eosjs')
 
 const config = {
   chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f', // 32 byte (64 char) hex string
@@ -31,14 +32,15 @@ options = {
   sign: true
 }
 
-/*
-Load in all these structures
-var file = fs.readFileSync("config.json");
-let config = JSON.parse(config);
-*/
-const eos = Eos(config);
+Eos = require('eosjs')
 
-eos.contract('wsc.code').then(wsccode => {wsccode.createitem("turnip", "Sword", "Weapon", "1.00 WOR", options)})
+const eos = Eos(config);
+module.exports = {
+  createItem: function(name, item, itemClass, stake){
+    eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, item, itemClass, stake, options)})
+  }
+}
+
 // const actions = eos.getActions('turnip')).actions;
 
 // console.log(actions.map(a => a.action_trace));
