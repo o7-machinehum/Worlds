@@ -15,6 +15,16 @@ The Worlds Smart Contact (WSC) is an EOS contract that is responsible for managi
 ```bash
 cd Worlds-Smart-Contract/WSC/ ; make
 ```
+
+### TODO
+- Functions
+  - createExp
+
+- Testing
+  - Liquidate Item
+  - Trasnder Item
+  - 
+  
 ## Worlds Client (Worlds.js)
 The worlds client uses eosjs to communicate with the Wor
 
