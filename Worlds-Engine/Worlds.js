@@ -4,10 +4,13 @@ Worlds.js
 */
 
 const Eos = require('eosjs');
-const dgram = require('dgram');
 const sock = require('./socket')
+const actions = require('./actions')
+const repl = require('repl');
 
 port = 43252;
 
 sock.open(port) // Open socket
 
+const msg = 'message';
+repl.start('> ').context.m = actions;

@@ -115,4 +115,4 @@ namespace eosio {
    };
 
 } /// namespace eosio
-EOSIO_DISPATCH( eosio::WSC, (createitem)(transferitem)(createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )
+EOSIO_DISPATCH( eosio::WSC, (createitem)(liquiditem)(transferitem)(createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )

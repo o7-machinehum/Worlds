@@ -49,7 +49,7 @@ void WSC::liquiditem( name                owner,    // Who's the owner.
 {
   require_auth( owner );
   require_recipient( owner );
-
+  
   assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash); // Ensure hash matches matches
 
   itemProof_table itemProof(_self, owner.value);
@@ -260,14 +260,14 @@ capi_checksum256 WSC::hashItemTransfer(name NewOwner, WSC::item item)
   sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
   
   // Make this hash match!
-  print("ItemName: ", item.ItemName, "\n");
-  print("ItemClass: ", item.ItemClass, "\n");
-  print("ItemOwner: ", item.Owner, "\n");
-  print("PreviousOwner: ", item.PreviousOwner, "\n");
-  print("OriginWorld: ", item.OriginWorld, "\n");
-  print("GenesisTime: ", item.GenesisTime, "\n");
-  print("TXtime: ", item.TXtime, "\n");
-  print("Stake: ", item.Stake, "\n");
+  print("ItemName: ", std::move(item.ItemName), "\n");
+  print("ItemClass: ", std::move(item.ItemClass), "\n");
+  print("ItemOwner: ", std::move(item.Owner), "\n");
+  print("PreviousOwner: ", std::move(item.PreviousOwner), "\n");
+  print("OriginWorld: ", std::move(item.OriginWorld), "\n");
+  print("GenesisTime: ", std::move(item.GenesisTime), "\n");
+  print("TXtime: ", std::move(item.TXtime), "\n");
+  print("Stake: ", std::move(item.Stake), "\n");
   
   return(calc_hash); 
 
@@ -292,14 +292,14 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
   item.Stake = stake;
 
   // Make this hash match!
-  print("GenesisTime: ", item.GenesisTime, "\n");
-  print("ItemName: ", item.ItemName, "\n");
-  print("ItemClass: ", item.ItemClass, "\n");
-  print("ItemOwner: ", item.Owner, "\n");
-  print("PreviousOwner: ", item.PreviousOwner, "\n");
-  print("OriginWorld: ", item.OriginWorld, "\n");
-  print("TXtime: ", item.TXtime, "\n");
-  print("Stake: ", item.Stake, "\n");
+  print("GenesisTime: ", std::move(item.GenesisTime), "\n");
+  print("ItemName: ", std::move(item.ItemName), "\n");
+  print("ItemClass: ", std::move(item.ItemClass), "\n");
+  print("ItemOwner: ", std::move(item.Owner), "\n");
+  print("PreviousOwner: ", std::move(item.PreviousOwner), "\n");
+  print("OriginWorld: ", std::move(item.OriginWorld), "\n");
+  print("TXtime: ", std::move(item.TXtime), "\n");
+  print("Stake: ", std::move(item.Stake), "\n");
 
   sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
   
