@@ -298,6 +298,7 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
   item.Stake = stake;
 
   // Make this hash match!
+  /*
   print("GenesisTime: ", std::move(item.GenesisTime), "\n");
   print("ItemName: ", std::move(item.ItemName), "\n");
   print("ItemClass: ", std::move(item.ItemClass), "\n");
@@ -306,6 +307,16 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
   print("OriginWorld: ", std::move(item.OriginWorld), "\n");
   print("TXtime: ", std::move(item.TXtime), "\n");
   print("Stake: ", std::move(item.Stake), "\n");
+  */
+  
+  print("GenesisTime: ", std::move(item.GenesisTime), " | ");
+  print("ItemName: ", std::move(item.ItemName), " | ");
+  print("ItemClass: ", std::move(item.ItemClass), " | ");
+  print("ItemOwner: ", std::move(item.Owner), " | ");
+  print("PreviousOwner: ", std::move(item.PreviousOwner), " | ");
+  print("OriginWorld: ", std::move(item.OriginWorld), " | ");
+  print("TXtime: ", std::move(item.TXtime), " | ");
+  print("Stake: ", std::move(item.Stake), " | ");
 
   sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
   
