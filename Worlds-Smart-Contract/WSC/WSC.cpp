@@ -42,10 +42,10 @@ void WSC::createitem( name         owner,        // Creator of this item.
   
 };
 
-void WSC::liquiditem( name                owner,    // Who's the owner.
+void WSC::liquiditem(    name                owner,    // Who's the owner.
                          item                tx_item,  // Actual item package.
                          capi_checksum256    hash      // What's the hash of the item.
-                       )
+                    )
 {
   require_auth( owner );
   require_recipient( owner );
@@ -80,15 +80,16 @@ void WSC::transferitem( name                from,     // Who's sending the item.
   itemProof_table itemProofFrom(_self, from.value);
   
   // Check to see if the item is onchain.
-  auto itr = itemProofFrom.find(*(uint64_t*)&hash);
   auto chainHash = itemProofFrom.get(*(uint64_t*)&hash);
+  auto itr = itemProofFrom.find(*(uint64_t*)&hash);
 
   assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
   itemProofFrom.erase(itr); // Remove the hash from the table.
 
   itemProof_table itemProofTo(_self, to.value);
-  calc_hash = hashItemTransfer(to, tx_item);
+  calc_hash = hashItemTransfer(to, tx_item.Owner, tx_item);
 
+  // 'from' is the gas payer.
   itemProofTo.emplace(from, [&](auto& p) {
     p.itemHash = calc_hash;
   });
@@ -252,11 +253,14 @@ void WSC::closewor( name owner, const symbol& symbol )
    acnts.erase( it );
 }
 
-capi_checksum256 WSC::hashItemTransfer(name NewOwner, WSC::item item)
+capi_checksum256 WSC::hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item)
 {
   capi_checksum256 calc_hash;
 
   item.Owner = NewOwner;
+  item.PreviousOwner = PreviousOwner;
+  item.TXtime = now();
+  
   sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
   
   // Make this hash match!
@@ -268,9 +272,11 @@ capi_checksum256 WSC::hashItemTransfer(name NewOwner, WSC::item item)
   print("GenesisTime: ", std::move(item.GenesisTime), "\n");
   print("TXtime: ", std::move(item.TXtime), "\n");
   print("Stake: ", std::move(item.Stake), "\n");
+ 
+  print("Sha256: ");
+  printhex((const void*)&calc_hash, 32);
   
   return(calc_hash); 
-
 }
 
 
@@ -308,6 +314,5 @@ capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_c
   printhex((const void*)&calc_hash, 32);
   
   return(calc_hash);
-
 }
 } // namespace eosio

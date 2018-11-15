@@ -63,6 +63,28 @@
             ]
         },
         {
+            "name": "transferitem",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "tx_item",
+                    "type": "item"
+                },
+                {
+                    "name": "hash",
+                    "type": "capi_checksum256"
+                }
+            ]
+       },
+       {
             "name": "createwor",
             "base": "",
             "fields": [
@@ -161,28 +183,6 @@
             ]
         },
         {
-            "name": "transferitem",
-            "base": "",
-            "fields": [
-                {
-                    "name": "from",
-                    "type": "name"
-                },
-                {
-                    "name": "to",
-                    "type": "name"
-                },
-                {
-                    "name": "tx_item",
-                    "type": "item"
-                },
-                {
-                    "name": "hash",
-                    "type": "checksum256"
-                }
-            ]
-        },
-        {
             "name": "transferwor",
             "base": "",
             "fields": [
@@ -217,6 +217,11 @@
             "ricardian_contract": ""
         },       
         {
+            "name": "transferitem",
+            "type": "transferitem",
+            "ricardian_contract": ""
+        },       
+        {
             "name": "createwor",
             "type": "createwor",
             "ricardian_contract": ""
@@ -227,15 +232,11 @@
             "ricardian_contract": ""
         },
         {
-            "name": "transferitem",
-            "type": "transferitem",
-            "ricardian_contract": ""
-        },
-        {
             "name": "transferwor",
             "type": "transferwor",
             "ricardian_contract": ""
         }
+
     ],
     "tables": [
         {

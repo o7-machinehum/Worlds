@@ -110,7 +110,7 @@ namespace eosio {
          void add_balance( name owner, asset value, name ram_payer );
 
     capi_checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
-    capi_checksum256 hashItemTransfer(name NewOwner, item item);
+    capi_checksum256 hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item);
 
    };
 
