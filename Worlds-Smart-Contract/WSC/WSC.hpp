@@ -27,10 +27,8 @@ namespace eosio {
           string ItemName;
           string ItemClass;
           name Owner;
-          name PreviousOwner;
           name OriginWorld;
           uint32_t GenesisTime;
-          uint32_t TXtime;
           asset Stake;
         };
 
@@ -55,9 +53,9 @@ namespace eosio {
 
          [[eosio::action]]
          void transferwor( name    from,
-                        name    to,
-                        asset   quantity,
-                        string  memo );
+                           name    to,
+                           asset   quantity,
+                           string  memo );
 
          [[eosio::action]]
          void openwor( name owner, const symbol& symbol, name ram_payer );
@@ -83,9 +81,10 @@ namespace eosio {
 
         struct [[eosio::table]] itemproof{
           capi_checksum256  itemHash;
+          uint32_t GenesisTime;
           
           uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
-          EOSLIB_SERIALIZE(itemproof, (itemHash))
+          //EOSLIB_SERIALIZE(itemproof, (itemHash)(GenesisTime))
         };
 
          struct [[eosio::table]] account {
@@ -109,8 +108,9 @@ namespace eosio {
          void sub_balance( name owner, asset value );
          void add_balance( name owner, asset value, name ram_payer );
 
-    capi_checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
-    capi_checksum256 hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item);
+         capi_checksum256 hashItem(WSC::item &item);
+         capi_checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
+         capi_checksum256 hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item);
 
    };
 

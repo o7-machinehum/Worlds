@@ -18,6 +18,14 @@ void WSC::createitem( name         owner,        // Creator of this item.
   require_auth( owner );
   require_recipient( owner );
   
+  WSC::item item;
+  
+  item.Owner = owner;
+  item.OriginWorld = owner;
+  item.ItemName = item_name;
+  item.ItemClass = item_class;
+  item.Stake= stake;
+
   auto sym = stake.symbol;
 
   stats statstable( _self, sym.code().raw() );
@@ -29,16 +37,15 @@ void WSC::createitem( name         owner,        // Creator of this item.
   sub_balance( owner, stake ); // Subtract Balance.
   
   capi_checksum256 calc_hash;
-  
-  calc_hash = hashItemCreate(owner, item_name, item_class, stake);
+  calc_hash = hashItem(item);
   
   itemProof_table itemProof(_self, owner.value);
   
   // Place the hash onchain   
   itemProof.emplace(owner, [&](auto& p) {
     p.itemHash = calc_hash;
+    p.GenesisTime = item.GenesisTime;
   });
-  
   
 };
 
@@ -47,8 +54,8 @@ void WSC::liquiditem(    name                owner,    // Who's the owner.
                          capi_checksum256    hash      // What's the hash of the item.
                     )
 {
-  require_auth( owner );
-  require_recipient( owner );
+  require_auth( tx_item.Owner );
+  require_recipient( tx_item.Owner );
   
   assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash); // Ensure hash matches matches
 
@@ -87,7 +94,8 @@ void WSC::transferitem( name                from,     // Who's sending the item.
   itemProofFrom.erase(itr); // Remove the hash from the table.
 
   itemProof_table itemProofTo(_self, to.value);
-  calc_hash = hashItemTransfer(to, tx_item.Owner, tx_item);
+  tx_item.Owner = to;
+  calc_hash = hashItem(tx_item);
 
   // 'from' is the gas payer.
   itemProofTo.emplace(from, [&](auto& p) {
@@ -253,77 +261,23 @@ void WSC::closewor( name owner, const symbol& symbol )
    acnts.erase( it );
 }
 
-capi_checksum256 WSC::hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item)
-{
-  capi_checksum256 calc_hash;
+capi_checksum256 WSC::hashItem(WSC::item &item){
 
-  item.Owner = NewOwner;
-  item.PreviousOwner = PreviousOwner;
-  item.TXtime = now();
-  
+  capi_checksum256 calc_hash;
+  item.GenesisTime = now();
+
   sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
-  
-  // Make this hash match!
+
   print("ItemName: ", std::move(item.ItemName), "\n");
   print("ItemClass: ", std::move(item.ItemClass), "\n");
   print("ItemOwner: ", std::move(item.Owner), "\n");
-  print("PreviousOwner: ", std::move(item.PreviousOwner), "\n");
   print("OriginWorld: ", std::move(item.OriginWorld), "\n");
   print("GenesisTime: ", std::move(item.GenesisTime), "\n");
-  print("TXtime: ", std::move(item.TXtime), "\n");
   print("Stake: ", std::move(item.Stake), "\n");
  
   print("Sha256: ");
   printhex((const void*)&calc_hash, 32);
   
   return(calc_hash); 
-}
-
-
-capi_checksum256 WSC::hashItemCreate(name owner, string item_name, string item_class, asset stake)
-{
-
-  capi_checksum256 calc_hash;
-  WSC::item item;
-  string output;
-
-  // Fill the structure. 
-  item.ItemName = item_name;
-  item.ItemClass = item_class;
-  item.Owner = owner;
-  item.PreviousOwner.value = 0x00;
-  item.OriginWorld = owner;
-  item.GenesisTime = now();
-  item.TXtime = 0x00;
-  item.Stake = stake;
-
-  // Make this hash match!
-  /*
-  print("GenesisTime: ", std::move(item.GenesisTime), "\n");
-  print("ItemName: ", std::move(item.ItemName), "\n");
-  print("ItemClass: ", std::move(item.ItemClass), "\n");
-  print("ItemOwner: ", std::move(item.Owner), "\n");
-  print("PreviousOwner: ", std::move(item.PreviousOwner), "\n");
-  print("OriginWorld: ", std::move(item.OriginWorld), "\n");
-  print("TXtime: ", std::move(item.TXtime), "\n");
-  print("Stake: ", std::move(item.Stake), "\n");
-  */
-  
-  print("GenesisTime: ", std::move(item.GenesisTime), " | ");
-  print("ItemName: ", std::move(item.ItemName), " | ");
-  print("ItemClass: ", std::move(item.ItemClass), " | ");
-  print("ItemOwner: ", std::move(item.Owner), " | ");
-  print("PreviousOwner: ", std::move(item.PreviousOwner), " | ");
-  print("OriginWorld: ", std::move(item.OriginWorld), " | ");
-  print("TXtime: ", std::move(item.TXtime), " | ");
-  print("Stake: ", std::move(item.Stake), " | ");
-
-  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
-  
-  // for (int i = 0 ; i < 32 ; i++)
-  print("Sha256: ");
-  printhex((const void*)&calc_hash, 32);
-  
-  return(calc_hash);
 }
 } // namespace eosio

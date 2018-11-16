@@ -151,19 +151,11 @@
                     "type": "name"
                 },
                 {
-                    "name": "PreviousOwner",
-                    "type": "name"
-                },
-                {
                     "name": "OriginWorld",
                     "type": "name"
                 },
                 {
                     "name": "GenesisTime",
-                    "type": "time"
-                },
-                {
-                    "name": "TXtime",
                     "type": "time"
                 },
                 {
@@ -179,6 +171,10 @@
                 {
                     "name": "itemHash",
                     "type": "checksum256"
+                },
+                {
+                    "name": "GenesisTime",
+                    "type": "uint32"
                 }
             ]
         },
@@ -257,7 +253,7 @@
             "name": "itemproofs",
             "type": "itemproof",
             "index_type": "i64",
-            "key_names": ["currency"],
+            "key_names": ["itemHash"],
             "key_types": ["uint64"]
         }
     ],
