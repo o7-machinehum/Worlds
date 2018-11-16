@@ -2,7 +2,7 @@
 
 <img src="Graphics/Header.png" alt="drawing" width="1000"/>
 
-Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimal dependencies required for developers to get up and running, it it still under development and has a planned deployment in 2019 on the EOS main net. For more detailed info please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/whitepaper.pdf). This repository contains three main components.
+Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimum dependencies required for developers to get up and running. It it still under development and has a planned deployment in 2019 on the EOS main net. For more detailed info please read the (somewhat out of date) paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/whitepaper.pdf). This repository contains three main components.
 
 * The Worlds Whitepaper
 * The Worlds Engine
@@ -50,12 +50,12 @@ Note that there is a hash required.
 ```
 
 ## Worlds Client (Worlds.js)
-The worlds client is wallet that enables players to view, create, trade and liquidate items, exp and WOR. The worlds client uses eosjs to communicate with the WSC. For now it will host a simple UDP server that will accept commands from the game client. It will also be possible for players to manually enter commands. 
+The worlds client is wallet that enables players to view, create, trade and liquidate items, exp and WOR. The worlds client uses eosjs to call the WSC. It hosts a simple UDP server that will accept commands from the game client. It will also be possible for players to manually enter commands to manage their assets.  
 
-## Funding
-When I started this project over six months ago I wasn't even planning on using a blockchain. If you go back in the commit history, it can be seen that Worlds relied on an overly complex system of ledgers and auditing. At the time there was no blockchain that could give me the rapid finality required for a game. In June the EOS main net launched and changed everything, this means I could get higher security in a less complex system developed in a fraction of the time.
+## Notes on the Project 
+When I started this project over six months ago I wasn't even planning on using a blockchain. If you go back in the commit history, you'll see that Worlds relied on an complex system of ledgers and auditing. At the time there was no blockchain that could provide the rapid finality required for my idea. In June 2018, the EOS main net launched and satisfied the response requirement for this platform. This meant we could get higher security in a less complex system developed in a fraction of the time.
 
-Even though the project uses a token there will be no ICO or crowd sale. I wish to avoid the stigma of a scam, and don't want to take people's money. However I do need to raise for the airdrop, so I'm reserving 10% for private investment, if I find cash from another outlet I will use that instead.
+Worlds uses a token, however there will be no ICO or crowd sale. In the future we launch an airdrop, so we plan to raise from private investors to fund this.
 
 ### Token Cap Table
 * 40% - Airdrop
