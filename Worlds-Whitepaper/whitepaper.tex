@@ -47,7 +47,7 @@
 \mainmatter  % start of an individual contribution
 
 % This needs some work, big time.
-\title{\SystemName: A distributed MMO}
+\title{\SystemName: A Distributed MMO}
 
 \author{Ryan Walker\\
 				ryan.cjw@gmail.com}
@@ -55,11 +55,6 @@
 \institute{} %Merp
 
 \maketitle
-%% Scrum area
-%% TODO:
-% Not controlled by centralized organization.
-% How/Where are the actual files hosted? Client Files??
-%	-> How are these fetched?
 
 \begin{abstract}
 This paper overviews a protocol that aims to manage the large scale economic components of a distributed MMO. Following the implementation of the Worlds protocol it becomes possible to fairly scale a universe based on games developed by completely independent parties. 
@@ -81,7 +76,7 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \node (WS)[myblock,above of=WE, yshift=1cm]{\begin{tabular}{c}Worlds Engine\\ {\scriptsize Worlds.js} \\\end{tabular}};
 \node (WC)[myblock,left of=WE, xshift=-3cm]{\begin{tabular}{c}Game Client \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
 \node (SE)[myblock,left of=WS, xshift=-3cm]{\begin{tabular}{c}Server Engine \\ {\scriptsize \textit{From game Dev}} \\\end{tabular}};
-\node (WSC)[myblock,right of=WS, xshift=3cm, yshift=-1cm]{\begin{tabular}{c}Smart Contract (\ref{WSC}) \\ {\scriptsize \textit{On Chain}} \\\end{tabular}};
+\node (WSC)[myblock,right of=WS, xshift=3cm, yshift=-1cm]{Smart Contract (\ref{WSC})};
 
 \draw [dashed] (-6,1) -- (2,1);
 \draw [dashed] (2,2.5) -- (2,-0.5);
@@ -100,7 +95,7 @@ A world, defined as $w_k$, is a node that designs a user experience and hosts pl
 \end{tikzpicture}
 \end{center}
 \end{small}
-The worlds engine is an application that manages the elements that are common throughout all worlds, such as player keys, hashing+signing and fetching the files required to run the Game Client. The world designer has full creative freedom over the game client and server engine. This enables the highest flexibility and the most unique universe. It is possible for clusters of worlds to share a single game client, yet design their own experience. Conversely, adjacent worlds might have completely different game clients, where players might move from a text based MUD into a fully 3D world. The worlds client takes care of fetching the executable game client.
+The worlds engine is an application that manages the elements that are common throughout all worlds, such as player keys, hashing, signing and fetching the files required to run the Game Client. The world designer has full creative freedom over the game client and server engine. This enables the highest flexibility and the most unique universe. It is possible for clusters of worlds to share a single game client, yet design their own experience. Conversely, adjacent worlds might have completely different game clients, where players might move from a text based MUD into a fully 3D world. 
 
 \section{Worlds Smart Contact (WSC)}
 \label{WSC}
@@ -129,7 +124,7 @@ Contract actions are any actions that communicate with the Worlds Smart Contract
 
 \section{Experience}
 \label{exp}
-Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable. It is possible for experience to be liquidated back into WOR by the players. Worlds determine the effect of player experience, typically the more WOR that is staked the larger the effect can be. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
+Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable. It is possible for experience to be liquidated back into WOR by the players. The amount of experience is a function of the amount of WOR locked against the hash. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
 
 \begin{figure}[H]
 \centering
