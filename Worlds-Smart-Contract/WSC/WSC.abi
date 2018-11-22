@@ -49,27 +49,15 @@
             "base": "",
             "fields": [
                 {
-                    "name": "owner",
-                    "type": "name"
-                },
-                {
                     "name": "tx_item",
                     "type": "item"
                 },
-                {
-                    "name": "hash",
-                    "type": "capi_checksum256"
-                }
             ]
         },
         {
             "name": "transferitem",
             "base": "",
             "fields": [
-                {
-                    "name": "from",
-                    "type": "name"
-                },
                 {
                     "name": "to",
                     "type": "name"
@@ -78,10 +66,6 @@
                     "name": "tx_item",
                     "type": "item"
                 },
-                {
-                    "name": "hash",
-                    "type": "capi_checksum256"
-                }
             ]
        },
        {

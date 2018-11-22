@@ -36,10 +36,10 @@ namespace eosio {
          void createitem( name owner, string item_name, string item_class, asset stake );
         
          [[eosio::action]]
-         void liquiditem( name owner, item tx_item, capi_checksum256 hash );
+         void liquiditem( item tx_item );
         
          [[eosio::action]] 
-         void transferitem( name from, name to, item tx_item, capi_checksum256 hash ); 
+         void transferitem( name to, item tx_item ); 
 
          [[eosio::action]]
          void createwor( name   issuer,

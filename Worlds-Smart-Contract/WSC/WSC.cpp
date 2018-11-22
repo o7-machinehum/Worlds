@@ -37,6 +37,7 @@ void WSC::createitem( name         owner,        // Creator of this item.
   sub_balance( owner, stake ); // Subtract Balance.
   
   capi_checksum256 calc_hash;
+  item.GenesisTime = now();
   calc_hash = hashItem(item);
   
   itemProof_table itemProof(_self, owner.value);
@@ -49,17 +50,16 @@ void WSC::createitem( name         owner,        // Creator of this item.
   
 };
 
-void WSC::liquiditem(    name                owner,    // Who's the owner.
-                         item                tx_item,  // Actual item package.
-                         capi_checksum256    hash      // What's the hash of the item.
+void WSC::liquiditem(    item                tx_item // Who's the owner.
                     )
 {
   require_auth( tx_item.Owner );
   require_recipient( tx_item.Owner );
-  
-  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash); // Ensure hash matches matches
 
-  itemProof_table itemProof(_self, owner.value);
+  capi_checksum256 hash;
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash);
+
+  itemProof_table itemProof(_self, tx_item.Owner.value);
 
   auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
   auto itr = itemProof.find(*(uint64_t*)&hash);
@@ -67,24 +67,23 @@ void WSC::liquiditem(    name                owner,    // Who's the owner.
   assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
   itemProof.erase(itr); // Remove the hash from the table.
 
-  add_balance( owner, tx_item.Stake, owner );
+  add_balance(tx_item.Owner, tx_item.Stake, tx_item.Owner);
 }
 
-void WSC::transferitem( name                from,     // Who's sending the item.
-                        name                to,       // Who's getting the item.
-                        item                tx_item,  // Actual item package.
-                        capi_checksum256    hash      // What's the hash of the item.
+void WSC::transferitem( name                to,       // Who's getting the item.
+                        item                tx_item   // Actual item package.
                       )
 {
   capi_checksum256 calc_hash;
   
-  require_auth( from );
-  require_recipient( from );
+  require_auth( tx_item.Owner );
+  require_recipient( tx_item.Owner );
   require_recipient( to );
 
-  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash); // Ensure hash matches matches
-  
-  itemProof_table itemProofFrom(_self, from.value);
+  capi_checksum256 hash;
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash);
+
+  itemProof_table itemProofFrom(_self, tx_item.Owner.value);
   
   // Check to see if the item is onchain.
   auto chainHash = itemProofFrom.get(*(uint64_t*)&hash);
@@ -94,12 +93,14 @@ void WSC::transferitem( name                from,     // Who's sending the item.
   itemProofFrom.erase(itr); // Remove the hash from the table.
 
   itemProof_table itemProofTo(_self, to.value);
+  auto from = tx_item.Owner;
   tx_item.Owner = to;
   calc_hash = hashItem(tx_item);
 
   // 'from' is the gas payer.
   itemProofTo.emplace(from, [&](auto& p) {
     p.itemHash = calc_hash;
+    p.GenesisTime = tx_item.GenesisTime;
   });
 }
 
@@ -264,7 +265,6 @@ void WSC::closewor( name owner, const symbol& symbol )
 capi_checksum256 WSC::hashItem(WSC::item &item){
 
   capi_checksum256 calc_hash;
-  item.GenesisTime = now();
 
   sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
 
