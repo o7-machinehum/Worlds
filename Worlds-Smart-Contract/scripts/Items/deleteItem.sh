@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Make these into vars in the future
-cleos push action wsc.code deleteitem '{"owner":"turnip","hash":"1c6d935bca45b415a383547af17b87dfafd5e5191e059bb35b6fad23047b9a54"}' -p turnip@active
+cleos push action wsc.code deleteitem '{"owner":"turnip","hash":"fc557baaa410cea3af8579056164a498c74422e4e36d82fdc6006b55b8b91a36"}' -p turnip@active

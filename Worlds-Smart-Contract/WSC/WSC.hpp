@@ -44,6 +44,9 @@ namespace eosio {
          [[eosio::action]] 
          void deleteitem( name owner, capi_checksum256 hash ); 
 
+         [[eosio::action]] 
+         void tradeitem( item tx_item, item rx_item ); 
+         
          [[eosio::action]]
          void createwor( name   issuer,
                          asset  maximum_supply);
@@ -87,7 +90,6 @@ namespace eosio {
           uint32_t GenesisTime;
           
           uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
-          //EOSLIB_SERIALIZE(itemproof, (itemHash)(GenesisTime))
         };
 
          struct [[eosio::table]] account {

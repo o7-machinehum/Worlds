@@ -104,7 +104,10 @@ void WSC::transferitem( name                to,       // Who's getting the item.
   });
 }
 
-/*WARNING: This function deletes items without refunding WOR!*/
+/*
+  WARNING: This function deletes items without refunding WOR!
+    It it mainly for refunding RAM if the user forgets the content of the items  
+*/
 void WSC::deleteitem( name                  owner,
                       capi_checksum256      hash
                     ) 
@@ -117,6 +120,30 @@ void WSC::deleteitem( name                  owner,
   print("Deleting Item");
   itemProof.erase(itr); // GONE!
 
+}
+
+void WSC::tradeitem( item               tx_item, // What are you trading 
+                     item               rx_item  // What are you traing for
+                   )
+{
+  require_auth( tx_item.Owner );
+
+  /*
+    -> Hash tx_item.
+      -> Ensure it is on chain.
+    -> Hash rx_item.
+    -> Ensure there is not a trade channel open that has rx_item = hash(tx_item) && tx_item = hash(rx_item)
+      -> If there is proceed to step X
+    -> Then move the hash(tx_item) and hash(rx_item) into a trade channel
+        -> This is a multi-index table that has two fields
+          -> hash(tx_item)
+          -> hash(rx_item)
+    -> Delete the reference to tx_item on tx_item.Owner, it's now been moved into a trade channel.
+
+    X-> Delete the trade channel and emplace tx_item on rx_item.Owners table. Then place rx_item on tx_item.Owners table!
+     -> We've just made a trade :)
+
+  */
 }
 
 void WSC::createwor( name   issuer,
