@@ -104,6 +104,21 @@ void WSC::transferitem( name                to,       // Who's getting the item.
   });
 }
 
+/*WARNING: This function deletes items without refunding WOR!*/
+void WSC::deleteitem( name                  owner,
+                      capi_checksum256      hash
+                    ) 
+{
+  require_auth( owner );
+
+  itemProof_table itemProof(_self, owner.value);
+  auto itr = itemProof.find(*(uint64_t*)&hash);
+  
+  print("Deleting Item");
+  itemProof.erase(itr); // GONE!
+
+}
+
 void WSC::createwor( name   issuer,
                      asset  maximum_supply )
 {

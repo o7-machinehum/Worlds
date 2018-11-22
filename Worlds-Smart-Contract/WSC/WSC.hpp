@@ -41,6 +41,9 @@ namespace eosio {
          [[eosio::action]] 
          void transferitem( name to, item tx_item ); 
 
+         [[eosio::action]] 
+         void deleteitem( name owner, capi_checksum256 hash ); 
+
          [[eosio::action]]
          void createwor( name   issuer,
                          asset  maximum_supply);
@@ -115,4 +118,4 @@ namespace eosio {
    };
 
 } /// namespace eosio
-EOSIO_DISPATCH( eosio::WSC, (createitem)(liquiditem)(transferitem)(createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )
+EOSIO_DISPATCH( eosio::WSC, (createitem)(liquiditem)(transferitem)(deleteitem)(createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )

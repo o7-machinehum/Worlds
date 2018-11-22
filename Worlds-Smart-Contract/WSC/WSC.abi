@@ -69,6 +69,20 @@
             ]
        },
        {
+            "name": "deleteitem",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "hash",
+                    "type": "checksum256"
+                },
+            ]
+       },
+       {
             "name": "createwor",
             "base": "",
             "fields": [
@@ -201,6 +215,11 @@
             "type": "transferitem",
             "ricardian_contract": ""
         },       
+        {
+            "name": "deleteitem",
+            "type": "deleteitem",
+            "ricardian_contract": ""
+        },
         {
             "name": "createwor",
             "type": "createwor",
