@@ -91,8 +91,16 @@ namespace eosio {
           
           uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
         };
+        
+        struct [[eosio::table]] tradechannel{
+          capi_checksum256  rx_item;
+          capi_checksum256  tx_item;
+          name trader;
 
-         struct [[eosio::table]] account {
+          uint64_t primary_key() const {return *(uint64_t*)&rx_item;}        // Primary Indices.
+        };
+         
+        struct [[eosio::table]] account {
             asset    balance;
 
             uint64_t primary_key()const { return balance.symbol.code().raw(); }
@@ -109,6 +117,7 @@ namespace eosio {
          typedef eosio::multi_index< "accounts"_n, account > accounts;
          typedef eosio::multi_index< "stat"_n, currency_stats > stats;
          typedef eosio::multi_index< "itemproofs"_n, itemproof > itemProof_table;
+         typedef eosio::multi_index< "tradechannel"_n, tradechannel > tradechannel_table;
 
          void sub_balance( name owner, asset value );
          void add_balance( name owner, asset value, name ram_payer );

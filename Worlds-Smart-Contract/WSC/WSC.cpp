@@ -128,6 +128,28 @@ void WSC::tradeitem( item               tx_item, // What are you trading
 {
   require_auth( tx_item.Owner );
 
+  capi_checksum256 tx_hash, rx_hash;
+
+  itemProof_table itemProofFrom(_self, tx_item.Owner.value);
+  
+  // Check to see if the item is onchain.
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&tx_hash);
+  auto itr = itemProofFrom.find(*(uint64_t*)&hash);
+
+  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
+  
+  itemProofFrom.erase(itr); // Remove the hash from the table.
+ 
+
+
+
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &tx_hash);
+  sha256((char*) &rx_item.ItemName, sizeof(tx_item), &rx_hash);
+
+  tradechannel_table channel(_self, _self.value); // The wsc owns the table. It is also in wsc scoope. 
+
+  auto itr = channel.find(*(uint64_t*)&tx_hash); // Check to see if a trade channel isn't already open
+  
   /*
     -> Hash tx_item.
       -> Ensure it is on chain.
