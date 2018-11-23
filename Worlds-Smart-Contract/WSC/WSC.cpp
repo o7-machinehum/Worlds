@@ -129,27 +129,63 @@ void WSC::tradeitem( item               tx_item, // What are you trading
   require_auth( tx_item.Owner );
 
   capi_checksum256 tx_hash, rx_hash;
+  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &tx_hash);
+  sha256((char*) &rx_item.ItemName, sizeof(rx_item), &rx_hash);
 
-  itemProof_table itemProofFrom(_self, tx_item.Owner.value);
+  itemProof_table itemProof_tx(_self, tx_item.Owner.value);
   
   // Check to see if the item is onchain.
-  auto chainHash = itemProofFrom.get(*(uint64_t*)&tx_hash);
-  auto itr = itemProofFrom.find(*(uint64_t*)&hash);
+  auto chainHash = itemProof_tx.get(*(uint64_t*)&tx_hash);
+  auto itr = itemProof_tx.find(*(uint64_t*)&tx_hash);
 
   assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
+  print("Item on chain and belongs to proper person");
+
+  /*At this point the item the user wants to trade does in fact belog to the user*/
+  itemProof_tx.erase(itr); // Remove the hash from the table.
+  print("Removing Item");
+
+  tradechannel_table channel(_self, rx_item.Owner.value); 
   
-  itemProofFrom.erase(itr); // Remove the hash from the table.
- 
+  auto itr_rx = channel.find(*(uint64_t*)&tx_hash); // Check to see if a trade channel isn't already open
+  if(itr_rx == channel.end()){
+    print("Found a trade channel open!");
+    auto rx_channel = channel.get(*(uint64_t*)&tx_hash);
+    
+    // if(rx_channel.tx_item == rx_hash){
+    if(std::equal(std::begin(rx_channel.tx_item.hash), std::end(rx_channel.tx_item.hash), std::begin(rx_hash.hash))){
+      print("Trade Maches, Time to trade");
+        
+      capi_checksum256 new_rx_hash, new_tx_hash;
+      tx_item.Owner = rx_item.Owner;
+      rx_item.Owner = tx_item.Owner;
 
-
-
-  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &tx_hash);
-  sha256((char*) &rx_item.ItemName, sizeof(tx_item), &rx_hash);
-
-  tradechannel_table channel(_self, _self.value); // The wsc owns the table. It is also in wsc scoope. 
-
-  auto itr = channel.find(*(uint64_t*)&tx_hash); // Check to see if a trade channel isn't already open
+      new_rx_hash = hashItem(rx_item);
+      new_tx_hash = hashItem(tx_item);
   
+      itemProof_table itemProof_rx(_self, rx_item.Owner.value);
+      itemProof_table itemProof_tx(_self, tx_item.Owner.value);
+  
+      // Place the hash onchain   
+      itemProof_rx.emplace(tx_item.Owner, [&](auto& p) {
+        p.itemHash = new_rx_hash;
+        p.GenesisTime = rx_item.GenesisTime;
+      });
+      
+      // The ram payer should really be the person receiving the item 
+      itemProof_tx.emplace(tx_item.Owner, [&](auto& p) {
+        p.itemHash = new_tx_hash;
+        p.GenesisTime = tx_item.GenesisTime;
+      });
+    }
+    else{
+      print("Trade does not match!");
+    }
+  }
+  else{
+    /* Now you need to create the trade channel and place it onchain */
+  }
+
   /*
     -> Hash tx_item.
       -> Ensure it is on chain.
