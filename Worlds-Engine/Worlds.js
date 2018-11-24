@@ -13,4 +13,4 @@ port = 43252;
 sock.open(port) // Open socket
 
 const msg = 'message';
-repl.start('> ').context.m = actions;
+repl.start('> ').context.act = actions;

@@ -4,6 +4,8 @@
       actions.createItem("turnip", "Sword", "Weapon", "1.00 WOR")
 */
 
+var sleep = require('sleep'); 
+
 const item = {
   ItemName: 'Sword',
   ItemClass: 'Weapon',
@@ -35,9 +37,12 @@ options = {
 Eos = require('eosjs')
 
 const eos = Eos(config);
+
 module.exports = {
   createItem: function(name, item, itemClass, stake){
     eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, item, itemClass, stake, options)})
+    sleep.sleep(2000)
+    eos.getTableRows(true, code, 'wsc.code', table, tableKey)    
   }
 }
 
