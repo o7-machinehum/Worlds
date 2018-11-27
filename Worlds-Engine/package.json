@@ -4,7 +4,7 @@
   "description": "The Worlds Engine is the application that lives in between the Game Engine and the Worlds Smart Contract (WSC)",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron --inspect ."
   },
   "author": "machinehum",
   "license": "ISC",

@@ -16,13 +16,25 @@ console.log = function(msg){
 function connect() {
   Key = document.getElementById("PrivateKey").value
   Port = document.getElementById("Port").value
+  EndPoint= document.getElementById("EndPoint").value
+  ChainID = document.getElementById("ChainID").value
   
   console.log('Unlocking Wallet and connect to endpoint!');
   
   sock.open(Port) // Open socket
-  actions. connectEndpoint()
+  actions.connectEndpoint(ChainID, EndPoint, Key)
   
   }
+
+function createItem(){
+
+  ItemName = document.getElementById("ItemName").value
+  ItemClass = document.getElementById("ItemClass").value
+  ItemStake = document.getElementById("ItemStake").value
+  
+  console.log('Creating Item')
+  actions.createItem('turnip', ItemName, ItemClass, ItemStake) 
+}
 
 function createWindow () {
   
