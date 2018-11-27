@@ -42,6 +42,9 @@ module.exports = {
   const eos = Eos().getInfo((error, info) => {
     console.log(error, info);
   });
+  
+  debugger; // <-- I want to break here 
+  
   },
 
   createItem: function(name, item, itemClass, stake){
