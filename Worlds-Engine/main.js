@@ -1,20 +1,34 @@
 const {app, BrowserWindow} = require('electron')
 const actions = require('./actions')
 const sock = require('./socket')
+// const preact = require('preact')
 
 let mainWindow
 
+/*
 var nodeConsole = require('console');
 var Myconsole = new nodeConsole.Console(process.stdout, process.stderr);
 
-/* Replace console with special output*/
+/* Replace console with special output
 var console = {};
 console.log = function(msg){
   Myconsole.log(msg)
 };
+*/
+
+var eos
+ 
+var account = {
+  pubKey : null,
+  privKey : null,
+  name : null
+}
+
+// const element = <h1>Hello, {formatName(account.name)}!</h1>;
 
 function connect() {
-  Key = document.getElementById("PrivateKey").value
+  account.privKey = document.getElementById("PrivateKey").value
+  account.pubKey = document.getElementById("PublicKey").value
   Port = document.getElementById("Port").value
   EndPoint= document.getElementById("EndPoint").value
   ChainID = document.getElementById("ChainID").value
@@ -22,8 +36,10 @@ function connect() {
   console.log('Unlocking Wallet and connect to endpoint!');
   
   sock.open(Port) // Open socket
-  actions.connectEndpoint(ChainID, EndPoint, Key)
-  
+  eos = actions.connectEndpoint(ChainID, EndPoint, account.privKey)
+  // eos.getKeyAccounts(account.pubKey).then(result => account.name = result.account_names)
+
+  // preact.render(element, document.getElementById('chars'));
   }
 
 function createItem(){
@@ -33,7 +49,7 @@ function createItem(){
   ItemStake = document.getElementById("ItemStake").value
   
   console.log('Creating Item')
-  actions.createItem('turnip', ItemName, ItemClass, ItemStake) 
+  actions.createItem(eos, 'turnip', ItemName, ItemClass, ItemStake) 
 }
 
 function createWindow () {
@@ -41,6 +57,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 400, height: 800})
 
   mainWindow.loadFile('index.html')
+
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
     mainWindow = null
@@ -60,5 +78,4 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
 
