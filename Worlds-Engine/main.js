@@ -1,7 +1,6 @@
 const {app, BrowserWindow} = require('electron')
 const actions = require('./actions')
 const sock = require('./socket')
-// const preact = require('preact')
 
 let mainWindow
 
@@ -21,7 +20,9 @@ var eos
 var account = {
   pubKey : null,
   privKey : null,
-  name : null
+  name : null,
+	selectedName : null,
+	balance : null
 }
 
 // const element = <h1>Hello, {formatName(account.name)}!</h1>;
@@ -37,10 +38,29 @@ function connect() {
   
   sock.open(Port) // Open socket
   eos = actions.connectEndpoint(ChainID, EndPoint, account.privKey)
-  // eos.getKeyAccounts(account.pubKey).then(result => account.name = result.account_names)
-
-  // preact.render(element, document.getElementById('chars'));
+  eos.getKeyAccounts(account.pubKey).then(addName)
   }
+
+function addName(result){
+	account.name = result.account_names 
+	
+	var x = document.getElementById("Chars");
+	
+	for(i = 0 ; i < account.name.length ; i++){
+		var option = document.createElement("option");
+		option.text = account.name[i] 
+		x.add(option)
+	}
+}
+
+function updateChar(){
+	account.selectedName = document.getElementById("Chars").value
+	eos.getCurrencyBalance('wsc.code', account.selectedName, 'WOR').then(function fun(result) {account.balance = result; updateHTML(result)})
+}
+
+function updateHTML(result){
+	document.getElementById("Balance").innerHTML = "Balance: " + account.balance
+}
 
 function createItem(){
 

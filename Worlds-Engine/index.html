@@ -8,8 +8,10 @@
   </head>
   <body>
      <center><h1>Worlds Engine</h1></center>
-     <div class="row">
-      <div class="column" style="background-color:#aaa;">
+     Welcome to the grossest application you have ever used. 
+		 <div class="row">
+      
+			<div class="column" style="background-color:#48a62d;">
         <div id='content' style='width:100%;'>        
         <center><h2>Credentials</h2></center>
         PrivateKey: <input type="text" id="PrivateKey" value="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3">
@@ -17,19 +19,33 @@
         Endpoint: <input type="text" id="EndPoint" value="http://127.0.0.1:8888">
         ChainID: <input type="text" id="ChainID" value="cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f">
         Port: <input type="text" id="Port" value="43252">
-        <button onclick="connect()">Connect</button>
-        <div id="chars"></div>
-        </div>
+        <button style='width:100%;' onclick="connect()">Connect</button>
+				</div>
       </div>
-      <div class="column" style="background-color:#bbb;">
+			
+			<div class="column" style="background-color:#e23801;">
         <div id='content' style='width:100%;'>        
-        <center><h2>Create Item</h2></center>
-        Item Name: <input type="text" id="ItemName" value="Sword">
-        Item Class: <input type="text" id="ItemClass" value="Weapon">
-        Stake: <input type="text" id="ItemStake" value="1.00 WOR">
-        <button onclick="createItem()">Create</button>
+					<center><h2>Character</h2></center>
+					<center><select id="Chars" style='width:100%;'></select></center>
+					<button style='width:100%;'onclick="updateChar()">Update</button><br>
+					<p id="Balance">Balance: ?</p>
+					<center><h2>Transfer</h2></center>
+					To: <input type="text" id="TransferTo" value="">
+					Amount: <input type="text" id="TransferAmt" value="">
+					<button style='width:100%;'onclick="TransferWor()">Transfer</button><br>
         </div>
       </div>
+			
+			<div class="column" style="background-color:#48a62d;">
+        <div id='content' style='width:100%;'>        
+					<center><h2>Create Item</h2></center>
+					Item Name: <input type="text" id="ItemName" value="Sword">
+					Item Class: <input type="text" id="ItemClass" value="Weapon">
+					Stake: <input type="text" id="ItemStake" value="1.00 WOR">
+					<button style='width:100%;' onclick="createItem()">Create</button>
+        </div>
+			</div>
+
     </div> 
   </body>
 </html>
