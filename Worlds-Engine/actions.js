@@ -35,5 +35,10 @@ module.exports = {
 
   createItem: function(eos, name, item, itemClass, stake){
     eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, item, itemClass, stake, options)})
+  }, 
+
+  TXwor: function(eos, from, to, amount, memo){
+    debugger
+    eos.contract('wsc.code').then(wsccode => {wsccode.transferwor(from, to, amount, memo, options)})
   }
 }

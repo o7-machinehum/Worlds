@@ -62,6 +62,15 @@ function updateHTML(result){
 	document.getElementById("Balance").innerHTML = "Balance: " + account.balance
 }
 
+function TransferWor(){
+  to = document.getElementById("TransferTo").value
+  amount = document.getElementById("TransferAmt").value
+  memo = 'future shit'
+
+  actions.TXwor(eos, account.selectedName, to, amount, memo) 
+}
+
+
 function createItem(){
 
   ItemName = document.getElementById("ItemName").value
