@@ -4,8 +4,8 @@
       actions.createItem("turnip", "Sword", "Weapon", "1.00 WOR")
 */
 
-options = {
-  authorization: 'turnip@active',
+var options = {
+  authorization: '',
   broadcast: true,
   sign: true
 }
@@ -34,11 +34,12 @@ module.exports = {
   },
 
   createItem: function(eos, name, item, itemClass, stake){
-    eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, item, itemClass, stake, options)})
+    options.authorization = name + '@active'
+		eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, item, itemClass, stake, options)})
   }, 
 
   TXwor: function(eos, from, to, amount, memo){
-    debugger
-    eos.contract('wsc.code').then(wsccode => {wsccode.transferwor(from, to, amount, memo, options)})
+    options.authorization = from + '@active'
+		eos.contract('wsc.code').then(wsccode => {wsccode.transferwor(from, to, amount, memo, options)})
   }
 }
