@@ -36,6 +36,18 @@ module.exports = {
   createItem: function(eos, name, item, itemClass, stake){
     options.authorization = name + '@active'
 		eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, item, itemClass, stake, options)})
+    
+    item.name = name
+    item.itemClass = itemClass
+    item.stake = stake
+    
+    setTimeout(function()
+      {
+        // Then grab the hash onchain, make the full item package and log it down. 
+        // eos.getTableRows({code:'wsc.code', scope:'turnip', table:'itemproofs', json:true}).then(function(res){console.log(res)})
+
+      });
+
   }, 
 
   TXwor: function(eos, from, to, amount, memo){
