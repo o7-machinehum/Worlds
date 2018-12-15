@@ -13,42 +13,50 @@
   </head>
   <body>
      <center><h1>Worlds Engine</h1></center>
-			<div class="row">
 			<div class="column" style="background-color:#093A3E;">
-        <div id='content' style='width:100%;'>        
-        <center><h2>Credentials</h2></center>
-				PrivateKey: <input type="text" id="PrivateKey" value="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3">
-        PublicKey: <input type="text" id="PublicKey" value="EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV">
-        Endpoint: <input type="text" id="EndPoint" value="http://127.0.0.1:8888">
-        ChainID: <input type="text" id="ChainID" value="cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f">
-        Port: <input type="text" id="Port" value="43252">
-        <button style='width:100%;' onclick="connect()">Connect</button>
+        <div id='content' style='width:100%;'>
+					<center><h2>Credentials</h2></center>
+					PrivateKey: <input type="text" id="PrivateKey" value="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"><br><br>
+					PublicKey: <input type="text" id="PublicKey" value="EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"><br><br>
+					Endpoint: <input type="text" id="EndPoint" value="http://127.0.0.1:8888"><br><br>
+					ChainID: <input type="text" id="ChainID" value="cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f"><br><br>
+					Port: <input type="text" id="Port" value="43252"><br><br><br><br>
+					<button style='width:100%;' onclick="connect()">Connect</button>
 				</div>
-      </div>
+			</div>
+			
+			<hr class="new">
 			
 			<div class="column" style="background-color:#093A3E;">
-        <div id='content' style='width:100%;'>        
+        <div id='content' style='width:100%;'>	
 					<center><h2>Character</h2></center>
-					<center><select id="Chars" style='width:100%;'></select></center>
+					<center><select id="Chars" style='width:100%;'></select></center><br><br><br>
 					<button style='width:100%;'onclick="updateChar()">Update</button><br>
 					<p id="Balance">Balance: ?</p>
-					<center><h2>Transfer</h2></center>
-					To: <input type="text" id="TransferTo" value="">
-					Amount: <input type="text" id="TransferAmt" value="">
-					<button style='width:100%;'onclick="TransferWor()">Transfer</button><br>
-        </div>
-      </div>
+				</div>
+			</div>
+
+			<hr class="new">
 			
 			<div class="column" style="background-color:#093A3E;">
-        <div id='content' style='width:100%;'>        
+    	  <div id='content' style='width:100%;'>	
+					<center><h2>Transfer</h2></center>
+					To: <input type="text" id="TransferTo" value=""><br><br>
+					Amount: <input type="text" id="TransferAmt" value=""><br><br><br><br>
+					<button style='width:100%;'onclick="TransferWor()">Transfer</button>
+				</div>
+			</div>
+
+			<hr class="new">
+			
+			<div class="column" style="background-color:#093A3E;">
+    	  <div id='content' style='width:100%;'>
 					<center><h2>Create Item</h2></center>
-					Item Name: <input type="text" id="ItemName" value="Sword">
-					Item Class: <input type="text" id="ItemClass" value="Weapon">
-					Stake: <input type="text" id="ItemStake" value="1.00 WOR">
+					Item Name: <input type="text" id="ItemName" value="Sword"><br><br>
+					Item Class: <input type="text" id="ItemClass" value="Weapon"><br><br>
+					Stake: <input type="text" id="ItemStake" value="1.00 WOR"><br><br><br><br>
 					<button style='width:100%;' onclick="createItem()">Create</button>
         </div>
 			</div>
-
-    </div> 
   </body>
 </html>

@@ -13,13 +13,6 @@ body {background-color: #001011;}
     padding: 10px;
 }
 
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
     .column {
@@ -32,6 +25,7 @@ body {background-color: #001011;}
     width:100%;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
+    color:#001011 !important
 }
 
 img {
@@ -39,3 +33,10 @@ img {
     height: auto;
 }
 
+/* Thick red border */
+hr.new {
+  border: 20px solid #001011;
+  border-radius: 5px;
+  width: 120%;
+  margin: 0em;
+}
