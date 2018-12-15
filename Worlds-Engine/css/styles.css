@@ -1,6 +1,9 @@
+body {background-color: #001011;}
+
 * {
     box-sizing: border-box;
-    font-family: Helvetica;
+    font-family: sans-serif;
+    color: #3AAFB9 !important
 }
 
 /* Create two equal columns that floats next to each other */
