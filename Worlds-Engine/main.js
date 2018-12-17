@@ -78,7 +78,15 @@ function createItem(){
   ItemStake = document.getElementById("ItemStake").value
   
   console.log('Creating Item')
-  actions.createItem(eos, 'turnip', ItemName, ItemClass, ItemStake) 
+  actions.createItem(eos, account.selectedName, ItemName, ItemClass, ItemStake) 
+}
+
+function deleteItem(){
+
+  ItemHash = document.getElementById("ItemHash").value
+  
+  console.log('Deleting item' + ItemHash)
+  actions.deleteItem(eos, account.selectedName, ItemHash) 
 }
 
 function createWindow () {

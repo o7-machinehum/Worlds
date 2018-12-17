@@ -1,1 +1,0 @@
-Archatecture = 'Windows10'
