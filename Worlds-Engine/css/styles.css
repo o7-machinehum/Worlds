@@ -33,10 +33,19 @@ img {
     height: auto;
 }
 
-/* Thick red border */
 hr.new {
-  border: 20px solid #001011;
+  border: 10px solid #001011;
   border-radius: 5px;
   width: 120%;
   margin: 0em;
 }
+
+.button {
+  display: inline-block;
+  line-height: 3em;
+  background: #001011;
+  background-clip: padding-box;
+	border: none;
+	width: 100%
+}
+
