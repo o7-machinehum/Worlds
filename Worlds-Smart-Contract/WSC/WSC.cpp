@@ -139,11 +139,11 @@ void WSC::tradeitem( item               tx_item, // What are you trading
   auto itr = itemProof_tx.find(*(uint64_t*)&tx_hash);
 
   assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
-  print("Item on chain and belongs to proper person");
+  print("TX Item on chain and belongs to proper person");
 
   /*At this point the item the user wants to trade does in fact belog to the user*/
-  itemProof_tx.erase(itr); // Remove the hash from the table.
   print("Removing Item");
+  itemProof_tx.erase(itr); // Remove the hash from the table.
 
   tradechannel_table channel(_self, rx_item.Owner.value); 
   
