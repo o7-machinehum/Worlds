@@ -56,18 +56,18 @@ void WSC::liquiditem(    item                tx_item // Who's the owner.
   require_auth( tx_item.Owner );
   require_recipient( tx_item.Owner );
 
-  capi_checksum256 hash;
-  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash);
+  capi_checksum256 calc_hash;
+  calc_hash = hashItem(tx_item);
 
   itemProof_table itemProof(_self, tx_item.Owner.value);
 
-  auto chainHash = itemProof.get(*(uint64_t*)&hash); // Check to see if the item is onchain.
-  auto itr = itemProof.find(*(uint64_t*)&hash);
+  auto chainHash = itemProof.get(*(uint64_t*)&calc_hash); // Check to see if the item is onchain.
+  auto itr = itemProof.find(*(uint64_t*)&calc_hash);
 
-  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
-  itemProof.erase(itr); // Remove the hash from the table.
-
-  add_balance(tx_item.Owner, tx_item.Stake, tx_item.Owner);
+  if(!(memcmp((void *) &calc_hash, (void *) &chainHash.itemHash, 32))){
+    itemProof.erase(itr); // Remove the hash from the table.
+    add_balance(tx_item.Owner, tx_item.Stake, tx_item.Owner);
+  }
 }
 
 void WSC::transferitem( name                to,       // Who's getting the item.
