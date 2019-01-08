@@ -26,6 +26,7 @@ namespace eosio {
         struct item {
           string ItemName;
           string ItemClass;
+          string Nuance;
           name Owner;
           name OriginWorld;
           uint32_t GenesisTime;
@@ -33,7 +34,7 @@ namespace eosio {
         };
 
          [[eosio::action]]
-         void createitem( name owner, string item_name, string item_class, asset stake );
+         void createitem( name owner, string item_name, string item_class, string nuance, asset stake );
         
          [[eosio::action]]
          void liquiditem( item tx_item );
@@ -84,10 +85,8 @@ namespace eosio {
          }
 
       private:
-
         struct [[eosio::table]] itemproof{
           capi_checksum256  itemHash;
-          uint32_t GenesisTime;
           
           uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
         };

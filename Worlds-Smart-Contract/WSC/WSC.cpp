@@ -7,10 +7,10 @@
 
 namespace eosio{
 
-
 void WSC::createitem( name         owner,        // Creator of this item.
                       string       item_name,    // Name of the item.
                       string       item_class,   // Class of the item.
+                      string       nuance,       // Special unique ID.
                       asset        stake         // How much WOR to stake into the item.
                     )
 {
@@ -24,6 +24,7 @@ void WSC::createitem( name         owner,        // Creator of this item.
   item.OriginWorld = owner;
   item.ItemName = item_name;
   item.ItemClass = item_class;
+  item.Nuance = nuance;
   item.Stake= stake;
 
   auto sym = stake.symbol;
@@ -37,7 +38,7 @@ void WSC::createitem( name         owner,        // Creator of this item.
   sub_balance( owner, stake ); // Subtract Balance.
   
   capi_checksum256 calc_hash;
-  item.GenesisTime = now();
+  item.GenesisTime = now() / 3600; // Convert to hours 
   calc_hash = hashItem(item);
   
   itemProof_table itemProof(_self, owner.value);
@@ -45,7 +46,6 @@ void WSC::createitem( name         owner,        // Creator of this item.
   // Place the hash onchain   
   itemProof.emplace(owner, [&](auto& p) {
     p.itemHash = calc_hash;
-    p.GenesisTime = item.GenesisTime;
   });
   
 };
@@ -100,7 +100,6 @@ void WSC::transferitem( name                to,       // Who's getting the item.
   // 'from' is the gas payer.
   itemProofTo.emplace(from, [&](auto& p) {
     p.itemHash = calc_hash;
-    p.GenesisTime = tx_item.GenesisTime;
   });
 }
 
@@ -169,13 +168,11 @@ void WSC::tradeitem( item               tx_item, // What are you trading
       // Place the hash onchain   
       itemProof_rx.emplace(tx_item.Owner, [&](auto& p) {
         p.itemHash = new_rx_hash;
-        p.GenesisTime = rx_item.GenesisTime;
       });
       
       // The ram payer should really be the person receiving the item 
       itemProof_tx.emplace(tx_item.Owner, [&](auto& p) {
         p.itemHash = new_tx_hash;
-        p.GenesisTime = tx_item.GenesisTime;
       });
     }
     else{
@@ -365,19 +362,52 @@ void WSC::closewor( name owner, const symbol& symbol )
 capi_checksum256 WSC::hashItem(WSC::item &item){
 
   capi_checksum256 calc_hash;
+  
+  uint32_t size = item.ItemName.size() + item.ItemClass.size() + item.Nuance.size() + sizeof(item.Owner) + sizeof(item.OriginWorld) + sizeof(item.GenesisTime) + sizeof(item.Stake);
 
-  sha256((char*) &item.ItemName, sizeof(item), &calc_hash);
+  print(size, "\n");
+  auto p = (char*) malloc(size);
+  int i = 0;
+
+  i = item.ItemName.copy(p, item.ItemName.size(), 0);
+  print(i, "\n");
+
+  i += item.ItemClass.copy(p+i, item.ItemClass.size(), 0);
+  print(i, "\n");
+  
+  i += item.Nuance.copy(p+i, item.Nuance.size(), 0);
+  print(i, "\n");
+  
+  memcpy(p+i, &item.Owner, sizeof(item.Owner));
+  i += sizeof(item.Owner);
+  print(i, "\n");
+  
+  memcpy(p+i, &item.OriginWorld, sizeof(item.OriginWorld));
+  i += sizeof(item.OriginWorld);
+  print(i, "\n");
+  
+  memcpy(p+i, &item.GenesisTime, sizeof(item.GenesisTime));
+  i += sizeof(item.GenesisTime);
+  print(i, "\n");
+  
+  memcpy(p+i, &item.Stake, sizeof(item.Stake));
+  i += sizeof(item.Stake);
+  print(i, "\n");
+  
+  sha256(p, size, &calc_hash);
+  free(p);
 
   print("ItemName: ", std::move(item.ItemName), "\n");
   print("ItemClass: ", std::move(item.ItemClass), "\n");
   print("ItemOwner: ", std::move(item.Owner), "\n");
+  print("ItemNuance: ", std::move(item.Nuance), "\n");
   print("OriginWorld: ", std::move(item.OriginWorld), "\n");
   print("GenesisTime: ", std::move(item.GenesisTime), "\n");
   print("Stake: ", std::move(item.Stake), "\n");
  
   print("Sha256: ");
   printhex((const void*)&calc_hash, 32);
-  
-  return(calc_hash); 
+  return(calc_hash);
+
 }
 } // namespace eosio
