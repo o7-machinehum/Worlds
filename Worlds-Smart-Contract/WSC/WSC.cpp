@@ -47,7 +47,6 @@ void WSC::createitem( name         owner,        // Creator of this item.
   itemProof.emplace(owner, [&](auto& p) {
     p.itemHash = calc_hash;
   });
-  
 };
 
 void WSC::liquiditem(    item                tx_item // Who's the owner.
@@ -80,27 +79,26 @@ void WSC::transferitem( name                to,       // Who's getting the item.
   require_recipient( tx_item.Owner );
   require_recipient( to );
 
-  capi_checksum256 hash;
-  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &hash);
+  calc_hash = hashItem(tx_item);
 
   itemProof_table itemProofFrom(_self, tx_item.Owner.value);
   
   // Check to see if the item is onchain.
-  auto chainHash = itemProofFrom.get(*(uint64_t*)&hash);
-  auto itr = itemProofFrom.find(*(uint64_t*)&hash);
+  auto chainHash = itemProofFrom.get(*(uint64_t*)&calc_hash);
+  auto itr = itemProofFrom.find(*(uint64_t*)&calc_hash);
+  
+  if(!(memcmp((void *) &calc_hash, (void *) &chainHash.itemHash, 32))){
+    itemProofFrom.erase(itr); // Remove the hash from the table.
+    itemProof_table itemProofTo(_self, to.value);
+    auto from = tx_item.Owner;
+    tx_item.Owner = to;
+    calc_hash = hashItem(tx_item);
 
-  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
-  itemProofFrom.erase(itr); // Remove the hash from the table.
-
-  itemProof_table itemProofTo(_self, to.value);
-  auto from = tx_item.Owner;
-  tx_item.Owner = to;
-  calc_hash = hashItem(tx_item);
-
-  // 'from' is the gas payer.
-  itemProofTo.emplace(from, [&](auto& p) {
-    p.itemHash = calc_hash;
-  });
+    // 'from' is the gas payer.
+    itemProofTo.emplace(from, [&](auto& p) {
+      p.itemHash = calc_hash;
+    });
+  }
 }
 
 /*
@@ -118,9 +116,9 @@ void WSC::deleteitem( name                  owner,
   
   print("Deleting Item");
   itemProof.erase(itr); // GONE!
-
 }
 
+/* This function isn't working yet */
 void WSC::tradeitem( item               tx_item, // What are you trading 
                      item               rx_item  // What are you traing for
                    )
