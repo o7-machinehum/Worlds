@@ -51,7 +51,7 @@ module.exports = {
   
   },
 
-  createItem: function(eos, name, itemName, itemClass, stake){
+  createItem: function(eos, name, itemName, itemClass, stake, ItemNuance){
     tstart = Math.floor(new Date() / 1000);
 
     options.authorization = name + '@active'

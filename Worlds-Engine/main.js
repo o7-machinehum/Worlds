@@ -76,9 +76,10 @@ function createItem(){
   ItemName = document.getElementById("ItemName").value
   ItemClass = document.getElementById("ItemClass").value
   ItemStake = document.getElementById("ItemStake").value
+  ItemNuance = document.getElementById("ItemNuance").value
   
   console.log('Creating Item')
-  actions.createItem(eos, account.selectedName, ItemName, ItemClass, ItemStake) 
+  actions.createItem(eos, account.selectedName, ItemName, ItemClass, ItemStake, ItemNuance) 
 }
 
 function deleteItem(){
