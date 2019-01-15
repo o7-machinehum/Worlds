@@ -359,14 +359,18 @@ void WSC::closewor( name owner, const symbol& symbol )
 
 capi_checksum256 WSC::hashItem(WSC::item &item){
 
+  int i = 0;
   capi_checksum256 calc_hash;
-  
-  uint32_t size = item.ItemName.size() + item.ItemClass.size() + item.Nuance.size() + sizeof(item.Owner) + sizeof(item.OriginWorld) + sizeof(item.GenesisTime) + sizeof(item.Stake);
+  string itemStake = item.Stake.to_string();
+  string itemOwner = item.Owner.to_string();
+  string itemOriginWorld = item.OriginWorld.to_string();
+  string GenesisTime = std::to_string(item.GenesisTime);
 
+  uint32_t size = item.ItemName.size() + item.ItemClass.size() + item.Nuance.size() + itemOwner.size() + itemOriginWorld.size() + GenesisTime.size() + itemStake.size();
+  
   print(size, "\n");
   auto p = (char*) malloc(size);
-  int i = 0;
-
+  
   i = item.ItemName.copy(p, item.ItemName.size(), 0);
   print(i, "\n");
 
@@ -376,20 +380,16 @@ capi_checksum256 WSC::hashItem(WSC::item &item){
   i += item.Nuance.copy(p+i, item.Nuance.size(), 0);
   print(i, "\n");
   
-  memcpy(p+i, &item.Owner, sizeof(item.Owner));
-  i += sizeof(item.Owner);
+  i += itemOwner.copy(p+i, itemOwner.size(), 0);
   print(i, "\n");
   
-  memcpy(p+i, &item.OriginWorld, sizeof(item.OriginWorld));
-  i += sizeof(item.OriginWorld);
+  i += itemOriginWorld.copy(p+i, itemOriginWorld.size(), 0);
+  print(i, "\n");
+
+  i += GenesisTime.copy(p+i, GenesisTime.size(), 0);
   print(i, "\n");
   
-  memcpy(p+i, &item.GenesisTime, sizeof(item.GenesisTime));
-  i += sizeof(item.GenesisTime);
-  print(i, "\n");
-  
-  memcpy(p+i, &item.Stake, sizeof(item.Stake));
-  i += sizeof(item.Stake);
+  i += itemStake.copy(p+i, itemStake.size(), 0);
   print(i, "\n");
   
   sha256(p, size, &calc_hash);
@@ -397,11 +397,11 @@ capi_checksum256 WSC::hashItem(WSC::item &item){
 
   print("ItemName: ", std::move(item.ItemName), "\n");
   print("ItemClass: ", std::move(item.ItemClass), "\n");
-  print("ItemOwner: ", std::move(item.Owner), "\n");
   print("ItemNuance: ", std::move(item.Nuance), "\n");
-  print("OriginWorld: ", std::move(item.OriginWorld), "\n");
-  print("GenesisTime: ", std::move(item.GenesisTime), "\n");
-  print("Stake: ", std::move(item.Stake), "\n");
+  print("ItemOwner: ", std::move(itemOwner), "\n");
+  print("OriginWorld: ", std::move(itemOriginWorld), "\n");
+  print("GenesisTime: ", std::move(GenesisTime), "\n");
+  print("Stake: ", std::move(itemStake), "\n");
  
   print("Sha256: ");
   printhex((const void*)&calc_hash, 32);

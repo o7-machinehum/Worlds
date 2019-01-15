@@ -12,21 +12,16 @@ var options = {
 
 Eos = require('eosjs')
 var fs = require("fs");
+var hash = require("js-sha256")
 
 function logItem(t, item, res){
-  var i = 0;
-  for(i=0 ; i < res.rows.length ; i++) { 
-    if(res.rows[i].GenesisTime >= t){
-      break;
-    }
-  };
   
-  item.GenesisTime = res.rows[i].GenesisTime;
-  item.hash = res.rows[i].itemHash;
+  /*
   fs.writeFile('items/' + item.hash + '-' + item.name + '.json', JSON.stringify(item), 'utf8', function(err){
     if(err) throw err;
     console.log('Written Item to File!')
   });
+  */
 
 }
 
@@ -52,17 +47,21 @@ module.exports = {
   },
 
   createItem: function(eos, name, itemName, itemClass, stake, ItemNuance){
-    tstart = Math.floor(new Date() / 1000);
 
     options.authorization = name + '@active'
-		eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, itemName, itemClass, stake, options)})
+		eos.contract('wsc.code').then(wsccode => {wsccode.createitem(name, itemName, itemClass, ItemNuance, stake, options)})
+    t = Math.floor((new Date() / 1000) / 3600);
    
-    var item = {name:itemName, class:itemClass, owner:name, originWorld:name, stake:stake}
+    // Move all this hashing into a function or something
+    var item = itemName + itemClass + ItemNuance + name + name + t.toString() + stake
+    
+    console.log(item)
 
-    setTimeout(function(item)
-    { // Max of 1000 items for now, three second delay (this is a pretty hacky way of doing this) 
-      eos.getTableRows({code:'wsc.code', scope:item.owner, table:'itemproofs', json:true, limit:1000}).then(logItem.bind(null, tstart, item))
-    }, 3000, item);
+    var hash_i = hash(item);
+    console.log(hash_i) // Hash should match what's onchain
+    
+    // logItem() <- Now log it down to a file
+  
   }, 
 
   TXwor: function(eos, from, to, amount, memo){
