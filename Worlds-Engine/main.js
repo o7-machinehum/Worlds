@@ -78,6 +78,7 @@ function createItem(){
   ItemStake = document.getElementById("ItemStake").value
   ItemNuance = document.getElementById("ItemNuance").value
   
+  // TODO: Check to ensure the same item is not already made!!!
   if(account.balance < ItemStake){
     console.log('Insufficant Funds!')
     return(0)
@@ -111,7 +112,15 @@ function loadItems(){
 		option.text = files[i] 
 		x.add(option)
 	}
-  
+}
+
+// Call this when the user slects new data. Ensure to remove the old stuff
+function selectItem(){
+  var para = document.createElement("p");
+  var node = document.createTextNode("This is new.");
+  para.appendChild(node);
+  var element = document.getElementById("div1");
+  element.appendChild(para);
 }
 
 function createWindow () {
