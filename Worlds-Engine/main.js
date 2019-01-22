@@ -1,6 +1,7 @@
 const {app, BrowserWindow} = require('electron')
 const actions = require('./actions')
 const sock = require('./socket')
+var fs = require('fs')
 
 let mainWindow
 
@@ -70,7 +71,6 @@ function TransferWor(){
   actions.TXwor(eos, account.selectedName, to, amount, memo) 
 }
 
-
 function createItem(){
 
   ItemName = document.getElementById("ItemName").value
@@ -78,6 +78,11 @@ function createItem(){
   ItemStake = document.getElementById("ItemStake").value
   ItemNuance = document.getElementById("ItemNuance").value
   
+  if(account.balance < ItemStake){
+    console.log('Insufficant Funds!')
+    return(0)
+  }
+
   console.log('Creating Item')
   actions.createItem(eos, account.selectedName, ItemName, ItemClass, ItemStake, ItemNuance) 
 }
@@ -88,6 +93,25 @@ function deleteItem(){
   
   console.log('Deleting item' + ItemHash)
   actions.deleteItem(eos, account.selectedName, ItemHash) 
+}
+
+function loadItems(){
+  files = fs.readdirSync('items')
+  
+  for(var i = 0 ; i < files.length ; i++){
+    if(files[i] == 'placeholder'){
+      // delete files[i]
+      files.splice(i)
+    }
+  }
+
+  var x = document.getElementById("Items_Select");
+  for(i = 0 ; i < files.length ; i++){
+		var option = document.createElement("option");
+		option.text = files[i] 
+		x.add(option)
+	}
+  
 }
 
 function createWindow () {

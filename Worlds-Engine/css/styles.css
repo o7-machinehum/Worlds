@@ -28,6 +28,16 @@ body {background-color: #001011;}
     color:#001011 !important
 }
 
+#content select 
+{
+    color:#001011 !important
+}
+
+#content option 
+{
+    color:#001011 !important
+}
+
 img {
     max-width: 100%;
     height: auto;
