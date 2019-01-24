@@ -2,21 +2,9 @@ const {app, BrowserWindow} = require('electron')
 const actions = require('./actions')
 const sock = require('./socket')
 var fs = require('fs')
+var eos
 
 let mainWindow
-
-/*
-var nodeConsole = require('console');
-var Myconsole = new nodeConsole.Console(process.stdout, process.stderr);
-
-/* Replace console with special output
-var console = {};
-console.log = function(msg){
-  Myconsole.log(msg)
-};
-*/
-
-var eos
  
 var account = {
   pubKey : null,
@@ -26,7 +14,19 @@ var account = {
 	balance : null
 }
 
-// const element = <h1>Hello, {formatName(account.name)}!</h1>;
+var selectedItem = {
+  item : null,
+  update : function(fname){
+    item = JSON.parse(fs.readFileSync('items/' + fname));
+	  document.getElementById("Item_Name").innerHTML = "Item Name: " + item.ItemName
+	  document.getElementById("Item_Class").innerHTML = "Item Class: " + item.ItemClass
+	  document.getElementById("Item_Nuance").innerHTML = "Item Nuance: " + item.Nuance
+	  document.getElementById("Item_Owner").innerHTML = "Item Owner: " + item.Owner
+	  document.getElementById("Item_OriginWorld").innerHTML = "Origin World: " + item.OriginWorld
+	  document.getElementById("Item_GenesisTime").innerHTML = "Genesis Time: " + item.GenesisTime
+	  document.getElementById("Item_Stake").innerHTML = "Stake: " + item.Stake
+  }
+};
 
 function connect() {
   account.privKey = document.getElementById("PrivateKey").value
@@ -52,6 +52,7 @@ function addName(result){
 		option.text = account.name[i] 
 		x.add(option)
 	}
+  updateChar()
 }
 
 function updateChar(){
@@ -105,6 +106,13 @@ function loadItems(){
       files.splice(i)
     }
   }
+  
+  // Remove all existing items
+  var select = document.getElementById("Items_Select");
+  var length = select.options.length;
+  for (i = 0; i < length; i++) {
+    select.options[i] = null;
+  }
 
   var x = document.getElementById("Items_Select");
   for(i = 0 ; i < files.length ; i++){
@@ -112,23 +120,15 @@ function loadItems(){
 		option.text = files[i] 
 		x.add(option)
 	}
-}
+  
+  selectedItem.update(files[0])
 
-// Call this when the user slects new data. Ensure to remove the old stuff
-function selectItem(){
-  var para = document.createElement("p");
-  var node = document.createTextNode("This is new.");
-  para.appendChild(node);
-  var element = document.getElementById("div1");
-  element.appendChild(para);
 }
 
 function createWindow () {
   
   mainWindow = new BrowserWindow({width: 400, height: 800})
-
   mainWindow.loadFile('index.html')
-
   mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {

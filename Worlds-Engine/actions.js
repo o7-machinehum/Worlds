@@ -49,7 +49,7 @@ module.exports = {
     var hash_i = hash(item);
     console.log(hash_i) // Hash should match what's onchain
     
-    fs.writeFile('items/' + hash_i.substring(0,5) + '-' + name + '-' + itemName + '-' + t.toString() + '-' + stake + '.json', JSON.stringify({'ItemName': name, 'ItemClass': itemClass, 'Nuance': ItemNuance, 'Owner': name, 'OriginWorld': name, 'GenesisTime': t.toString(), 'Stake': stake, 'Hash': hash_i }, null, 2), 'utf8', function(err){
+    fs.writeFile('items/' + hash_i.substring(0,5) + '-' + name + '-' + itemName + '-' + t.toString() + '-' + stake + '.json', JSON.stringify({'ItemName': itemName, 'ItemClass': itemClass, 'Nuance': ItemNuance, 'Owner': name, 'OriginWorld': name, 'GenesisTime': t.toString(), 'Stake': stake, 'Hash': hash_i }, null, 2), 'utf8', function(err){
       if(err) throw err;
       console.log('Written Item to File!')
     });
