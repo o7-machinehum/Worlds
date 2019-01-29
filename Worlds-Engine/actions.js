@@ -63,5 +63,9 @@ module.exports = {
   deleteItem: function(eos, name, hash){
     options.authorization = name + '@active'
 		eos.contract('wsc.code').then(wsccode => {wsccode.deleteitem(name, hash, options)})
+  },
+  liquidItem: function(eos, item, name){
+    options.authorization = name + '@active'
+		eos.contract('wsc.code').then(wsccode => {wsccode.liquiditem({"tx_item":{"ItemName":item.ItemName, "ItemClass":item.ItemClass, "Nuance":item.Nuance,"Owner":item.Owner, "OriginWorld":item.OriginWorld, "GenesisTime":parseInt(item.GenesisTime), "Stake":item.Stake}}, options)})
   }
 }

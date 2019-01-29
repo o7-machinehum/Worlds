@@ -25,8 +25,11 @@ var selectedItem = {
 	  document.getElementById("Item_OriginWorld").innerHTML = "Origin World: " + item.OriginWorld
 	  document.getElementById("Item_GenesisTime").innerHTML = "Genesis Time: " + item.GenesisTime
 	  document.getElementById("Item_Stake").innerHTML = "Stake: " + item.Stake
+  },
+  liquid : function(){
+    actions.liquidItem(eos, item, account.selectedName)
   }
-};
+}
 
 function connect() {
   account.privKey = document.getElementById("PrivateKey").value
@@ -122,7 +125,6 @@ function loadItems(){
 	}
   
   selectedItem.update(files[0])
-
 }
 
 function createWindow () {
