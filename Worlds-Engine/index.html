@@ -14,9 +14,19 @@
   </head>
   <body>
      <center><h1>Worlds Engine</h1></center>
-			<div class="column" style="background-color:#093A3E;">
+			
+      <div id=SocketCommand class="column" style="background-color:red; display: none;">
         <div id='content' style='width:100%;'>
-					<center><h2>Credentials</h2></center>
+            SocketCommand: <input type="text" id="SockCMD" value=""><br><br>
+            <button class=button onclick="socket.execute()">Execute</button>
+			  </div>
+			</div>
+			
+			<hr class="new">
+			
+      <div class="column" style="background-color:#093A3E;">
+        <div id='content' style='width:100%;'>
+          <center><h2>Credentials</h2></center>
 					PrivateKey: <input type="text" id="PrivateKey" value="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"><br><br>
 					PublicKey: <input type="text" id="PublicKey" value="EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"><br><br>
 					Endpoint: <input type="text" id="EndPoint" value="http://127.0.0.1:8888"><br><br>
@@ -27,8 +37,8 @@
 			</div>
 			
 			<hr class="new">
-			
-			<div class="column" style="background-color:#093A3E;">
+		
+      <div class="column" style="background-color:#093A3E;">
         <div id='content' style='width:100%;'>	
 					<center><h2>Character</h2></center>
 					<center><select id="Chars" style='width:100%;'; onchange="updateChar(this.value);"></select></center>

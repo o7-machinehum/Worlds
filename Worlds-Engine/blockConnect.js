@@ -28,10 +28,22 @@ var selectedItem = {
   }
 }
 
+var socket = {
+  execute: function(fname){
+    eval(document.getElementById("SockCMD").value)
+    document.getElementById("SockCMD").value = null
+    
+    var x = document.getElementById("SocketCommand");
+    x.style.display = "none";
+  }
+}
+
+// Exported Modules
 module.exports = {
 	act: function (cmd){
-    console.log(cmd)
-    eval(cmd)
+    var x = document.getElementById("SocketCommand");
+    x.style.display = "block"; // Hide
+    document.getElementById("SockCMD").value = cmd 
   }
 }
 
@@ -91,7 +103,6 @@ function createItem(){
     console.log('Insufficant Funds!')
     return(0)
   }
-
   console.log('Creating Item')
   actions.createItem(eos, account.selectedName, ItemName, ItemClass, ItemStake, ItemNuance) 
 }
