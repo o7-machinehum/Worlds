@@ -2,10 +2,10 @@
 
 const dgram = require('dgram');
 const server = dgram.createSocket('udp4');
+var bc = require('./blockConnect')
 
 function processCmd(msg){
-	console.log(`Processing CMD: ${msg} `);
-	// Then parse and process the command
+  bc.act(`${msg}`)
 }
 
 module.exports = {
@@ -14,7 +14,6 @@ module.exports = {
 			console.log(`server error:\n${err.stack}`);
 			server.close();
 		});
-
 		server.on('message', (msg, rinfo) => {
 			processCmd(msg);
 		});
