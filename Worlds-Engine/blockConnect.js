@@ -29,10 +29,14 @@ var selectedItem = {
 }
 
 var socket = {
-  execute: function(fname){
+  execute: function(){
     eval(document.getElementById("SockCMD").value)
     document.getElementById("SockCMD").value = null
-    
+    var x = document.getElementById("SocketCommand");
+    x.style.display = "none";
+  },
+  ignore: function(){
+    document.getElementById("SockCMD").value = null
     var x = document.getElementById("SocketCommand");
     x.style.display = "none";
   }
