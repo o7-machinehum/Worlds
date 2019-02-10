@@ -1,6 +1,7 @@
 const actions = require('./actions')
 const sock = require('./socket')
 var fs = require('fs')
+const ecc = require('eosjs-ecc')
 var eos
  
 var account = {
@@ -48,8 +49,18 @@ module.exports = {
     var x = document.getElementById("SocketCommand");
     x.style.display = "block"; // Hide
     document.getElementById("SockCMD").value = cmd 
+  },
+  prove: function (data){
+    return(ecc.sign(data, document.getElementById("PrivateKey").value))
   }
+  
 }
+
+// Used to verify proof packages.
+function verify(sig, data, pubkey){
+  ecc.verify(sig, data, pubkey)
+  // Now need to respond with something
+  }
 
 function connect() {
   account.privKey = document.getElementById("PrivateKey").value

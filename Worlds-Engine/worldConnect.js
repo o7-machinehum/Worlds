@@ -1,5 +1,6 @@
 var fs = require('fs')
 const nodeCmd = require('node-cmd');
+const bc = require('./blockConnect')
 
 var world = {
   IP : null,
@@ -13,9 +14,12 @@ var world = {
     exe = document.getElementById("world_exe").value 
     
     console.log(IP + Port + Name)
-  
+    
+    t = Math.floor(new Date());
+    data = t + account.selectedName;
+
     // Write the player info down into a file
-    fs.writeFile('player/' + 'player.json', JSON.stringify({'Name': account.selectedName, 'Proof': 'notMeow'}, null, 2), 'utf8', function(err){
+    fs.writeFile('player/' + 'player.json', JSON.stringify({'Name': account.selectedName, 'PubKey': account.pubKey, 'Data': data, 'Proof': bc.prove(data)}, null, 2), 'utf8', function(err){
       if(err) throw err;
       console.log('Written Proof to File!')
     });
