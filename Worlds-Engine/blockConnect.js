@@ -2,8 +2,10 @@ const actions = require('./actions')
 const sock = require('./socket')
 var fs = require('fs')
 const ecc = require('eosjs-ecc')
+const wc = require('./worldConnect')
+
 var eos
- 
+
 var account = {
   pubKey : null,
   privKey : null,
@@ -53,26 +55,25 @@ module.exports = {
   prove: function (data){
     return(ecc.sign(data, document.getElementById("PrivateKey").value))
   }
-  
 }
 
 // Used to verify proof packages.
 function verify(sig, data, pubkey){
-  ecc.verify(sig, data, pubkey)
-  // Now need to respond with something
+  wc.send(ecc.verify(sig, data, pubkey).toString())
   }
 
 function connect() {
   account.privKey = document.getElementById("PrivateKey").value
   account.pubKey = document.getElementById("PublicKey").value
-  Port = document.getElementById("Port").value
-  EndPoint= document.getElementById("EndPoint").value
-  ChainID = document.getElementById("ChainID").value
   
   console.log('Unlocking Wallet and connect to endpoint!');
+  sock.open(document.getElementById("world_port").value) // Open socket
   
-  sock.open(Port) // Open socket
-  eos = actions.connectEndpoint(ChainID, EndPoint, account.privKey)
+  eos = actions.connectEndpoint(
+    document.getElementById("ChainID").value, 
+    document.getElementById("EndPoint").value, 
+    account.privKey)
+
   eos.getKeyAccounts(account.pubKey).then(addName)
   }
 
