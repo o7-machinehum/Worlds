@@ -14,4 +14,4 @@ clean:
 	rm -f $(Contract).wasm
 
 deploy:
-	cleos set contract -f wsc.code ../$(Contract) -p wsc.code@active
+	cleos -u http://192.168.10.35:8888 set contract -f wsc.code ../$(Contract) -p wsc.code@active

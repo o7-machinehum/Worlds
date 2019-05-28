@@ -26,7 +26,6 @@ var world = {
     
     nodeCmd.get(exe, (err, data, stderr) => console.log(data)); // Run the client 
     sock.openOutgoing(document.getElementById("world_Outport").value) // Open socket
-    
   }
 }
 

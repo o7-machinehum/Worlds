@@ -60,8 +60,9 @@ module.exports = {
 // Used to verify proof packages.
 function verify(sig, data, pubkey){
   wc.send(ecc.verify(sig, data, pubkey).toString())
-  }
+}
 
+/* Connect to the blockchain and load characters*/
 function connect() {
   account.privKey = document.getElementById("PrivateKey").value
   account.pubKey = document.getElementById("PublicKey").value
@@ -72,7 +73,8 @@ function connect() {
   eos = actions.connectEndpoint(
     document.getElementById("ChainID").value, 
     document.getElementById("EndPoint").value, 
-    account.privKey)
+    account.privKey
+  )
 
   eos.getKeyAccounts(account.pubKey).then(addName)
   }

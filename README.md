@@ -62,6 +62,17 @@ npm install
 npm start
 ```
 
+## Worlds Server
+It is possible for anyone to host a Worlds server and allow players to connect. There is a specific server / client state machine that must be followed to keep things consistent. Sections marked in bold are handled by the Engine itself, so developers do not have to worry about these. When the player connects the following sequence takes place...
+
+1. **A socket is opened from the worlds engine on the client side to the worlds engine on the server side.**
+2. **The Worlds engine on the server side authenticates the credentials of the player using priv/pub keys. A folder is then made with a specific structure shown below.**
+3. **The Worlds engine on the server side will reply with FTP credentials so the player can deposit items into the world. The act of using FTP to move json items/exp into the player folder is an indication that the player wishes to use these items and experiance in the world**
+5. **Deposited items and experiance are validated by the worlds engine and signed on the server side.**
+6. The game client opens the players folder and issues these items to the player in game.
+7. The game server opens a socket to the worlds engine on the server side. There is a command set to issue to player items and exp.
+8. Players recive these items ingame and can also claim them using FTP.
+
 ## Notes on the Project 
 Ready Player One was the main inspiration for this project, at the core of the novel is a centralisation issues over the control of the Oasis. The idea of one company owning such a large game is an analogous to one company owning the internet. When I started this project over six months ago I wasn't even planning on using a blockchain. If you go back in the commit history, you'll see that Worlds relied on an complex system of ledgers and auditing. At the time there was no blockchain that could provide the rapid finality required for my idea. In June 2018, the EOS main net launched and satisfied the response requirements. This meant we could get higher security in a less complex system developed in a fraction of the time.
 
