@@ -8,6 +8,10 @@ var world = {
   Name : null,
   exe: null,
   enter: function(){
+    /* 
+      This function writes connection details to player/player.json and launches the exe for the
+      client. This is how a player should enter a world.
+    */
     IP = document.getElementById("world_ip").value 
     Port = document.getElementById("world_port").value 
     Name = document.getElementById("world_name").value 
