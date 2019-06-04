@@ -11,6 +11,16 @@ Worlds is an open protocol designed to manage the economic and game theoretical 
 * The Worlds Engine
 * The World Smart Contract
 
+## TODO
+  - Functionality
+    - The client needs a way to deposit items into the world.
+  - Security
+    - The Serverside Worlds engine needs a whitelist of commands that it can execute (security hole)
+  - Code Cleanliness
+    - The Serverside Worlds engine needs to be cleaned up. There should be more common files between the client side and serverside Engines.
+    - The port situation is somewhat confusing.
+  
+
 ## Worlds Smart Contract 
 The Worlds Smart Contact (WSC) is an EOS contract that is responsible for managing player assets and WOR. WOR is a token that can be staked against items and used as a means of currency. The contract is still under development and subject to change!
 
