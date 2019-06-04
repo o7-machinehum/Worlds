@@ -14,6 +14,7 @@ var account = {
 	balance : null
 }
 
+
 var selectedItem = {
   item : null,
   update : function(fname){

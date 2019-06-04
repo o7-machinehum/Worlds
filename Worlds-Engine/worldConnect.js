@@ -19,7 +19,7 @@ var world = {
     data = t + account.selectedName;
 
     // Write the player info down into a file
-    fs.writeFile('player/' + 'player.json', JSON.stringify({'Name': account.selectedName, 'PubKey': account.pubKey, 'Data': data, 'Proof': bc.prove(data)}, null, 2), 'utf8', function(err){
+    fs.writeFile('player/' + 'player.json', JSON.stringify({'Name': account.selectedName, 'PubKey': account.pubKey, 'Data': data, 'Proof': bc.prove(data), 'Address': IP, 'Port': Port }, null, 2), 'utf8', function(err){
       if(err) throw err;
       console.log('Written Proof to File!')
     });
