@@ -13,3 +13,5 @@ ftp.cwd('items') # change into user dir
 
 with open(filename, 'rb') as fp:
     ftp.storlines('STOR ' + filename, fp)
+
+ftp.sendcmd('SITE CHMOD 644 ' + filename)

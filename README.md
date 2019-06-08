@@ -19,7 +19,24 @@ Worlds is an open protocol designed to manage the economic and game theoretical 
   - Code Cleanliness
     - The Serverside Worlds engine needs to be cleaned up. There should be more common files between the client side and serverside Engines.
     - The port situation is somewhat confusing.
-  
+
+## Running the server
+```bash
+cd ~/Worlds/Worlds/Realm.One/bin/
+./runserver.sh # Run the Minetest server
+cd ~/Worlds/Worlds-Smart-Contract/scripts/
+./runChain.sh # Run the blockchain
+cd ~/Worlds/Worlds-Engine
+node server.js # Run the Server Engine
+cd ~/Worlds/utils/itemMan
+./man.sh # Run the Item manager
+```
+
+## Running the client
+```bash
+cd ~/Worlds/Worlds-Engine
+npm start
+```
 
 ## Worlds Smart Contract 
 The Worlds Smart Contact (WSC) is an EOS contract that is responsible for managing player assets and WOR. WOR is a token that can be staked against items and used as a means of currency. The contract is still under development and subject to change!
@@ -74,6 +91,13 @@ npm start
 
 ## Worlds Server
 It is possible for anyone to host a Worlds server and allow players to connect. There is a specific server / client state machine that must be followed to keep things consistent. Sections marked in bold are handled by the Engine itself, so developers do not have to worry about these. When the player connects the following sequence takes place...
+
+1. *SS:* The game server is already running and has established a socket to the Worlds Engine on the serverside.
+1. *CS:* **The Worlds Engine launches the game client, as commanded by the player**
+1. *SS/CS:* Communication is opened between the game client and the game server. This can be any protocol and is determined by the developer.
+2. **The Worlds Engine generates a proof package and writes it to player/player.json on the client side**
+3. The game client sends the json serialized object from client to server.
+4. The game server verifies the proof and omits the player to log in if it's correct. 
 
 1. **A socket is opened from the worlds engine on the client side to the worlds engine on the server side.**
 2. **The Worlds engine on the server side authenticates the credentials of the player using priv/pub keys. A folder is then made with a specific structure shown below.**
