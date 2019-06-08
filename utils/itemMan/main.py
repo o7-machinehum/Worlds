@@ -9,6 +9,7 @@ import config as cfg
 import json
 import pdb
 import sys
+import it
 
 def writeFifo(string):
     with open(cfg.fifo, "w") as text_file:
@@ -18,16 +19,24 @@ class Item:
     def __init__(self, path, item):
         with open(sys.argv[1] + sys.argv[2]) as json_file:  
             self.item = json.load(json_file)
+        
         if(self.Verify() == False):
             return
         self.name = str(self.item['Owner'])
-        self.item = str(self.item['ItemName'])
-        self.Translate() # Translate the item into something minetest cares about
+        self.itemName = str(self.item['ItemName'])
+        self.stake = float(str(self.item['Stake']).strip(' WOR'))
+        
+        if(self.Translate() == False): # Translate the item into something minetest cares about
+            return
         self.giveItem() # Give the item to the player.
     
     # This function takes in sel
     def Translate(self):
-        self.itemOut = 'default:torch' 
+        self.itemOut = it.translation[self.itemName][0]
+
+        # Ensure there is enought stakes into the item.
+        if(it.translation[self.itemName][1] > self.stake):
+            return False
 
     def Verify(self):
         print('Right Here make sure the Items is onchain')
