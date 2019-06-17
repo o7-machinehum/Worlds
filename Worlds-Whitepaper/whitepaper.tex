@@ -104,11 +104,11 @@ The worlds smart contract is used to balance the economy across the network. It 
 \begin{itemize}
 \item{Low networks fees}
 \item{Fast transactions for in game purchases}
-\item{Decent data capacity to hold merkle proofs}
+\item{Decent data capacity to hold proofs}
 \end{itemize}
 
 \subsection{Staking} % Need to write more one this. I think this is a good spot?
-Staking is the fundamental mechanic that balances the economy. This allows a node to lock the WOR token against a hash. This hash can be a proof for experience, items, or any arbitrary chunk of data that that has meaning within the World universe. It is up to the World creators to interpret the data.
+Staking is the fundamental mechanic that balances the economy. This allows a node to lock the WOR token against a hash. This hash can be a proof for experience, items, or any arbitrary chunk of data that that has meaning within the World universe. It's up to the World creators to interpret this data.
 
 \section{Actions}
 Actions are defined as anything a node can do to effect the network. Messages and data packages are to be considered actions in this context.
@@ -117,14 +117,14 @@ Actions are defined as anything a node can do to effect the network. Messages an
 A direct action is any action that is travels between the Server Engine and the Game Client. These actions have the lowest latency. An example of an action like this might be the Server engine telling the Game Client of some in game event. Before there can be communication like this the there needs to be a symmetric key exchange. 
 
 \subsection{Proof Action}
-A proof action are actions that require the use of private keys for signing, but then relay the signed package from the Game Client to the Server Engine. For nodes that require higher security it is possible to hold the Worlds Engine offline therefor keeping their keys offline. 
+Proof actions are actions that require the use of private keys for signing, private keys are managed exclusively by the worlds engine. It it possible for the Game Client to request the Worlds Engine to sign a package, however the player must approve this. For nodes that require higher security it is possible to hold the Worlds Engine offline, this inherently keeps their keys keys offline. 
 
 \subsection{Contract Action}
-Contract actions are any actions that communicate with the Worlds Smart Contract. They can be issued from the Worlds Engine directly, or the Game Client can pipe action requests into the worlds engine. 
+Contract actions are any actions which communicate with the Worlds Smart Contract. They can be issued from the Worlds Engine directly, or the Game Client can pipe action requests into the worlds engine. Like proof actions, contract actions must be approved by the player if they were issued by the game client. 
 
 \section{Experience}
 \label{exp}
-Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable. It is possible for experience to be liquidated back into WOR by the players. The amount of experience is a function of the amount of WOR locked against the hash. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
+Experience is distributed to players using experience packages. These are of the form (Figure \ref{exppkg}). When a player is to received experience this package is hashed, signed and sent to the \textit{Worlds Smart Contract} (\ref{WSC})(WSC). The world must stake some WOR in order to grant experience. Experience is distributed like items, although it is not transferable from player to player. It is possible for experience to be liquidated back into WOR by the players. The amount of experience is a function of the amount of WOR locked against the hash. It is possible for players to stake their own WOR and buy experience. However this experience is stamped with the public key of the issuer and it's possible that worlds might not accept this during the worlds transfer. 
 
 \begin{figure}[H]
 \centering
@@ -194,10 +194,10 @@ ItemHash = hash(ForgeHash | ... | Stake);
 \end{figure}
 
 \subsection{Using Items}
-In order reduce the latency of item usage, certain actions must be taken off-chain. Please see the section \ref{Burying} for more information on this.
+In order to use an items in a world, the player must present the items to the world for verification, this is done using ftp. During an initial connection the worlds server issues ftp credentials to player, these credentials are then used by the player to move items into the game. The world is responsible for ensuring that there are no double deposits. This can be done with a simple hash lookup comparing items that have been deposited in the past to items that are currently being deposited.
 
 \subsection{Item and Exp Value}
-The value and effect of items and experience will most likely not be directly correlated to the amount of WOR that is staked into them. The two other factors are Genesis time and Genesis world. As the game moves forward, many items will become 
+The value and effect of items and experience will most likely not be directly correlated to the amount of WOR that is staked into them. The two other factors are Genesis time and Genesis world. As the game moves forward, many items will become rare or scarce.
 
 \subsection{Item Translations}
 \label{ItemTranslations}
@@ -219,7 +219,21 @@ To prevent players from playing on multiple worlds concurrently a player locatio
 \item{Player is granted access, WSC is updated with player location.}
 \end{itemize}
 
-\section{World Incentivisation}
+\section{Connection}
+In order to make a smooth player experience there is a state machine that must be followed by all worlds. This is outlined below, SS indicated serverside while CL indicated client size.
+
+\begin{enumerate}
+\item{\textbf{SS:} The game server establishes a socket to the Worlds Engine on the serverside. This is used to pipe data back and fourth.}
+\item{\textbf{CS:} The Worlds Engine launches the game client, as commanded by the player}
+\item{\textbf{SS/CS:} Communication is opened between the game client and the game server. This can be any protocol and is determined by the developer.}
+\item{\textbf{CS:} The Worlds Engine generates a proof package and writes the file to player/player.json on the client side**}
+\item{\textbf{CS/SS:} The game client sends the json serialized object from client to server.}
+\item{\textbf{SS:} The game server verifies the proof through the worlds engine, if the proof in genuine the server instantiates the player into the world.}
+\item{\textbf{CS/SS:} The player is given ftp credentials, these can be used to move items into a folder on the server.}
+\item{\textbf{SS:} The server then verifies the items are real. If they are they are given the player in game.}
+\item{\textbf{SS:} If a player is to receive items, they are placed in the players folder on the server. They can then be claimed by the player for transfer to another world.}
+\end{enumerate}
+
 
 \section{World Incentivisation}
 \label{MakeMoney}
