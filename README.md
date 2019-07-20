@@ -1,8 +1,7 @@
 # Worlds
 
 <img src="Graphics/Header.png" alt="drawing" width="1000"/>
-[YouTube Demo Here 1](https://www.youtube.com/watch?v=OrOZVr-j92A&t) <br>
-[YouTube Demo Here 2](https://www.youtube.com/watch?v=ZrWL-L7rXs0&t) <br>
+[YouTube Demo Here](https://www.youtube.com/watch?v=OrOZVr-j92A&t) <br>
 [YouTube Explanation Here](https://www.youtube.com/watch?v=wfqsvlMFGHs&t=71s)
 
 Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimum dependencies required for developers to get up and running. It it still under development and has a planned deployment in 2019 on the EOS main net. For more detailed info please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/whitepaper.pdf). This repository contains three main components.
