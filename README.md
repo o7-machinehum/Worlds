@@ -5,20 +5,11 @@
 [YouTube Demo Here](https://www.youtube.com/watch?v=OrOZVr-j92A&t) <br>
 [YouTube Explanation Here](https://www.youtube.com/watch?v=wfqsvlMFGHs&t)
 
-Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimum dependencies required for developers to get up and running. It it still under development and has a planned deployment in 2019 on the EOS main net. For more detailed info please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/whitepaper.pdf). This repository contains three main components.
+Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimum dependencies required for developers to get up and running. For more detailed info please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/whitepaper.pdf). This repository contains three main components.
 
 * The Worlds Whitepaper
 * The Worlds Engine
 * The World Smart Contract
-
-## TODO
-  - Functionality
-    - The client needs a way to deposit items into the world.
-  - Security
-    - The Serverside Worlds engine needs a whitelist of commands that it can execute (security hole)
-  - Code Cleanliness
-    - The Serverside Worlds engine needs to be cleaned up. There should be more common files between the client side and serverside Engines.
-    - The port situation is somewhat confusing.
 
 ## Running the server
 ```bash
@@ -114,3 +105,12 @@ Worlds uses a token, however there will be no ICO or crowd sale. In the future w
 
 ## Contribution
 If you wish to help with the project or are interested in developing a world, please reach out! Feedback welcome!
+
+## TODO
+  - Functionality
+    - The client needs a way to deposit items into the world.
+  - Security
+    - The Serverside Worlds engine needs a whitelist of commands that it can execute (security hole)
+  - Code Cleanliness
+    - The Serverside Worlds engine needs to be cleaned up. There should be more common files between the client side and serverside Engines.
+    - The port situation is somewhat confusing.
