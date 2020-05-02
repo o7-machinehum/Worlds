@@ -4,9 +4,9 @@
  */
 #pragma once
 
-#include <eosiolib/asset.hpp>
-#include <eosiolib/eosio.hpp>
-#include <eosiolib/crypto.h>
+#include <eosio/asset.hpp>
+#include <eosio/eosio.hpp>
+#include <eosio/crypto.hpp>
 
 #include <string>
 
@@ -18,7 +18,7 @@ namespace eosio {
 
    using std::string;
 
-   class [[eosio::contract("wsc.code")]] WSC : public contract {
+   class [[eosio::contract("WSC")]] WSC : public contract {
       public:
          using contract::contract;
 
@@ -43,7 +43,7 @@ namespace eosio {
          void transferitem( name to, item tx_item ); 
 
          [[eosio::action]] 
-         void deleteitem( name owner, capi_checksum256 hash ); 
+         void deleteitem( name owner, checksum256 hash ); 
 
          [[eosio::action]] 
          void tradeitem( item tx_item, item rx_item ); 
@@ -86,14 +86,14 @@ namespace eosio {
 
       private:
         struct [[eosio::table]] itemproof{
-          capi_checksum256  itemHash;
+          checksum256  itemHash;
           
           uint64_t primary_key() const {return *(uint64_t*)&itemHash;}        // Primary Indices.
         };
         
         struct [[eosio::table]] tradechannel{
-          capi_checksum256  rx_item;
-          capi_checksum256  tx_item;
+          checksum256  rx_item;
+          checksum256  tx_item;
           name trader;
 
           uint64_t primary_key() const {return *(uint64_t*)&rx_item;}        // Primary Indices.
@@ -121,11 +121,10 @@ namespace eosio {
          void sub_balance( name owner, asset value );
          void add_balance( name owner, asset value, name ram_payer );
 
-         capi_checksum256 hashItem(WSC::item &item);
-         capi_checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
-         capi_checksum256 hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item);
+         checksum256 hashItem(WSC::item &item);
+         checksum256 hashItemCreate(name owner, string item_name, string item_class, asset stake);
+         checksum256 hashItemTransfer(name NewOwner, name PreviousOwner, WSC::item item);
 
    };
 
 } /// namespace eosio
-EOSIO_DISPATCH( eosio::WSC, (createitem)(liquiditem)(transferitem)(deleteitem)(createwor)(issuewor)(transferwor)(openwor)(closewor)(retirewor) )
