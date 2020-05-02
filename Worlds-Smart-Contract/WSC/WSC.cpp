@@ -4,6 +4,8 @@
  */
 
 #include "WSC.hpp"
+#include <eosio/system.hpp>
+#include <eosio/time.hpp>
 
 namespace eosio{
 
@@ -32,14 +34,13 @@ void WSC::createitem( name         owner,        // Creator of this item.
   stats statstable( _self, sym.code().raw() );
   const auto& st = statstable.get( sym.code().raw() );
   
-  eosio_assert( stake.is_valid(), "invalid quantity" );                           
-  eosio_assert( stake.amount > 0, "must transfer positive quantity" );
-  eosio_assert( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
+  check( stake.is_valid(), "invalid quantity" );                           
+  check( stake.amount > 0, "must transfer positive quantity" );
+  check( stake.symbol == st.supply.symbol, "symbol precision mismatch" );
   sub_balance( owner, stake ); // Subtract Balance.
   
-  capi_checksum256 calc_hash;
-  item.GenesisTime = now() / 3600; // Convert to hours 
-  calc_hash = hashItem(item);
+  item.GenesisTime = current_time_point().sec_since_epoch() / 3600; // Convert to hours 
+  checksum256 calc_hash = hashItem(item);
   
   itemProof_table itemProof(_self, owner.value);
   
@@ -55,8 +56,7 @@ void WSC::liquiditem(    item                tx_item // Who's the owner.
   require_auth( tx_item.Owner );
   require_recipient( tx_item.Owner );
 
-  capi_checksum256 calc_hash;
-  calc_hash = hashItem(tx_item);
+  checksum256 calc_hash = hashItem(tx_item);
 
   itemProof_table itemProof(_self, tx_item.Owner.value);
 
@@ -73,13 +73,11 @@ void WSC::transferitem( name                to,       // Who's getting the item.
                         item                tx_item   // Actual item package.
                       )
 {
-  capi_checksum256 calc_hash;
-  
   require_auth( tx_item.Owner );
   require_recipient( tx_item.Owner );
   require_recipient( to );
 
-  calc_hash = hashItem(tx_item);
+  checksum256 calc_hash = hashItem(tx_item);
 
   itemProof_table itemProofFrom(_self, tx_item.Owner.value);
   
@@ -106,7 +104,7 @@ void WSC::transferitem( name                to,       // Who's getting the item.
     It it mainly for refunding RAM if the user forgets the content of the items  
 */
 void WSC::deleteitem( name                  owner,
-                      capi_checksum256      hash
+                      checksum256           hash
                     ) 
 {
   require_auth( owner );
@@ -125,9 +123,8 @@ void WSC::tradeitem( item               tx_item, // What are you trading
 {
   require_auth( tx_item.Owner );
 
-  capi_checksum256 tx_hash, rx_hash;
-  sha256((char*) &tx_item.ItemName, sizeof(tx_item), &tx_hash);
-  sha256((char*) &rx_item.ItemName, sizeof(rx_item), &rx_hash);
+  checksum256 tx_hash = sha256((char*) &tx_item.ItemName, sizeof(tx_item));
+  checksum256 rx_hash = sha256((char*) &rx_item.ItemName, sizeof(rx_item));
 
   itemProof_table itemProof_tx(_self, tx_item.Owner.value);
   
@@ -135,7 +132,7 @@ void WSC::tradeitem( item               tx_item, // What are you trading
   auto chainHash = itemProof_tx.get(*(uint64_t*)&tx_hash);
   auto itr = itemProof_tx.find(*(uint64_t*)&tx_hash);
 
-  assert_sha256((char*) &tx_item.ItemName, sizeof(tx_item), &chainHash.itemHash); // Ensure hash matches matches
+  assert_sha256((const char*) &tx_item.ItemName, sizeof(tx_item), chainHash.itemHash); // Ensure hash matches matches
   print("TX Item on chain and belongs to proper person");
 
   /*At this point the item the user wants to trade does in fact belog to the user*/
@@ -149,11 +146,10 @@ void WSC::tradeitem( item               tx_item, // What are you trading
     print("Found a trade channel open!");
     auto rx_channel = channel.get(*(uint64_t*)&tx_hash);
     
-    // if(rx_channel.tx_item == rx_hash){
-    if(std::equal(std::begin(rx_channel.tx_item.hash), std::end(rx_channel.tx_item.hash), std::begin(rx_hash.hash))){
+    if(rx_channel.tx_item == rx_hash){
       print("Trade Maches, Time to trade");
         
-      capi_checksum256 new_rx_hash, new_tx_hash;
+      checksum256 new_rx_hash, new_tx_hash;
       tx_item.Owner = rx_item.Owner;
       rx_item.Owner = tx_item.Owner;
 
@@ -205,13 +201,13 @@ void WSC::createwor( name   issuer,
     require_auth( _self );
 
     auto sym = maximum_supply.symbol;
-    eosio_assert( sym.is_valid(), "invalid symbol name" );
-    eosio_assert( maximum_supply.is_valid(), "invalid supply");
-    eosio_assert( maximum_supply.amount > 0, "max-supply must be positive");
+    check( sym.is_valid(), "invalid symbol name" );
+    check( maximum_supply.is_valid(), "invalid supply");
+    check( maximum_supply.amount > 0, "max-supply must be positive");
 
     stats statstable( _self, sym.code().raw() );
     auto existing = statstable.find( sym.code().raw() );
-    eosio_assert( existing == statstable.end(), "token with symbol already exists" );
+    check( existing == statstable.end(), "token with symbol already exists" );
 
     statstable.emplace( _self, [&]( auto& s ) {
        s.supply.symbol = maximum_supply.symbol;
@@ -224,20 +220,20 @@ void WSC::createwor( name   issuer,
 void WSC::issuewor( name to, asset quantity, string memo )
 {
     auto sym = quantity.symbol;
-    eosio_assert( sym.is_valid(), "invalid symbol name" );
-    eosio_assert( memo.size() <= 256, "memo has more than 256 bytes" );
+    check( sym.is_valid(), "invalid symbol name" );
+    check( memo.size() <= 256, "memo has more than 256 bytes" );
 
     stats statstable( _self, sym.code().raw() );
     auto existing = statstable.find( sym.code().raw() );
-    eosio_assert( existing != statstable.end(), "token with symbol does not exist, create token before issue" );
+    check( existing != statstable.end(), "token with symbol does not exist, create token before issue" );
     const auto& st = *existing;
 
     require_auth( st.issuer );
-    eosio_assert( quantity.is_valid(), "invalid quantity" );
-    eosio_assert( quantity.amount > 0, "must issue positive quantity" );
+    check( quantity.is_valid(), "invalid quantity" );
+    check( quantity.amount > 0, "must issue positive quantity" );
 
-    eosio_assert( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
-    eosio_assert( quantity.amount <= st.max_supply.amount - st.supply.amount, "quantity exceeds available supply");
+    check( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
+    check( quantity.amount <= st.max_supply.amount - st.supply.amount, "quantity exceeds available supply");
 
     statstable.modify( st, same_payer, [&]( auto& s ) {
        s.supply += quantity;
@@ -255,19 +251,19 @@ void WSC::issuewor( name to, asset quantity, string memo )
 void WSC::retirewor( asset quantity, string memo )
 {
     auto sym = quantity.symbol;
-    eosio_assert( sym.is_valid(), "invalid symbol name" );
-    eosio_assert( memo.size() <= 256, "memo has more than 256 bytes" );
+    check( sym.is_valid(), "invalid symbol name" );
+    check( memo.size() <= 256, "memo has more than 256 bytes" );
 
     stats statstable( _self, sym.code().raw() );
     auto existing = statstable.find( sym.code().raw() );
-    eosio_assert( existing != statstable.end(), "token with symbol does not exist" );
+    check( existing != statstable.end(), "token with symbol does not exist" );
     const auto& st = *existing;
 
     require_auth( st.issuer );
-    eosio_assert( quantity.is_valid(), "invalid quantity" );
-    eosio_assert( quantity.amount > 0, "must retire positive quantity" );
+    check( quantity.is_valid(), "invalid quantity" );
+    check( quantity.amount > 0, "must retire positive quantity" );
 
-    eosio_assert( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
+    check( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
 
     statstable.modify( st, same_payer, [&]( auto& s ) {
        s.supply -= quantity;
@@ -281,9 +277,9 @@ void WSC::transferwor( name    from,
                        asset   quantity,
                        string  memo )
 {
-    eosio_assert( from != to, "cannot transfer to self" );
+    check( from != to, "cannot transfer to self" );
     require_auth( from );
-    eosio_assert( is_account( to ), "to account does not exist");
+    check( is_account( to ), "to account does not exist");
     auto sym = quantity.symbol.code();
     stats statstable( _self, sym.raw() );
     const auto& st = statstable.get( sym.raw() );
@@ -291,10 +287,10 @@ void WSC::transferwor( name    from,
     require_recipient( from );
     require_recipient( to );
 
-    eosio_assert( quantity.is_valid(), "invalid quantity" );
-    eosio_assert( quantity.amount > 0, "must transfer positive quantity" );
-    eosio_assert( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
-    eosio_assert( memo.size() <= 256, "memo has more than 256 bytes" );
+    check( quantity.is_valid(), "invalid quantity" );
+    check( quantity.amount > 0, "must transfer positive quantity" );
+    check( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
+    check( memo.size() <= 256, "memo has more than 256 bytes" );
 
     auto payer = has_auth( to ) ? to : from;
 
@@ -306,7 +302,7 @@ void WSC::sub_balance( name owner, asset value ) {
    accounts from_acnts( _self, owner.value );
 
    const auto& from = from_acnts.get( value.symbol.code().raw(), "no balance object found" );
-   eosio_assert( from.balance.amount >= value.amount, "overdrawn balance" );
+   check( from.balance.amount >= value.amount, "overdrawn balance" );
 
    from_acnts.modify( from, owner, [&]( auto& a ) {
          a.balance -= value;
@@ -336,7 +332,7 @@ void WSC::openwor( name owner, const symbol& symbol, name ram_payer )
 
    stats statstable( _self, sym_code_raw );
    const auto& st = statstable.get( sym_code_raw, "symbol does not exist" );
-   eosio_assert( st.supply.symbol == symbol, "symbol precision mismatch" );
+   check( st.supply.symbol == symbol, "symbol precision mismatch" );
 
    accounts acnts( _self, owner.value );
    auto it = acnts.find( sym_code_raw );
@@ -352,15 +348,14 @@ void WSC::closewor( name owner, const symbol& symbol )
    require_auth( owner );
    accounts acnts( _self, owner.value );
    auto it = acnts.find( symbol.code().raw() );
-   eosio_assert( it != acnts.end(), "Balance row already deleted or never existed. Action won't have any effect." );
-   eosio_assert( it->balance.amount == 0, "Cannot close because the balance is not zero." );
+   check( it != acnts.end(), "Balance row already deleted or never existed. Action won't have any effect." );
+   check( it->balance.amount == 0, "Cannot close because the balance is not zero." );
    acnts.erase( it );
 }
 
-capi_checksum256 WSC::hashItem(WSC::item &item){
+checksum256 WSC::hashItem(WSC::item &item){
 
   int i = 0;
-  capi_checksum256 calc_hash;
   string itemStake = item.Stake.to_string();
   string itemOwner = item.Owner.to_string();
   string itemOriginWorld = item.OriginWorld.to_string();
@@ -392,7 +387,7 @@ capi_checksum256 WSC::hashItem(WSC::item &item){
   i += itemStake.copy(p+i, itemStake.size(), 0);
   print(i, "\n");
   
-  sha256(p, size, &calc_hash);
+  checksum256 calc_hash = sha256(p, size);
   free(p);
 
   print("ItemName: ", std::move(item.ItemName), "\n");
@@ -404,7 +399,7 @@ capi_checksum256 WSC::hashItem(WSC::item &item){
   print("Stake: ", std::move(itemStake), "\n");
  
   print("Sha256: ");
-  printhex((const void*)&calc_hash, 32);
+  calc_hash.print();
   return(calc_hash);
 
 }
