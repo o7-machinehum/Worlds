@@ -11,16 +11,49 @@ Worlds is an open protocol designed to manage the economic and game theoretical 
 * The Worlds Engine
 * The World Smart Contract
 
-## Running the server
+## Getting Started
+First you want to source the enviornment.
 ```bash
-cd ~/Worlds/Worlds/Realm.One/bin/
-./runserver.sh # Run the Minetest server
-cd ~/Worlds/Worlds-Smart-Contract/scripts/
-./runChain.sh # Run the blockchain
-cd ~/Worlds/Worlds-Engine
-node server.js # Run the Server Engine
-cd ~/Worlds/utils/itemMan
-./man.sh # Run the Item manager
+source source_env.sh
+```
+
+Go ahead and create a wallet. 
+```bash
+wor_create_wallet
+```
+
+This will give you password, set up an init file to be called by other scripts.
+Replace <PW>, <Pub> below with your password and pubkey. Keep in mind this is just
+for development, do not do something like this with actual credentials.
+```bash
+echo "EOS_PW=<PW>" >> scripts/wor_init
+echo "EOS_PUB=<Pub>" >> scripts/wor_init
+wor_init
+```
+
+Run the chain
+```bash
+wor_run_chain
+```
+
+Unlock your wallet and Create account. If cleos asked you to unlock your wallet,
+use this unlock wallet script.
+```bash
+wor_unlock_wallet
+wor_run_chain
+```
+
+## Worlds Smart Contract 
+The Worlds Smart Contact (WSC) is an EOS contract that is responsible for
+managing player assets and WOR. WOR is a token that can be staked against items
+and used as a means of currency. The contract is still under development and
+subject to change!
+
+### Building / Deploying
+```bash
+cd Worlds-Smart-Contract/  
+make
+make deploy
 ```
 
 ## Running the client
@@ -29,23 +62,15 @@ cd ~/Worlds/Worlds-Engine
 npm start
 ```
 
-## Worlds Smart Contract 
-The Worlds Smart Contact (WSC) is an EOS contract that is responsible for managing player assets and WOR. WOR is a token that can be staked against items and used as a means of currency. The contract is still under development and subject to change!
-
-### Building / Deploying
-```bash
-cd Worlds-Smart-Contract/WSC/  
-make
-make deploy
-```
-
 ### Dependencies
 The WSC is build using eosio.cdt 1.3+
 * [eosio](https://github.com/EOSIO/eos)
 * [eosio.cdt](https://github.com/EOSIO/eosio.cdt)
 
 ## Scripting
-Various simple scripts have been written to test the WSC. Before running them be sure to open them and change the required fields depending on your account names and application.
+Various simple scripts have been written to test the WSC. Before running them be
+sure to open them and change the required fields depending on your account names
+and application.
 
 ### Creating / Issuing Tokens
 ```bash

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source wor_init
+cleos wallet unlock -n worlds --password $EOS_PW 

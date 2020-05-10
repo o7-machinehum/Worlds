@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source wor_init
+
+cleos -u $IP set contract -f wsc.code $PJ_ROOT/WSC -p wsc.code@active

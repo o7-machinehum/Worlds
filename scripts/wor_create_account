@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source wor_init
+
+cleos -u $IP create account eosio wsc.code $EOS_PUB
+cleos -u $IP create account eosio turnip $EOS_PUB
+cleos -u $IP create account eosio turnip2 $EOS_PUB
