@@ -1,6 +1,14 @@
 #!/bin/bash
 
+if [ $# -eq 0 ]
+    then
+        echo "No arguments supplied, first argument is name of player"
+        exit 
+fi
+
+source wor_init
+
 owner=wsc.code
 table=itemproofs
 
-cleos -u http://192.168.10.35:8888 get table $owner $1 $table 
+cleos -u $IP get table $owner $1 $table 
