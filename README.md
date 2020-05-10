@@ -12,13 +12,9 @@ Worlds is an open protocol designed to manage the economic and game theoretical 
 * The World Smart Contract
 
 ## Getting Started
-First you want to source the enviornment.
+First you want to source the enviornment and create a wallet.
 ```bash
 source source_env.sh
-```
-
-Go ahead and create a wallet. 
-```bash
 wor_create_wallet
 ```
 
