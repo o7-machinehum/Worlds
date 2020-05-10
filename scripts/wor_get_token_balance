@@ -1,3 +1,11 @@
 #!/bin/bash
-# arg1 = Name
-cleos -u http://192.168.10.35:8888 get currency balance wsc.code $1 WOR
+
+source wor_init 
+
+if [ $# -eq 0 ]
+    then
+        echo "No arguments supplied, first argument is name of player"
+        exit 
+fi
+
+cleos -u $IP get currency balance wsc.code $1 WOR

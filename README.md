@@ -28,7 +28,8 @@ for development, do not do something like this with actual credentials.
 ```bash
 echo "EOS_PW=<PW>" >> scripts/wor_init
 echo "EOS_PUB=<Pub>" >> scripts/wor_init
-wor_init
+echo "PJ_ROOT=$(pwd)" >> scripts/wor_init
+source wor_init
 ```
 
 Run the chain
@@ -40,7 +41,7 @@ Unlock your wallet and Create account. If cleos asked you to unlock your wallet,
 use this unlock wallet script.
 ```bash
 wor_unlock_wallet
-wor_run_chain
+wor_create_account
 ```
 
 ## Worlds Smart Contract 
@@ -53,7 +54,7 @@ subject to change!
 ```bash
 cd Worlds-Smart-Contract/  
 make
-make deploy
+wor_deploy_contract
 ```
 
 ## Running the client
@@ -68,16 +69,14 @@ The WSC is build using eosio.cdt 1.3+
 * [eosio.cdt](https://github.com/EOSIO/eosio.cdt)
 
 ## Scripting
-Various simple scripts have been written to test the WSC. Before running them be
-sure to open them and change the required fields depending on your account names
-and application.
+Various simple scripts have been written to test the WSC. 
 
-### Creating / Issuing Tokens
 ```bash
-cd Worlds-Smart-Contract/scripts
-./Tokens/createTokens.sh
-./Tokens/issueTokens.sh
+wor_create_tokens              # Create tokens
+wor_issue_tokens               # Issue tokens
+wor_get_token_balance turnip   # Get token balance of a player
 ```
+
 ### Create Items
 ```bash
 cd Worlds-Smart-Contract/scripts 
