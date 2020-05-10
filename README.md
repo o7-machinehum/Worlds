@@ -81,18 +81,5 @@ npm install
 npm start
 ```
 
-## Notes on the Project Ready Player One was the main inspiration for this
-project, at the core of the novel is a centralisation issues over the control of
-the Oasis. The idea of one company owning such a large game is an analogous to
-one company owning the internet. When I started this project over six months ago
-I wasn't even planning on using a blockchain. If you go back in the commit
-history, you'll see that Worlds relied on an complex system of ledgers and
-auditing. At the time there was no blockchain that could provide the rapid
-finality required for my idea. In June 2018, the EOS main net launched and
-satisfied the response requirements. This meant we could get higher security in
-a less complex system developed in a fraction of the time.
-
-Worlds uses a token, however there will be no ICO or crowd sale! 
-
 ## Contribution
 If you wish to help with the project or are interested in developing a world, please reach out! Feedback welcome!
