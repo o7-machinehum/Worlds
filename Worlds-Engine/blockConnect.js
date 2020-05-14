@@ -32,6 +32,7 @@ var selectedItem = {
     }
 }
 
+
 var socket = {
     execute: function(){
         eval(document.getElementById("SockCMD").value)
@@ -46,6 +47,7 @@ var socket = {
     }
 }
 
+
 // Exported Modules
 module.exports = {
     act: function (cmd) {
@@ -59,10 +61,12 @@ module.exports = {
     }
 }
 
+
 // Used to verify proof packages.
 function verify(sig, data, pubkey) {
   wc.send(ecc.verify(sig, data, pubkey).toString())
 }
+
 
 /* Connect to the blockchain and load characters*/
 function connect() {
@@ -70,7 +74,7 @@ function connect() {
     account.pubKey = document.getElementById("PublicKey").value
     
     console.log('Unlocking Wallet and connect to endpoint!');
-    sock.open(document.getElementById("world_port").value) // Open socket
+    // sock.open(document.getElementById("world_port").value) // Open socket
     
     eos = actions.connectEndpoint(
         document.getElementById("ChainID").value, 
@@ -80,6 +84,7 @@ function connect() {
 
     eos.getKeyAccounts(account.pubKey).then(addName)
 }
+
 
 function addName(result){
     account.name = result.account_names 
@@ -94,14 +99,17 @@ function addName(result){
   updateChar()
 }
 
+
 function updateChar(){
     account.selectedName = document.getElementById("Chars").value
     eos.getCurrencyBalance('wsc.code', account.selectedName, 'WOR').then(function fun(result) {account.balance = result; updateHTML(result)})
 }
 
+
 function updateHTML(result) {
     document.getElementById("Balance").innerHTML = "Balance: " + account.balance
 }
+
 
 function TransferWor() {
     to = document.getElementById("TransferTo").value
@@ -110,6 +118,7 @@ function TransferWor() {
 
     actions.TXwor(eos, account.selectedName, to, amount, memo) 
 }
+
 
 function createItem() {
 
@@ -127,6 +136,7 @@ function createItem() {
     actions.createItem(eos, account.selectedName, ItemName, ItemClass, ItemStake, ItemNuance) 
 }
 
+
 function deleteItem() {
 
     ItemHash = document.getElementById("ItemHash").value
@@ -134,6 +144,7 @@ function deleteItem() {
     console.log('Deleting item' + ItemHash)
     actions.deleteItem(eos, account.selectedName, ItemHash) 
 }
+
 
 function loadItems() {
     files = fs.readdirSync('items')

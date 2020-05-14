@@ -1,8 +1,8 @@
-/* Blockchain Actions
-    Example:
-      const actions = require('./actions')
-      actions.createItem("turnip", "Sword", "Weapon", "1.00 WOR")
-*/
+// Blockchain Actions
+// Example:
+//    const actions = require('./actions')
+//    actions.createItem("turnip", "Sword", "Weapon", "1.00 WOR")
+
 
 var options = {
     authorization: '',
@@ -20,20 +20,21 @@ module.exports = {
         console.log('IP: ' + IP)
         
         var config = {
-        chainId: chainId, 
-        keyProvider: [PrivateKey], 
-        httpEndpoint: IP, 
-        expireInSeconds: 60,
-        broadcast: true,
-        debug: true,
-        verbose: false, // API activity
-        sign: true
+            chainId: chainId, 
+            keyProvider: [PrivateKey], 
+            httpEndpoint: IP, 
+            expireInSeconds: 60,
+            broadcast: true,
+            debug: true,
+            verbose: false, // API activity
+            sign: true
         };
 
         console.log(config)
         return(Eos(config))
     
     },
+
 
     createItem: function(eos, name, itemName, itemClass, stake, ItemNuance){
 
@@ -55,15 +56,18 @@ module.exports = {
         });
     }, 
 
+
     TXwor: function(eos, from, to, amount, memo){
         options.authorization = from + '@active'
 		eos.contract('wsc.code').then(wsccode => {wsccode.transferwor(from, to, amount, memo, options)})
     },
-    
+
+
     deleteItem: function(eos, name, hash){
         options.authorization = name + '@active'
 		eos.contract('wsc.code').then(wsccode => {wsccode.deleteitem(name, hash, options)})
     },
+
 
     liquidItem: function(eos, item, name){
         options.authorization = name + '@active'
