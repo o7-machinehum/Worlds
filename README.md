@@ -25,6 +25,7 @@ for development, do not do something like this with actual credentials.
 echo "EOS_PW=<PW>" >> scripts/wor_init
 echo "EOS_PUB=<Pub>" >> scripts/wor_init
 echo "PJ_ROOT=$(pwd)" >> scripts/wor_init
+echo "IP=$(ipconfig getifaddr en0)" >> scripts/wor_init # Or just hardcode in your IP address
 source wor_init
 ```
 
