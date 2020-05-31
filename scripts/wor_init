@@ -1,6 +1,2 @@
 #!/bin/bash
 
-EOS_PW=PW5JM4my4QGYe8eoAjFHYLgMrRe3C7mdw5iB9VtaTPEgkZr5EfWGW
-EOS_PUB=EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
-IP="http://127.0.0.1:8888" 
-PJ_ROOT=/Users/machinehum/worlds
