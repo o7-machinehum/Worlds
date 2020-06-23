@@ -10,7 +10,7 @@
                 ||      ||
 ```
 
-When determining the cap table, three things should be kept in mind.
+- When determining the cap table, three things should be kept in mind.
     1) Game developers should be incentivised to integrate their games into Worlds
     2) Gamers should be incentivised to play on Worlds
     3) The developers of Worlds should be rewarded if the platform is successful.
