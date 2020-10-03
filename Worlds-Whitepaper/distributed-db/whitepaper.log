@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.9.2)  2 OCT 2020 23:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.9.2)  2 OCT 2020 23:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -578,57 +578,67 @@ ase
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 66--70
+Underfull \hbox (badness 10000) in paragraph at lines 65--69
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 72--79
+Underfull \hbox (badness 10000) in paragraph at lines 71--78
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--85
+Underfull \hbox (badness 10000) in paragraph at lines 80--84
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--96
+Underfull \hbox (badness 10000) in paragraph at lines 90--95
 
  []
 
+<img/traditional.pdf, id=4, 291.00719pt x 103.3461pt>
+File: img/traditional.pdf Graphic file (type pdf)
+<use img/traditional.pdf>
+Package pdftex.def Info: img/traditional.pdf  used on input line 106.
+(pdftex.def)             Requested size: 291.00647pt x 103.34584pt.
 [1
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<img/traditional.pdf, id=15, 291.00719pt x 103.3461pt>
-File: img/traditional.pdf Graphic file (type pdf)
-<use img/traditional.pdf>
-Package pdftex.def Info: img/traditional.pdf  used on input line 108.
-(pdftex.def)             Requested size: 291.00647pt x 103.34584pt.
+<img/nieve.pdf, id=15, 291.00719pt x 161.64389pt>
+File: img/nieve.pdf Graphic file (type pdf)
+<use img/nieve.pdf>
+Package pdftex.def Info: img/nieve.pdf  used on input line 114.
+(pdftex.def)             Requested size: 291.00647pt x 161.6435pt.
  [2 <./img/traditional.pdf
 
 pdfTeX warning: pdflatex (file ./img/traditional.pdf): PDF inclusion: invalid o
 ther resource which is no dict (key 'ProcSets', type <array>); ignored.
->] (./whitepaper.aux) ) 
+> <./img/nieve.pdf
+
+pdfTeX warning: pdflatex (file ./img/nieve.pdf): PDF inclusion: invalid other r
+esource which is no dict (key 'ProcSets', type <array>); ignored.
+>] [3] (./whitepaper.aux) ) 
 Here is how much of TeX's memory you used:
- 14688 strings out of 480478
- 285840 string characters out of 5905960
+ 14694 strings out of 480478
+ 285957 string characters out of 5905960
  688385 words of memory out of 5000000
- 30455 multiletter control sequences out of 15000+600000
+ 30460 multiletter control sequences out of 15000+600000
  540200 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,7n,60p,415b,222s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super
--t1.enc}</usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/s
-hare/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf-dist
-/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/pu
-blic/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/s
-frm0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on whitepaper.pdf (2 pages, 113863 bytes).
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-s
+uper-t1.enc}</usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></u
+sr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf-
+dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type
+1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-sup
+er/sfrm0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb
+>
+Output written on whitepaper.pdf (3 pages, 135691 bytes).
 PDF statistics:
- 51 PDF objects out of 1000 (max. 8388607)
- 37 compressed objects within 1 object stream
+ 64 PDF objects out of 1000 (max. 8388607)
+ 46 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 18 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

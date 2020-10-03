@@ -61,8 +61,7 @@ decentralized world. This yealds the advantege of using existing database
 structure, ie: SLQ and Mongo - without having to reinvent the world.
 \end{abstract}
 
-\section{Worlds}
-\subsection{Introduction}
+\section{Introduction}
 Before I start, I should say there are several centralised components of this
 y architecture. However I chosen to build it's implementation as a ``phase zero''
 of Worlds. 
@@ -87,7 +86,7 @@ The quickest way to drive adoption is to take existing MMO infrastrucutre and bu
 around it. This is why I chose to write the document. I will outlinine how to
 port traditional databases to reach a near trustless entity,
 
-\subsection{Overview}
+\section{Overview}
 Nearly all MMO games are using a traditional databsese. This is SQL, Mongo or otherwise.
 These databases rely on a trusted design, meaning whoever hosts the database will not 
 commit to malicious activity. However there is a way to build a ecosystem that relies
@@ -98,9 +97,8 @@ This is called distributed verification, the contents on the datbase are verifie
 a blockchain, with the heavy lifting done by the database. This also has the added 
 feature of not having to port existing games to having blockchain interaction.
 
-\subsection{Archatecture}
-
-\subsubsection{Existing Design}
+\section{Archatecture}
+\subsection{Existing Design}
 The existing deign shown in figure whatever is the obvious solutions to a MMO game.
 The data is kept in a normal trusted database.
 
@@ -108,16 +106,24 @@ The data is kept in a normal trusted database.
 \includegraphics[scale=1]{img/traditional.pdf}
 \end{figure}
 
-\subsubsection{Existing Design}
-The existing deign shown in figure whatever is the obvious solutions to a MMO game.
-The data is kept in a normal trusted database.
+\subsection{Nieve Design}
+To crack the problem of a distributed MMO might lead of the nieve design... This
+will allow player to move from game to game, withe fully different mechanicics. 
 
 \begin{figure}[H]
-\includegraphics[scale=1]{img/traditional.pdf}
+\includegraphics[scale=1]{img/nieve.pdf}
 \end{figure}
 
+However there is an obvious flaw. When the number of servers n scales to a high
+number you have the following issues.
 
+\begin{itemize}
+\item Servers with malicious intent have write capabilities on the database
+\item more issues here
+\end{itemize}
 
+\section{Worlds.db Archatecture}
+This is much different
 
 The archatecutre is laid out in figure 1. The clients connect to the
 

@@ -1,2 +1,0 @@
-all:
-	pdflatex whitepaper.tex	
