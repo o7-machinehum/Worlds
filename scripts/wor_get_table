@@ -11,4 +11,4 @@ source wor_init
 owner=wsc.code
 table=itemproofs
 
-cleos -u $IP get table $owner $1 $table 
+cleos -u http://$IP:8888 get table $owner $1 $table 

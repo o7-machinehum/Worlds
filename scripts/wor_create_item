@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source wor_init
-cleos push action wsc.code createitem '{"owner":"turnip","item_name":"Sword","item_class":"Weapon","nuance":"0000","stake":"1.00 WOR"}' -p turnip@active
+cleos -u http://$IP:8888 push action wsc.code createitem '{"owner":"turnip","item_name":"Sword","item_class":"Weapon","nuance":"0001","stake":"1.00 WOR"}' -p turnip@active
