@@ -10,6 +10,7 @@
 \usepackage{color}
 \usetikzlibrary{arrows,chains,positioning,scopes,quotes,calc}
 \usepackage{float}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
 
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\endspace\ignorespaces#1}
@@ -58,22 +59,25 @@
 \begin{abstract}
 This paper outlines how to move a traditional trusted database into the
 decentralized world. This yealds the advantege of using existing database
-structure, ie: SLQ and Mongo - without having to reinvent the world.
+structure, ie: SLQ and Mongo. Further enabling developers to work in a farmiliar
+ecosystem until the advantages of blockchain are realised in their context.
 \end{abstract}
 
 \section{Introduction}
-Before I start, I should say there are several centralised components of this
-y architecture. However I chosen to build it's implementation as a ``phase zero''
-of Worlds. 
+Before I begin, I should mention there are several centralised components in the
+following architecture. However I chosen to build use it for ``phase zero'' of
+Worlds. The goal of phase zero is simple, to drive adoption through rapid
+integration in existing MMO ecosystems. Simply put, we want remove the entrance
+barrier for developers. Several concepts in this whitepaper draw on concepts from
+the orriginal Worlds whitepaper.
 \\
 
-
 Blockchain infrastructure is being used to build decentralised games. However
-most games are build using traditional database infrasture. Building technology
-has always been about getting to market fast, building your MVP first and the
-focusing on the core tech once the world realised it's capabilities. Most gaming
-projects in the space have moved straight to the ideal without answering the core
-question of: How will you get gamers?
+most games are build using traditional database infrasture. Success in techology
+usually spawns from: building your MVP first, being the first to market and the
+first to demonstrate the capabilities of your idea. Most gaming projects in the
+space have moved straight to the ideal without answering the core question of:
+How will you attract gamers? 
 \\
 
 
@@ -84,49 +88,138 @@ you have a silver bullet of a game, you're going to be hard pressed to drive ado
 
 The quickest way to drive adoption is to take existing MMO infrastrucutre and build
 around it. This is why I chose to write the document. I will outlinine how to
-port traditional databases to reach a near trustless entity,
+port traditional trusted databases to reach a near trustless entity,
 
 \section{Overview}
 Nearly all MMO games are using a traditional databsese. This is SQL, Mongo or otherwise.
-These databases rely on a trusted design, meaning whoever hosts the database will not 
-commit to malicious activity. However there is a way to build a ecosystem that relies
-on a central database without having to trust the contents.
+These databases rely on a trusted design, meaning whomever hosts the database will not 
+engage in malicious activity. However there is a way to build a ecosystem that relies
+on a central database without having to trust the database maintainer.
 \\
 
-This is called distributed verification, the contents on the datbase are verified on
-a blockchain, with the heavy lifting done by the database. This also has the added 
-feature of not having to port existing games to having blockchain interaction.
+Simply said, the contents on the datbase are verified on a blockchain, with the
+heavy lifting done by the database itself. This also has the added feature of
+not having to port existing games to having blockchain interaction. They can
+continue to work with their existing and known database interaction.
+\\
+
+If the maintainer of the database acts with malicious intent, the database can
+be reconstructed using the orrignal signed database query commands.
+
+\newpage
 
 \section{Archatecture}
 \subsection{Existing Design}
-The existing deign shown in figure whatever is the obvious solutions to a MMO game.
-The data is kept in a normal trusted database.
+The typical MMO archatecture is shown in Figure \ref{trad}. The data is kept in
+a normal trusted database.  This issue being players can't have interoperability
+between servers.
 
 \begin{figure}[H]
+\centering
 \includegraphics[scale=1]{img/traditional.pdf}
+\caption{Traditional Design}
+\label{trad}
 \end{figure}
 
-\subsection{Nieve Design}
-To crack the problem of a distributed MMO might lead of the nieve design... This
-will allow player to move from game to game, withe fully different mechanicics. 
+\subsection{Naive Design}
+Someone might arrive at the nieve design shown in Figure \ref{naive} to crack
+the problem of player interoperability. This will allow player to move from game
+to game, however it's fondamentally flawed.
 
 \begin{figure}[H]
+\centering
 \includegraphics[scale=1]{img/nieve.pdf}
+\caption{Naive Design}
+\label{naive} 
 \end{figure}
 
-However there is an obvious flaw. When the number of servers n scales to a high
-number you have the following issues.
+The issue being... servers with malicious intent have write capabilities on the
+database, they can create unbounded wealth, distroy players assets, etc...
+
+\subsection{Worlds Design}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1]{img/worlds.pdf}
+\caption{Worlds Design}
+\label{fig:Worlds}
+\end{figure}
+
+A simplified version of the Worlds design is shown in Figure \ref{fig:Worlds}.
+For more details please see the orrignal Worlds whitepaper. This is the ideal
+and the nexus point where distributed games will be in the future, this will
+allow player to place full control over their items to be clear - this is the
+final goal.
+\\
+
+In the intereum, we need to build something a little bit easier for devleopers
+to build with.
+
+\subsubsection{Issues}
+
+The problem is game developement is challanging, and adding the additional later to games
+of querying a blockchain to understand the state of a game is simply too much to
+ask for developers.
+
+\section{Worlds.db}
+We want the best aspect from both the
+centralised and deventralised system.
+
+\begin{enumerate}
+\item Centralised databases enable simple integration.
+\item Blockchain grants user driven control of assets, and player interteroperability.
+\end{enumerate}
+
+
+\begin{figure}[H]
+\includegraphics[]{img/worldsdb.pdf}
+\caption{Worlds.db}
+\label{fig:worldsdb}
+\end{figure}
+
+Figure \ref{fig:worldsdb} depicts the proposed structure. At a glance it looks
+complicated. Howver the implementation is much simpler than Figure
+\ref{fig:Worlds}. Lets outline the flow.
 
 \begin{itemize}
-\item Servers with malicious intent have write capabilities on the database
-\item more issues here
+\item The traditional database becomes read only from the servers perspective.
+\item When servers want to update their game state they create $a$ - the database request.
+\begin{itemize}
+\item $a$ is just a string of the sql, mongo, etc... query.
+\end{itemize}
+\item $a$ sent to the supervisor (and broadcasted), the hash of $a$ .. $hs(a)$ is staked against and sent to the blockchain.
+\begin{itemize}
+\item The staked amount is a function of the database query itself.
+\end{itemize}
+\item The supervisor ensures $hs(a)$ is correct with $a$.
+\item The supervisor update the state in the traditional database.
 \end{itemize}
 
-\section{Worlds.db Archatecture}
-This is much different
+\subsection{Security}
+It becomes obvious there are two centralised components of this structure. The
+supervisor and the database. However this is recourse for a malicious attack. 
+Since $a$ is broadcast, the comminity can reconstruct the state of the database though the
+signed/submitted hashes to the blockchain. This allows for somewhat of a hard
+fork away from the malcious database. 
+\\
 
-The archatecutre is laid out in figure 1. The clients connect to the
+In addition you can incentivise the database maintainer to behave through a
+monetary incentive.
+\\
 
+If further security is required, the database system can horizontally scale to
+create redundant systems. This enables more robust error detection within
+several databases.
+
+\section{Advantages}
+The biggest advantage of this structure is the simplicity of implementation on the
+server side. Instead of modifying the code to quiery a blockchain directly
+developers can continue to query a traditional database with the only modification
+being instead of sending the mutable requests to the database, they are sent
+directly to the supervisor. 
+
+\section{Conclusion}
+Time to build it.
 
 \end{document}
 

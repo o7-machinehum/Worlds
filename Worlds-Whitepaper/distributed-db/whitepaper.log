@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.9.2)  2 OCT 2020 23:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.9.2)  4 OCT 2020 11:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -513,42 +513,64 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks35
 \@floatcapt=\box107
 )
+(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/share/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/share/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count301
+\Gm@cntv=\count302
+\c@Gm@tempcnt=\count303
+\Gm@bindingoffset=\dimen270
+\Gm@wd@mp=\dimen271
+\Gm@odd@mp=\dimen272
+\Gm@even@mp=\dimen273
+\Gm@layoutwidth=\dimen274
+\Gm@layoutheight=\dimen275
+\Gm@layouthoffset=\dimen276
+\Gm@layoutvoffset=\dimen277
+\Gm@dimlist=\toks36
+)
 (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
 (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-06-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count301
+\l__kernel_color_stack_int=\count304
 \l__pdf_internal_box=\box108
 )
 (./whitepaper.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count302
-\scratchdimen=\dimen270
+\scratchcounter=\count305
+\scratchdimen=\dimen278
 \scratchbox=\box109
-\nofMPsegments=\count303
-\nofMParguments=\count304
-\everyMPshowfont=\toks36
-\MPscratchCnt=\count305
-\MPscratchDim=\dimen271
-\MPnumerator=\count306
-\makeMPintoPDFobject=\count307
-\everyMPtoPDFconversion=\toks37
+\nofMPsegments=\count306
+\nofMParguments=\count307
+\everyMPshowfont=\toks37
+\MPscratchCnt=\count308
+\MPscratchDim=\dimen279
+\MPnumerator=\count309
+\makeMPintoPDFobject=\count310
+\everyMPtoPDFconversion=\toks38
 ) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -559,58 +581,99 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 ABD: EveryShipout initializing macros
-\c@lstlisting=\count308
-LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
+\c@lstlisting=\count311
 
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(65.55515pt, 433.62pt, 98.33273pt)
+* v-part:(T,H,B)=(48.93872pt, 722.7pt, 73.40813pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=433.62pt
+* \textheight=722.7pt
+* \oddsidemargin=-6.71484pt
+* \evensidemargin=26.06274pt
+* \topmargin=-51.33127pt
+* \headheight=12.0pt
+* \headsep=16.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=90.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
 
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (6.13214pt too wide) in paragraph at lines 59--62
-[]\T1/cmr/m/n/9 This pa-per out-lines how to move a tra-di-tional trusted datab
-ase
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 65--69
+Underfull \hbox (badness 10000) in paragraph at lines 67--74
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 71--78
+Underfull \hbox (badness 10000) in paragraph at lines 75--82
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--84
+Underfull \hbox (badness 10000) in paragraph at lines 84--88
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 90--95
+Underfull \hbox (badness 10000) in paragraph at lines 94--99
 
  []
 
-<img/traditional.pdf, id=4, 291.00719pt x 103.3461pt>
-File: img/traditional.pdf Graphic file (type pdf)
-<use img/traditional.pdf>
-Package pdftex.def Info: img/traditional.pdf  used on input line 106.
-(pdftex.def)             Requested size: 291.00647pt x 103.34584pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--105
+
+ []
+
 [1
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<img/traditional.pdf, id=14, 291.00719pt x 103.3461pt>
+File: img/traditional.pdf Graphic file (type pdf)
+<use img/traditional.pdf>
+Package pdftex.def Info: img/traditional.pdf  used on input line 119.
+(pdftex.def)             Requested size: 291.00647pt x 103.34584pt.
 <img/nieve.pdf, id=15, 291.00719pt x 161.64389pt>
 File: img/nieve.pdf Graphic file (type pdf)
 <use img/nieve.pdf>
-Package pdftex.def Info: img/nieve.pdf  used on input line 114.
+Package pdftex.def Info: img/nieve.pdf  used on input line 131.
 (pdftex.def)             Requested size: 291.00647pt x 161.6435pt.
+<img/worlds.pdf, id=16, 355.3275pt x 161.64389pt>
+File: img/worlds.pdf Graphic file (type pdf)
+<use img/worlds.pdf>
+Package pdftex.def Info: img/worlds.pdf  used on input line 143.
+(pdftex.def)             Requested size: 355.32661pt x 161.6435pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
  [2 <./img/traditional.pdf
 
 pdfTeX warning: pdflatex (file ./img/traditional.pdf): PDF inclusion: invalid o
@@ -619,26 +682,56 @@ ther resource which is no dict (key 'ProcSets', type <array>); ignored.
 
 pdfTeX warning: pdflatex (file ./img/nieve.pdf): PDF inclusion: invalid other r
 esource which is no dict (key 'ProcSets', type <array>); ignored.
->] [3] (./whitepaper.aux) ) 
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 148--154
+
+ []
+
+<img/worldsdb.pdf, id=41, 421.575pt x 252.945pt>
+File: img/worldsdb.pdf Graphic file (type pdf)
+<use img/worldsdb.pdf>
+Package pdftex.def Info: img/worldsdb.pdf  used on input line 175.
+(pdftex.def)             Requested size: 421.57396pt x 252.94438pt.
+[3 <./img/worlds.pdf
+
+pdfTeX warning: pdflatex (file ./img/worlds.pdf): PDF inclusion: invalid other 
+resource which is no dict (key 'ProcSets', type <array>); ignored.
+> <./img/worldsdb.pdf
+
+pdfTeX warning: pdflatex (file ./img/worldsdb.pdf): PDF inclusion: invalid othe
+r resource which is no dict (key 'ProcSets', type <array>); ignored.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 199--205
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 206--209
+
+ []
+
+[4] (./whitepaper.aux) ) 
 Here is how much of TeX's memory you used:
- 14694 strings out of 480478
- 285957 string characters out of 5905960
- 688385 words of memory out of 5000000
- 30460 multiletter control sequences out of 15000+600000
+ 15221 strings out of 480478
+ 293528 string characters out of 5905960
+ 701610 words of memory out of 5000000
+ 30975 multiletter control sequences out of 15000+600000
  540200 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,7n,60p,415b,222s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-s
-uper-t1.enc}</usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></u
-sr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf-
-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type
-1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-sup
-er/sfrm0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb
->
-Output written on whitepaper.pdf (3 pages, 135691 bytes).
+ 60i,7n,60p,415b,230s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-supe
+r-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr
+/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1
+/public/cm-super/sfbx0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-supe
+r/sfbx1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb>
+</usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/tex
+mf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf-dist/fonts/t
+ype1/public/cm-super/sfrm1000.pfb>
+Output written on whitepaper.pdf (4 pages, 295294 bytes).
 PDF statistics:
- 64 PDF objects out of 1000 (max. 8388607)
- 46 compressed objects within 1 object stream
+ 134 PDF objects out of 1000 (max. 8388607)
+ 92 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 23 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 33 words of extra memory for PDF output out of 10000 (max. 10000000)
 
