@@ -5,7 +5,7 @@
 [YouTube Demo Here](https://www.youtube.com/watch?v=OrOZVr-j92A&t) <br>
 [YouTube Explanation Here](https://www.youtube.com/watch?v=wfqsvlMFGHs&t)
 
-Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimum dependencies required for developers to get up and running. For more detailed info please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/whitepaper.pdf). This repository contains three main components.
+Worlds is an open protocol designed to manage the economic and game theoretical components of a distributed MMO. This repository is focused on implementing the minimum dependencies required for developers to get up and running. For more detailed info please read the paper [here](https://github.com/Machine-Hum/Worlds/blob/master/Worlds-Whitepaper/worlds/whitepaper.pdf). This repository contains three main components.
 
 * The Worlds Whitepaper
 * The Worlds Engine
